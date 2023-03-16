@@ -25,8 +25,10 @@
         <li class="menu active">
             <a href="#dashboard" data-bs-toggle="dropdown" aria-expanded="true" class="dropdown-toggle">
                 <div class="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <span>Dashboard</span>
+                    <script>function goIndexPage() {
+ window.location.href = "index.php";
+}</script>
+                  <span onclick="goIndexPage()">Dashboard</span>
                 </div>
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -79,53 +81,12 @@
             </a>
             <ul class="dropdown-menu submenu list-unstyled" id="components" data-bs-parent="#accordionExample">
                 <li>
-                    <a href="./component-tabs.html"> Tabs </a>
+                    <a href="musterilistesi.php"> Ürün Listesi </a>
                 </li>
                 <li>
-                    <a href="./component-accordion.html"> Accordions  </a>
+                    <a href="musteriekle.php"> ürün Ekle </a>
                 </li>
-                <li>
-                    <a href="./component-modal.html"> Modals </a>
-                </li>
-                <li>
-                    <a href="./component-cards.html"> Cards </a>
-                </li>
-                <li>
-                    <a href="./component-bootstrap-carousel.html">Carousel</a>
-                </li>
-                <li>
-                    <a href="./component-splide.html">Splide</a>
-                </li>
-                <li>
-                    <a href="./component-sweetalert.html"> Sweet Alerts </a>
-                </li>
-                <li>
-                    <a href="./component-timeline.html"> Timeline </a>
-                </li>
-                <li>
-                    <a href="./component-notifications.html"> Notifications </a>
-                </li>
-                <li>
-                    <a href="./component-media-object.html"> Media Object </a>
-                </li>
-                <li>
-                    <a href="./component-list-group.html"> List Group </a>
-                </li>
-                <li>
-                    <a href="./component-pricing-table.html"> Pricing Tables </a>
-                </li>
-                <li>
-                    <a href="./component-lightbox.html"> Lightbox </a>
-                </li>
-                <li>
-                    <a href="./component-drag-drop.html"> Drag and Drop </a>
-                </li>
-                <li>
-                    <a href="./component-fonticons.html"> Font Icons </a>
-                </li>
-                <li>
-                    <a href="./component-flags.html"> Flag Icons </a>
-                </li>
+
             </ul>
         </li>
 
