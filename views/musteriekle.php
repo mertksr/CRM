@@ -22,6 +22,9 @@
     <link rel="stylesheet" type="text/css" href="../public/src/assets/css/dark/scrollspyNav.css" />
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/stepper/custom-bsStepper.css">
     <!--  END CUSTOM STYLE FILE  -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+ 
+
 </head>
 
 <body class="layout-boxed" data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100">
@@ -53,46 +56,10 @@
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
             <div class="container">
-                <div class="container">
-
-                    <!--  BEGIN BREADCRUMBS  -->
-                    <div class="secondary-nav">
-                        <div class="breadcrumbs-container" data-page-heading="Analytics">
-                            <header class="header navbar navbar-expand-sm">
-                                <a href="javascript:void(0);" class="btn-toggle sidebarCollapse"
-                                    data-placement="bottom">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="feather feather-menu">
-                                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                                    </svg>
-                                </a>
-                                <div class="d-flex breadcrumb-content">
-                                    <div class="page-header">
-
-                                        <div class="page-title">
-                                        </div>
-
-                                        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-                                            <ol class="breadcrumb">
-                                                <li class="breadcrumb-item"><a href="#">Form</a></li>
-                                                <li class="breadcrumb-item active" aria-current="page">Wizards</li>
-                                            </ol>
-                                        </nav>
-
-                                    </div>
-                                </div>
-
-                            </header>
-                        </div>
-                    </div>
-                    <!--  END BREADCRUMBS  -->
+                <div class="container" style="margin: 0 auto;">
 
                     <div class="row layout-top-spacing" id="cancel-row">
-
-                        <div id="wizard_Default" class="col-lg-12 layout-spacing">
+                        <div id="wizard_Default" class="col-lg-12 layout-spacing" style="width:%100;">
                             <div class="statbox widget box box-shadow">
                                 <div class="widget-header">
                                     <div class="row">
@@ -131,47 +98,71 @@
                                             <div id="defaultStep-one" class="content" role="tabpanel">
                                                 <form id="musteriekleform" method="post" action="aa.php">
                                                     <div class="row">
+                                                        <div class="form-group col-6">
+                                                            <label for="flexRadioDefault1">Kayıt Türü</label>
+
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="flexRadioDefault" value="bb"
+                                                                    id="flexRadioDefault1" checked>
+                                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                                    Gerçek Kişi
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="flexRadioDefault" value="ccccccc"
+                                                                    id="flexRadioDefault2">
+                                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                                    Tüzel Kişi
+                                                                </label>
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group mb-4 col-12 col md-6 col-lg-6">
                                                             <label for="defaultForm-name">Ad</label>
-                                                            <input form="musteriekleform" type="text" name="ad" class="form-control"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="text" name="ad"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-4 col-12 col md-6 col-lg-6">
                                                             <label for="defaultForm-name">Soyad</label>
-                                                            <input form="musteriekleform" type="text" class="form-control"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
 
                                                         <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name" class="p-1">Tel1</label>                                                  
-                                                            <input form="musteriekleform" type="text" class="form-control" id="defaultForm-name">
-                                                            </div>
+                                                            <label for="defaultForm-name" class="p-1">Tel1</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
                                                         <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name" class="p-1">Tel2</label>                                               
-                                                            <input form="musteriekleform" type="text" class="form-control" id="defaultForm-name">
-                                                            </div>
+                                                            <label for="defaultForm-name" class="p-1">Tel2</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
                                                         <div class="form-group mb-4  col-6">
                                                             <label for="defaultForm-name" class="p-1">Tel3</label>
-                                                            <input form="musteriekleform" type="text" class="form-control" id="defaultForm-name">
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
-                                                    
+
                                                         <div class="form-group mb-4 col-6">
                                                             <label for="defaultForm-name">Tc No/Vergi No</label>
-                                                            <input form="musteriekleform" type="text" class="form-control"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-4 col-6">
                                                             <label for="defaultForm-name">Vergi İli</label>
-                                                            <input form="musteriekleform" type="text" class="form-control"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-4 col-6">
                                                             <label for="defaultForm-name">Vergi Dairesi</label>
-                                                            <input form="musteriekleform" type="text" class="form-control" name="ad"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" name="ad" id="defaultForm-name">
                                                         </div>
                                                     </div>
-                                                    
+
 
 
                                                 </form>
@@ -184,22 +175,23 @@
 
                                             <div id="defaultStep-two" class="content" role="tabpanel">
                                                 <form>
-                                                    
-                                                <div class="row">
+
+                                                    <div class="row">
                                                         <div class="form-group mb-3 col-6">
                                                             <label for="defaultForm-name">Kurulum Tarihi</label>
-                                                            <input form="musteriekleform" type="date" class="form-control"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="date"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-4 col-6">
                                                             <label for="defaultForm-name">Garanti Bitiş Tarihi</label>
-                                                            <input form="musteriekleform" type="date" class="form-control"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="date"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-4  col-6">
                                                             <label for="defaultInputState" class="form-label p-1">Cihaz
                                                                 Marka</label>
-                                                            <select form="musteriekleform" id="defaultInputState" class="form-select">
+                                                            <select form="musteriekleform" id="defaultInputState"
+                                                                class="form-select">
                                                                 <option selected="">Seç</option>
                                                                 <option>Aqualine</option>
                                                                 <option>Aqualix</option>
@@ -208,10 +200,11 @@
 
                                                             </select>
                                                         </div>
-                                                            <div class="form-group mb-4  col-6">
-                                                            <label for="defaultInputState"  class="form-label p-1">Cihaz
+                                                        <div class="form-group mb-4  col-6">
+                                                            <label for="defaultInputState" class="form-label p-1">Cihaz
                                                                 Model</label>
-                                                            <select form="musteriekleform" id="defaultInputState" class="form-select" name="vd">
+                                                            <select form="musteriekleform" id="defaultInputState"
+                                                                class="form-select" name="vd">
                                                                 <option selected="">Seç</option>
                                                                 <option>Açık Kasa</option>
                                                                 <option>Kapalı Kasa</option>
@@ -222,12 +215,14 @@
                                                         </div>
                                                         <div class="form-group mb-3 col-6">
                                                             <label for="defaultForm-name">Son Bakım Tarihi</label>
-                                                            <input form="musteriekleform" type="date" class="form-control"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="date"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-3 col-6">
-                                                        <label for="defaultInputState" class="form-label p-1">Bakım Periyodu</label>
-                                                            <select form="musteriekleform" id="defaultInputState" class="form-select">
+                                                            <label for="defaultInputState" class="form-label p-1">Bakım
+                                                                Periyodu</label>
+                                                            <select form="musteriekleform" id="defaultInputState"
+                                                                class="form-select">
                                                                 <option selected="">Seç</option>
                                                                 <option>3</option>
                                                                 <option>6</option>
@@ -242,17 +237,17 @@
                                                                 <option>10</option>
                                                                 <option>11</option>
                                                             </select>
-                                                            </div>
+                                                        </div>
                                                         <div class="form-group mb-4 col-6">
                                                             <label for="defaultForm-name">Notlar</label>
-                                                            <input form="musteriekleform" type="text" class="form-control"
-                                                                id="defaultForm-name">
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-0 col-6">
                                                             <label for="defaultForm-name">Satış Fiyatı</label>
-                                                            <input form="musteriekleform" type="text" name="soyad" class="form-control"
-                                                                id="defaultForm-name">
-                                                        </div>                                                    
+                                                            <input form="musteriekleform" type="text" name="soyad"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
                                                     </div>
                                                 </form>
 
@@ -267,29 +262,30 @@
                                                         <div class="col-12">
                                                             <label for="defaultInputAddress"
                                                                 class="form-label">Adres</label>
-                                                            <input form="musteriekleform" type="text" class="form-control"
-                                                                id="defaultInputAddress" placeholder="1234 Main St">
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultInputAddress"
+                                                                placeholder="1234 Main St">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="defaultInputCity"
                                                                 class="form-label">Bölge</label>
-                                                            <input form="musteriekleform" type="text" class="form-control"
-                                                                id="defaultInputCity">
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultInputCity">
                                                         </div>
 
                                                         <div class="col-md-6">
                                                             <button class="btn btn-sm btn-primary">Konum Bul</button>
                                                             <button class="btn btn-sm btn-success">Konumu Aç</button>
 
-                                                            <input class="form-control" name="ad" type="text" readonly
-                                                                >
+                                                            <input class="form-control" name="ad" type="text" readonly>
                                                         </div>
                                                     </div>
                                                 </form>
 
                                                 <div class="button-action mt-3">
                                                     <button class="btn btn-secondary btn-prev me-3">Prev</button>
-                                                    <input type="submit" form="musteriekleform" class="btn btn-success me-3">
+                                                    <input type="submit" form="musteriekleform"
+                                                        class="btn btn-success me-3">
                                                 </div>
                                             </div>
                                         </div>
