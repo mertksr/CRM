@@ -20,5 +20,5 @@
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
+# public i ayrı tuttuk
 **/public
