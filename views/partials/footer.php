@@ -1,6 +1,4 @@
-<div class="footer-wrapper" style="position:absolute;
-  bottom: 0;right: 0;
-  left :0;">
+<div class="footer-wrapper">
                 <div class="footer-section f-section-1">
                     <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
                 </div>
