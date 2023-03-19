@@ -4,11 +4,11 @@
 </head>
 <body>
 <?php 
+print_r($_POST);
+// $_POST['ibilgi'];
+// $_POST['ituru'];
 
-$_POST['ad'];
-$_POST['soyad'];
-$_POST['vd'];
-echo $_POST['ad'] . $_POST['soyad'] . $_POST['vd'];;  ?>
+// echo $_POST['ibilgi'] . $_POST['ituru'];  ?>
 
 </body>
 </html>

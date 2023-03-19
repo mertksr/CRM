@@ -22,8 +22,23 @@
     <link rel="stylesheet" type="text/css" href="../public/src/assets/css/dark/scrollspyNav.css" />
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/stepper/custom-bsStepper.css">
     <!--  END CUSTOM STYLE FILE  -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
- 
+
+    <script src="https://use.fontawesome.com/8718f85db8.js"></script>
+    <style>
+        .boxx {
+            display: none;
+        }
+
+        label {
+            margin-bottom: 0 !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+        integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -97,69 +112,93 @@
                                         <div class="bs-stepper-content">
                                             <div id="defaultStep-one" class="content" role="tabpanel">
                                                 <form id="musteriekleform" method="post" action="aa.php">
-                                                    <div class="row">
-                                                        <div class="form-group col-6">
-                                                            <label for="flexRadioDefault1">Kayıt Türü</label>
-
+                                                    <div class="row g-2">
+                                                        <div class="form-group mb-1 col-6">
+                                                            <label>Kayıt Türü</label>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="flexRadioDefault" value="bb"
-                                                                    id="flexRadioDefault1" checked>
-                                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                                    name="flexRadioDefault" id="flexRadioDefault1"
+                                                                    checked>
+                                                                <label for="flexRadioDefault1">
                                                                     Gerçek Kişi
                                                                 </label>
                                                             </div>
 
-                                                            <div class="form-check">
+                                                            <div class="form-check form-check-danger">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="flexRadioDefault" value="ccccccc"
-                                                                    id="flexRadioDefault2">
-                                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                                    name="flexRadioDefault" id="flexRadioDefault2">
+                                                                <label for="flexRadioDefault2">
                                                                     Tüzel Kişi
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group mb-4 col-12 col md-6 col-lg-6">
+                                                        <div class="form-group col-12 col-md-6 col-lg-6">
                                                             <label for="defaultForm-name">Ad</label>
                                                             <input form="musteriekleform" type="text" name="ad"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
-                                                        <div class="form-group mb-4 col-12 col md-6 col-lg-6">
+                                                        <div class="form-group mb-1 col-12 col-md-6 col-lg-6">
                                                             <label for="defaultForm-name">Soyad</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
+                                                        <div class="form-group mt-0 col-12 col-md-6 col-lg-6">
+                                                            <label for="defaultForm-name" class="p-1">Doğum Günü</label>
+                                                            <input form="musteriekleform" type="date"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 col-md-6 col-lg-6">
+                                                            <label for="defaultForm-name">Çalıştığı Firma</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group  mt-0 mb-1 col-6 col-lg-6">
+                                                            <label for="defaultForm-name"
+                                                                class="p-1">Unvanı/Mesleği</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
 
-                                                        <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name" class="p-1">Tel1</label>
-                                                            <input form="musteriekleform" type="text"
-                                                                class="form-control" id="defaultForm-name">
-                                                        </div>
-                                                        <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name" class="p-1">Tel2</label>
-                                                            <input form="musteriekleform" type="text"
-                                                                class="form-control" id="defaultForm-name">
-                                                        </div>
-                                                        <div class="form-group mb-4  col-6">
-                                                            <label for="defaultForm-name" class="p-1">Tel3</label>
-                                                            <input form="musteriekleform" type="text"
-                                                                class="form-control" id="defaultForm-name">
-                                                        </div>
 
-                                                        <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name">Tc No/Vergi No</label>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Müşteri TCKN
+                                                                No</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
-                                                        <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name">Vergi İli</label>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Vergi
+                                                                Dairesi</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
-                                                        <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name">Vergi Dairesi</label>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Marka Adı</label>
                                                             <input form="musteriekleform" type="text"
-                                                                class="form-control" name="ad" id="defaultForm-name">
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Şube Adı</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Müşteri
+                                                                Kısaltması</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Firma Ticari
+                                                                Unvanı</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Müşteri
+                                                                Unvanı</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
                                                         </div>
                                                     </div>
 
@@ -175,91 +214,15 @@
 
                                             <div id="defaultStep-two" class="content" role="tabpanel">
                                                 <form>
-
-                                                    <div class="row">
-                                                        <div class="form-group mb-3 col-6">
-                                                            <label for="defaultForm-name">Kurulum Tarihi</label>
-                                                            <input form="musteriekleform" type="date"
-                                                                class="form-control" id="defaultForm-name">
-                                                        </div>
-                                                        <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name">Garanti Bitiş Tarihi</label>
-                                                            <input form="musteriekleform" type="date"
-                                                                class="form-control" id="defaultForm-name">
-                                                        </div>
-                                                        <div class="form-group mb-4  col-6">
-                                                            <label for="defaultInputState" class="form-label p-1">Cihaz
-                                                                Marka</label>
-                                                            <select form="musteriekleform" id="defaultInputState"
-                                                                class="form-select">
-                                                                <option selected="">Seç</option>
-                                                                <option>Aqualine</option>
-                                                                <option>Aqualix</option>
-                                                                <option>Ocean</option>
-                                                                <option>Pınar/Diğer</option>
-
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group mb-4  col-6">
-                                                            <label for="defaultInputState" class="form-label p-1">Cihaz
-                                                                Model</label>
-                                                            <select form="musteriekleform" id="defaultInputState"
-                                                                class="form-select" name="vd">
-                                                                <option selected="">Seç</option>
-                                                                <option>Açık Kasa</option>
-                                                                <option>Kapalı Kasa</option>
-                                                                <option>Bina girişi</option>
-
-
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group mb-3 col-6">
-                                                            <label for="defaultForm-name">Son Bakım Tarihi</label>
-                                                            <input form="musteriekleform" type="date"
-                                                                class="form-control" id="defaultForm-name">
-                                                        </div>
-                                                        <div class="form-group mb-3 col-6">
-                                                            <label for="defaultInputState" class="form-label p-1">Bakım
-                                                                Periyodu</label>
-                                                            <select form="musteriekleform" id="defaultInputState"
-                                                                class="form-select">
-                                                                <option selected="">Seç</option>
-                                                                <option>3</option>
-                                                                <option>6</option>
-                                                                <option>12</option>
-                                                                <option>1</option>
-                                                                <option>2</option>
-                                                                <option>4</option>
-                                                                <option>5</option>
-                                                                <option>7</option>
-                                                                <option>8</option>
-                                                                <option>9</option>
-                                                                <option>10</option>
-                                                                <option>11</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group mb-4 col-6">
-                                                            <label for="defaultForm-name">Notlar</label>
+                                                    <div class="row g-3">
+                                                        <div class="col-12 col-sm-6"">
+                                                            <label for=" defaultInputAddress" class="form-label">
+                                                            Bölge</label>
                                                             <input form="musteriekleform" type="text"
-                                                                class="form-control" id="defaultForm-name">
+                                                                class="form-control" id="defaultInputAddress"
+                                                                placeholder="1234 Main St">
                                                         </div>
-                                                        <div class="form-group mb-0 col-6">
-                                                            <label for="defaultForm-name">Satış Fiyatı</label>
-                                                            <input form="musteriekleform" type="text" name="soyad"
-                                                                class="form-control" id="defaultForm-name">
-                                                        </div>
-                                                    </div>
-                                                </form>
-
-                                                <div class="button-action mt-1">
-                                                    <button class="btn btn-secondary btn-prev me-3">Prev</button>
-                                                    <button class="btn btn-secondary btn-nxt">Next</button>
-                                                </div>
-                                            </div>
-                                            <div id="defaultStep-three" class="content" role="tabpanel">
-                                                <form class="row g-3">
-                                                    <div class="row g-3 needs-validation">
-                                                        <div class="col-12">
+                                                        <div class="col-12 col-sm-6">
                                                             <label for="defaultInputAddress"
                                                                 class="form-label">Adres</label>
                                                             <input form="musteriekleform" type="text"
@@ -268,21 +231,70 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="defaultInputCity"
-                                                                class="form-label">Bölge</label>
+                                                                class="form-label">İlçe</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultInputCity">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="defaultInputCity" class="form-label">İl</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultInputCity">
                                                         </div>
 
-                                                        <div class="col-md-6">
-                                                            <button class="btn btn-sm btn-primary">Konum Bul</button>
-                                                            <button class="btn btn-sm btn-success">Konumu Aç</button>
-
-                                                            <input class="form-control" name="ad" type="text" readonly>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Konum"
+                                                                readonly>
+                                                            <button class="btn btn-outline-primary" type="button">Konum
+                                                                Bul</button>
+                                                            <button class="btn btn-outline-success"
+                                                                type="button">Haritada Aç</button>
                                                         </div>
+
                                                     </div>
+
                                                 </form>
 
-                                                <div class="button-action mt-3">
+                                                <div class="button-action mt-1">
+                                                    <button class="btn btn-secondary btn-prev me-3">Prev</button>
+                                                    <button class="btn btn-secondary btn-nxt">Next</button>
+                                                </div>
+                                            </div>
+                                            <div id="defaultStep-three" class="content" role="tabpanel">
+
+
+                                                <div class="info-row">
+                                                    <div class="row g-3">
+                                                        <div class="col-5 info-row-item">
+                                                            <label for="defaultInputCity" class="form-label">İletişim
+                                                                Bilgisi</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultInputCity"
+                                                                name="ibilgi[]">
+                                                        </div>
+                                                        <div class="col-5 info-row-item">
+                                                            <label for="defaultInputState" class="form-label ">İletişim
+                                                                Türü</label>
+                                                            <select form="musteriekleform" id="defaultInputState"
+                                                                name="ituru[]" class="form-select">
+                                                                <option selected="">Seç</option>
+                                                                <option>Cep Tel</option>
+                                                                <option>Faks</option>
+                                                                <option>Email</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-2 info-row-item p-0">
+                                                        <label for="defaultInputState" class="form-label ">Ekle</label>
+                                                        <button id="add-contact" type="button"
+                                                    class="btn btn-primary add_button " style="width:100%;height:65%;"><i
+                                                        class="fa-solid fa-circle-plus fa-lg"></i></button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+
+                                                <div class="button-action mt-2">
                                                     <button class="btn btn-secondary btn-prev me-3">Prev</button>
                                                     <input type="submit" form="musteriekleform"
                                                         class="btn btn-success me-3">
@@ -323,7 +335,73 @@
         <!--  END CONTENT AREA  -->
     </div>
     <!-- END MAIN CONTAINER -->
+    <script>
+        $(document).ready(function () {
+            var maxField = 10; //Input fields increment limitation
+            var addButton = $('.add_button'); //Add button selector
+            var wrapper = $('.info-row'); //Input field wrapper
+            var fieldHTML = `                                                    <div class="row  g-3">      
+                                                        <div class="col-5 info-row-item">
+                                                            <label for="defaultInputCity" class="form-label">İletişim
+                                                                Bilgisi</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultInputCity"
+                                                                name="ibilgi[]">
+                                                        </div>
+                                                        <div class="col-5 info-row-item">
+                                                            <label for="defaultInputState" class="form-label ">İletişim
+                                                                Türü</label>
+                                                            <select form="musteriekleform" id="defaultInputState"
+                                                                name="ituru[]" class="form-select">
+                                                                <option selected="">Seç</option>
+                                                                <option>Cep Tel</option>
+                                                                <option>Faks</option>
+                                                                <option>Email</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-2 info-row-item p-0">
+                                                        <label for="defaultInputState" class="form-label ">Sil</label>
+                                                        <button id="add-contact" type="button"
+                                                    class="btn btn-danger remove_button add_button" style="width:100%;height:65%;"><i
+                                                        class="fa-solid fa-circle-plus fa-lg"></i></button>
+                                                        </div>
+                                                    </div>`;
+            var x = 1; //Initial field counter is 1
 
+            //Once add button is clicked
+            $(addButton).click(function () {
+                //Check maximum number of input fields
+                if (x < maxField) {
+                    x++; //Increment field counter
+                    $(wrapper).append(fieldHTML); //Add field html
+                }
+            });
+
+            //Once remove button is clicked
+            $(wrapper).on('click', '.remove_button', function (e) {
+                e.preventDefault();
+                $(this).parent().parent('div').remove(); //Remove field html
+                x--; //Decrement field counter
+            });
+        });
+
+
+
+        const box = document.getElementsByClassName("boxx");
+        function handleRadioClick() {
+
+            if (document.getElementById('flexRadioDefault2').checked) {
+                for (let i = 0; i < box.length; i++) { box[i].style.display = 'block'; }
+            } else {
+                for (let i = 0; i < box.length; i++) { box[i].style.display = 'none'; }
+            }
+        }
+
+        const radioButtons = document.querySelectorAll('input[name="flexRadioDefault"]');
+        radioButtons.forEach(radio => {
+            radio.addEventListener('click', handleRadioClick);
+        });
+    </script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../public/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
