@@ -48,7 +48,7 @@
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
             <div class="container">
-                <div class="container">
+                <div class="container" style="margin: 0 auto;">
                     <div class="row layout-top-spacing" id="cancel-row">
 
                         <div id="wizard_Default" class="col-lg-12 layout-spacing">
@@ -121,7 +121,7 @@
                                                     <button class="btn btn-secondary btn-prev me-3" disabled>Önceki</button>
                                                     <button class="btn btn-secondary btn-nxt">Sonraki</button>
                                                 </div>
-                                            </div>
+                                            </div>                               
                                             <div id="defaultStep-two" class="content" role="tabpanel">
                                 <div class="row">
                                             <div class="form-group mb-4 col-12 col md-6 col-lg-6">
@@ -136,8 +136,8 @@
 
 
                                                 <div class="button-action mt-2">
-                                                    <button class="btn btn-secondary btn-prev me-3">Prev</button>
-                                                    <button class="btn btn-secondary btn-nxt">Next</button>
+                                                    <button class="btn btn-secondary btn-prev me-3">Önceki</button>
+                                                    <button class="btn btn-secondary btn-nxt">Sonraki</button>
                                                 </div>
                                             </div>
                                             <div id="defaultStep-three" class="content" role="tabpanel" >
@@ -151,7 +151,7 @@
                                 </form>
 
                                                 <div class="button-action mt-3">
-                                                    <button class="btn btn-secondary btn-prev me-3">Prev</button>
+                                                    <button class="btn btn-secondary btn-prev me-3">Önceki</button>
                                                     <input type="submit" form="urunekleform" class="btn btn-success me-3">
                                                 </div>
                                             </div>

@@ -32,10 +32,6 @@
         label {
             margin-bottom: 0 !important;
         }
-        .mekle {
-  position: relative;
-  float: right;
-}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
         integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
@@ -93,14 +89,14 @@
                                             <div class="step" data-target="#defaultStep-one">
                                                 <button type="button" class="step-trigger" role="tab">
                                                     <span class="bs-stepper-circle">1</span>
-                                                    <span class="bs-stepper-label">Step One</span>
+                                                    <span class="bs-stepper-label">Müşteri Bilgisi</span>
                                                 </button>
                                             </div>
                                             <div class="line"></div>
                                             <div class="step" data-target="#defaultStep-two">
                                                 <button type="button" class="step-trigger" role="tab">
                                                     <span class="bs-stepper-circle">2</span>
-                                                    <span class="bs-stepper-label">Step Two</span>
+                                                    <span class="bs-stepper-label">Adres Bilgisi</span>
                                                 </button>
                                             </div>
                                             <div class="line"></div>
@@ -108,7 +104,7 @@
                                                 <button type="button" class="step-trigger" role="tab">
                                                     <span class="bs-stepper-circle">3</span>
                                                     <span class="bs-stepper-label">
-                                                        <span class="bs-stepper-title">Step Three</span>
+                                                        <span class="bs-stepper-title">İletişim Bilgisi</span>
                                                     </span>
                                                 </button>
                                             </div>
