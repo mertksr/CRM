@@ -32,6 +32,10 @@
         label {
             margin-bottom: 0 !important;
         }
+        .mekle {
+  position: relative;
+  float: right;
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
         integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
@@ -132,17 +136,27 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group col-12 col-md-6 col-lg-6">
+                                                        <div class="form-group col-6 col-md-6 col-lg-6">
                                                             <label for="defaultForm-name">Ad</label>
                                                             <input form="musteriekleform" type="text" name="ad"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
-                                                        <div class="form-group mb-1 col-12 col-md-6 col-lg-6">
+                                                        <div class="form-group mb-1 col-6 col-md-6 col-lg-6">
                                                             <label for="defaultForm-name">Soyad</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
-                                                        <div class="form-group mt-0 col-12 col-md-6 col-lg-6">
+                                                        <div class="form-group mb-1 col-6 col-md-6 col-lg-6">
+                                                            <label for="defaultForm-name">TC No</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 col-md-6 col-lg-6">
+                                                            <label for="defaultForm-name">Referans No</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mt-0 col-6 col-md-6 col-lg-6">
                                                             <label for="defaultForm-name" class="p-1">Doğum Günü</label>
                                                             <input form="musteriekleform" type="date"
                                                                 class="form-control" id="defaultForm-name">
@@ -160,13 +174,13 @@
                                                         </div>
 
 
-                                                        <div class="form-group mb-1 col-6 boxx">
-                                                            <label for="defaultForm-name" class="p-1">Müşteri TCKN
+                                                        <div class="form-group  mt-0 mb-0 col-6 col-lg-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Vergi
                                                                 No</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
-                                                        <div class="form-group mb-1 col-6 boxx">
+                                                        <div class="form-group mt-0 mb-0 col-6 col-lg-6 boxx">
                                                             <label for="defaultForm-name" class="p-1">Vergi
                                                                 Dairesi</label>
                                                             <input form="musteriekleform" type="text"
@@ -182,12 +196,7 @@
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
-                                                        <div class="form-group mb-1 col-6 boxx">
-                                                            <label for="defaultForm-name" class="p-1">Müşteri
-                                                                Kısaltması</label>
-                                                            <input form="musteriekleform" type="text"
-                                                                class="form-control" id="defaultForm-name">
-                                                        </div>
+
                                                         <div class="form-group mb-1 col-6 boxx">
                                                             <label for="defaultForm-name" class="p-1">Firma Ticari
                                                                 Unvanı</label>
@@ -195,8 +204,29 @@
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Ticaret Sicil No</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Oda Sicil No</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Mersis No</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 boxx">
                                                             <label for="defaultForm-name" class="p-1">Müşteri
                                                                 Unvanı</label>
+                                                            <input form="musteriekleform" type="text"
+                                                                class="form-control" id="defaultForm-name">
+                                                        </div>
+                                                        <div class="form-group mb-1 col-6 boxx">
+                                                            <label for="defaultForm-name" class="p-1">Müşteri
+                                                                Kısaltması</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
@@ -207,8 +237,8 @@
                                                 </form>
                                                 <div class="button-action mt-1">
                                                     <button class="btn btn-secondary btn-prev me-3"
-                                                        disabled>Prev</button>
-                                                    <button class="btn btn-secondary btn-nxt">Next</button>
+                                                        disabled>Önceki</button>
+                                                    <button class="btn btn-secondary btn-nxt">Sonraki</button>
                                                 </div>
                                             </div>
 
@@ -255,8 +285,8 @@
                                                 </form>
 
                                                 <div class="button-action mt-1">
-                                                    <button class="btn btn-secondary btn-prev me-3">Prev</button>
-                                                    <button class="btn btn-secondary btn-nxt">Next</button>
+                                                    <button class="btn btn-secondary btn-prev me-3">Önceki</button>
+                                                    <button class="btn btn-secondary btn-nxt">Sonraki</button>
                                                 </div>
                                             </div>
                                             <div id="defaultStep-three" class="content" role="tabpanel">
@@ -295,7 +325,7 @@
 
 
                                                 <div class="button-action mt-2">
-                                                    <button class="btn btn-secondary btn-prev me-3">Prev</button>
+                                                    <button class="btn btn-secondary btn-prev me-3">Önceki</button>
                                                     <input type="submit" form="musteriekleform"
                                                         class="btn btn-success me-3">
                                                 </div>
