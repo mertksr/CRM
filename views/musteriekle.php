@@ -10,8 +10,10 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link href="../public/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
-    <link href="../public/public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
+
+
 
     <!--  BEGIN CUSTOM STYLE FILE  -->
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/src/stepper/bsStepper.min.css">
@@ -268,12 +270,12 @@
                                                         </div>
 
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Konum"
-                                                                readonly>
-                                                            <button class="btn btn-outline-primary" type="button">Konum
+                                                            <input type="text" class="form-control" id="locationInput" placeholder="Konum"
+                                                                readonly value="">
+                                                            <button class="btn btn-outline-primary" type="button"  onclick="getLocation()">Konum
                                                                 Bul</button>
                                                             <button class="btn btn-outline-success"
-                                                                type="button">Haritada Aç</button>
+                                                                type="button" onclick="goLocation()" id="goLocationBtn">Haritada Aç</button>
                                                         </div>
 
                                                     </div>
@@ -362,38 +364,66 @@
     </div>
     <!-- END MAIN CONTAINER -->
     <script>
+
+
+            var locationInput = document.getElementById("locationInput");
+
+            function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(showPosition);
+            } else { 
+                locationInput.innerHTML = "Geolocation is not supported by this browser.";
+            }
+            }
+                
+            function showPosition(position) {
+             locationInput.value= position.coords.latitude + "," + position.coords.longitude;
+            }
+
+const goLocationBtn = document.getElementById("goLocationBtn");
+function goLocation (){
+    if(locationInput.value == ""){
+alert("Önce Konumunuzu Bulmalısınız")        
+}else{
+    window.location.href = "https://maps.google.com/?q=" + locationInput.value;
+}
+
+}
+
+
+
         $(document).ready(function () {
-            var maxField = 10; //Input fields increment limitation
+            var maxField = 15; //Input fields increment limitation
             var addButton = $('.add_button'); //Add button selector
             var wrapper = $('.info-row'); //Input field wrapper
-            var fieldHTML = `                                                    <div class="row  g-3">      
-                                                        <div class="col-5 info-row-item">
-                                                            <label for="defaultInputCity" class="form-label">İletişim
-                                                                Bilgisi</label>
-                                                            <input form="musteriekleform" type="text"
-                                                                class="form-control" id="defaultInputCity"
-                                                                name="ibilgi[]">
-                                                        </div>
-                                                        <div class="col-5 info-row-item">
-                                                            <label for="defaultInputState" class="form-label ">İletişim
-                                                                Türü</label>
-                                                            <select form="musteriekleform" id="defaultInputState"
-                                                                name="ituru[]" class="form-select">
-                                                                <option selected="">Seç</option>
-                                                                <option>Cep Tel</option>
-                                                                <option>Faks</option>
-                                                                <option>Email</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-2 info-row-item p-0">
-                                                        <label for="defaultInputState" class="form-label ">Sil</label>
-                                                        <button id="add-contact" type="button"
-                                                    class="btn btn-danger remove_button add_button" style="width:100%;height:65%;"><i
-                                                        class="fa-solid fa-circle-plus fa-lg"></i></button>
-                                                        </div>
-                                                    </div>`;
+            var fieldHTML = `   
+                                <div class="row  g-3">      
+                                    <div class="col-5 info-row-item">
+                                        <label for="defaultInputCity" class="form-label">İletişim
+                                            Bilgisi</label>
+                                        <input form="musteriekleform" type="text"
+                                            class="form-control" id="defaultInputCity"
+                                            name="ibilgi[]">
+                                    </div>
+                                    <div class="col-5 info-row-item">
+                                        <label for="defaultInputState" class="form-label ">İletişim
+                                            Türü</label>
+                                        <select form="musteriekleform" id="defaultInputState"
+                                            name="ituru[]" class="form-select">
+                                            <option selected="">Seç</option>
+                                            <option>Cep Tel</option>
+                                            <option>Faks</option>
+                                            <option>Email</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-2 info-row-item p-0">
+                                    <label for="defaultInputState" class="form-label ">Sil</label>
+                                    <button id="add-contact" type="button"
+                                        class="btn btn-danger remove_button add_button" style="width:100%;height:65%;"><i
+                                    class="fa-solid fa-circle-minus fa-lg"></i></button>
+                                    </div>
+                                </div> `;
             var x = 1; //Initial field counter is 1
-
             //Once add button is clicked
             $(addButton).click(function () {
                 //Check maximum number of input fields

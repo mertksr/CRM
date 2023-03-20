@@ -12,7 +12,8 @@
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
-
+    <!-- Mültiselect -->
+    <link href="../public/src/plugins/src/multiselect/multi-select.css" rel="stylesheet" type="text/css" />
     <!--  BEGIN CUSTOM STYLE FILE  -->
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/src/stepper/bsStepper.min.css">
 
@@ -136,6 +137,7 @@
     <!--  END CONTENT AREA  -->
     </div>
     <!-- END MAIN CONTAINER -->
+    <script src="../public/src/plugins/multiselect/jquery.multi-select.js"></script>
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
