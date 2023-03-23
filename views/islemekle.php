@@ -161,8 +161,8 @@
                                 <div class="widget-content widget-content-area">
                                     <form class="row g-3">
                                         <div class="col-6">
-                                            <label for="inputAddress" class="form-label">Müşteri</label>
-                                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                            <label for="inputAddress" class="form-label">Müşteri No</label>
+                                            <input type="text" class="form-control" id="inputAddress">
                                         </div>
                                         <div class="col-6">
                                             <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>

@@ -27,7 +27,7 @@
         </div>
         <div class="shadow-bottom"></div>
         <ul class="list-unstyled menu-categories" id="accordionExample">
-            <li class="menu active">
+            <li class="menu <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'index') {  echo "active"; } ?>">
                 <a href="index.php" class="dropdown-toggle">
                     <div class="">
                         <span>Ana Sayfa</span>
@@ -36,7 +36,7 @@
                 </a>
             </li>
 
-            <li class="menu">
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'musteriler' || basename($_SERVER['PHP_SELF'], '.php') == 'musteriekle') {  echo "active"; } ?>">
                 <a href="musteriler.php" class="dropdown-toggle">                    
                     <div class="">                        
                         <span> Müşteriler</span>
@@ -52,15 +52,9 @@
                 </a>
             </li>
 
-            <li class="menu menu-heading">
-                <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-minus">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg><span>USER INTERFACE</span></div>
-            </li>
 
-            <li class="menu">
+
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'islemler' || basename($_SERVER['PHP_SELF'], '.php') == 'islemekle') {  echo "active"; } ?>">
                 <a href="islemler.php" class="dropdown-toggle">                    
                     <div class="">                        
                         <span>İşlemler</span>
@@ -77,7 +71,7 @@
             </li>
 
 
-            <li class="menu">
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'urunler' || basename($_SERVER['PHP_SELF'], '.php') == 'urunekle') {  echo "active"; } ?>">
                 <a href="urunler.php" class="dropdown-toggle">                    
                     <div class="">                        
                         <span>Ürünler</span>
@@ -93,13 +87,7 @@
                 </a>
             </li>
 
-            <li class="menu menu-heading">
-                <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-minus">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg><span>USER INTERFACE</span></div>
-            </li>
+
 
             <li class="menu">
                 <a href="#elements" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
