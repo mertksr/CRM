@@ -14,7 +14,6 @@
     <!-- END GLOBAL MANDATORY STYLES -->
 
 
-
     <!--  BEGIN CUSTOM STYLE FILE  -->
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/src/stepper/bsStepper.min.css">
 
@@ -63,7 +62,12 @@
     <div class="main-container " id="container">
 
         <div class="overlay"></div>
-        <div class="search-overlay"></div>
+
+
+        <div class="search-overlay">
+
+
+        </div>
 
         <!--  BEGIN SIDEBAR  -->
         <?php include 'partials/navbar.php' ?>
@@ -202,12 +206,14 @@
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-1 col-6 boxx">
-                                                            <label for="defaultForm-name" class="p-1">Ticaret Sicil No</label>
+                                                            <label for="defaultForm-name" class="p-1">Ticaret Sicil
+                                                                No</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-1 col-6 boxx">
-                                                            <label for="defaultForm-name" class="p-1">Oda Sicil No</label>
+                                                            <label for="defaultForm-name" class="p-1">Oda Sicil
+                                                                No</label>
                                                             <input form="musteriekleform" type="text"
                                                                 class="form-control" id="defaultForm-name">
                                                         </div>
@@ -270,12 +276,14 @@
                                                         </div>
 
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" id="locationInput" placeholder="Konum"
-                                                                readonly value="">
-                                                            <button class="btn btn-outline-primary" type="button"  onclick="getLocation()">Konum
+                                                            <input type="text" class="form-control" id="locationInput"
+                                                                placeholder="Konum" readonly value="">
+                                                            <button class="btn btn-outline-primary" type="button"
+                                                                onclick="getLocation()">Konum
                                                                 Bul</button>
-                                                            <button class="btn btn-outline-success"
-                                                                type="button" onclick="goLocation()" id="goLocationBtn">Haritada Aç</button>
+                                                            <button class="btn btn-outline-success" type="button"
+                                                                onclick="goLocation()" id="goLocationBtn">Haritada
+                                                                Aç</button>
                                                         </div>
 
                                                     </div>
@@ -311,10 +319,12 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-2 info-row-item p-0">
-                                                        <label for="defaultInputState" class="form-label ">Ekle</label>
-                                                        <button id="add-contact" type="button"
-                                                    class="btn btn-primary add_button " style="width:100%;height:65%;"><i
-                                                        class="fa-solid fa-circle-plus fa-lg"></i></button>
+                                                            <label for="defaultInputState"
+                                                                class="form-label ">Ekle</label>
+                                                            <button id="add-contact" type="button"
+                                                                class="btn btn-primary add_button "
+                                                                style="width:100%;height:65%;"><i
+                                                                    class="fa-solid fa-circle-plus fa-lg"></i></button>
                                                         </div>
                                                     </div>
 
@@ -366,29 +376,29 @@
     <script>
 
 
-            var locationInput = document.getElementById("locationInput");
+        var locationInput = document.getElementById("locationInput");
 
-            function getLocation() {
+        function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.watchPosition(showPosition);
-            } else { 
+            } else {
                 locationInput.innerHTML = "Geolocation is not supported by this browser.";
             }
-            }
-                
-            function showPosition(position) {
-             locationInput.value= position.coords.latitude + "," + position.coords.longitude;
+        }
+
+        function showPosition(position) {
+            locationInput.value = position.coords.latitude + "," + position.coords.longitude;
+        }
+
+        const goLocationBtn = document.getElementById("goLocationBtn");
+        function goLocation() {
+            if (locationInput.value == "") {
+                alert("Önce Konumunuzu Bulmalısınız")
+            } else {
+                window.location.href = "https://maps.google.com/?q=" + locationInput.value;
             }
 
-const goLocationBtn = document.getElementById("goLocationBtn");
-function goLocation (){
-    if(locationInput.value == ""){
-alert("Önce Konumunuzu Bulmalısınız")        
-}else{
-    window.location.href = "https://maps.google.com/?q=" + locationInput.value;
-}
-
-}
+        }
 
 
 

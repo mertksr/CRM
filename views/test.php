@@ -12,9 +12,10 @@
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
-    <!-- Mültiselect -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    <!-- Mültiselect -->
+    <link href="../public/src/plugins/src/multiselect/multi-select.css" rel="stylesheet" type="text/css" />
     <!--  BEGIN CUSTOM STYLE FILE  -->
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/src/stepper/bsStepper.min.css">
 
@@ -24,91 +25,72 @@
     <link rel="stylesheet" type="text/css" href="../public/src/assets/css/dark/scrollspyNav.css" />
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/stepper/custom-bsStepper.css">
     <!--  END CUSTOM STYLE FILE  -->
-    <style>
-        .multi-select-container {
-            display: inline-block;
-            position: relative;
-        }
-
-        @media only screen and (max-width: 600px) {
-            .ms-container {
-                width: 320px;
-            }
-        }
-
-        @media screen and (max-width: 900px) and (min-width: 600px) {
-            .ms-container {
-                width: 320px;
-            }
-        }
-
-        .multi-select-menu {
-            position: absolute;
-            left: 0;
-            top: 0.8em;
-            float: left;
-            min-width: 100%;
-            background: #fff;
-            margin: 1em 0;
-            padding: 0.4em 0;
-            border: 1px solid #aaa;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            display: none;
-        }
-
-        .multi-select-menu input {
-            margin-right: 0.3em;
-            vertical-align: 0.1em;
-        }
-
-        .multi-select-button {
-            display: inline-block;
-            font-size: 0.875em;
-            padding: 0.2em 0.6em;
-            max-width: 20em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            vertical-align: -0.5em;
-            background-color: #fff;
-            border: 1px solid #aaa;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            cursor: default;
-        }
-
-        .multi-select-button:after {
-            content: "";
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0.4em 0.4em 0 0.4em;
-            border-color: #999 transparent transparent transparent;
-            margin-left: 0.4em;
-            vertical-align: 0.1em;
-        }
-
-        .multi-select-container--open .multi-select-menu {
-            display: block;
-        }
-
-        .multi-select-container--open .multi-select-button:after {
-            border-width: 0 0.4em 0.4em 0.4em;
-            border-color: transparent transparent #999 transparent;
-        }
-        .choices[data-type*=select-multiple] .choices__inner, .choices[data-type*=text] .choices__inner {
-            cursor:pointer;
-        }
-        
-
-.choices__inner, .choices__input, .choices__list {
-background-color:white;
+    <style> 
+    .multi-select-container {
+  display: inline-block;
+  position: relative;
 }
-.choices__item {
-    color: #505463;
+@media only screen and (max-width: 600px) {
+.ms-container {
+    width:320px;
+}}
+@media screen and (max-width: 900px) and (min-width: 600px){
+.ms-container {
+    width:320px;
+}}
+.multi-select-menu {
+  position: absolute;
+  left: 0;
+  top: 0.8em;
+  float: left;
+  min-width: 100%;
+  background: #fff;
+  margin: 1em 0;
+  padding: 0.4em 0;
+  border: 1px solid #aaa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: none;
 }
-    </style>
+
+.multi-select-menu input {
+  margin-right: 0.3em;
+  vertical-align: 0.1em;
+}
+
+.multi-select-button {
+  display: inline-block;
+  font-size: 0.875em;
+  padding: 0.2em 0.6em;
+  max-width: 20em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: -0.5em;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: default;
+}
+
+.multi-select-button:after {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.4em 0.4em 0 0.4em;
+  border-color: #999 transparent transparent transparent;
+  margin-left: 0.4em;
+  vertical-align: 0.1em;
+}
+
+.multi-select-container--open .multi-select-menu { display: block; }
+
+.multi-select-container--open .multi-select-button:after {
+  border-width: 0 0.4em 0.4em 0.4em;
+  border-color: transparent transparent #999 transparent;
+} </style>
 </head>
 
 <body class="layout-boxed" data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100">
@@ -171,38 +153,40 @@ background-color:white;
                                             </select>
                                         </div>
 
-                                        <div class="col-12">
-                                            <label for="defaultInputState" class="form-label ">Kullanılan
-                                                Ürünler</label>
-                                            <select id="choices-multiple-remove-button" name="islemyapan[]"
-                                                placeholder="Ürün Seçiniz" multiple>
-                                                <option value="50|Alkalix">*Alkalix Cihaz</option>
-                                                <option value="50|Aqualine">*Aqualine Cihaz</option>
-                                                <option value="20|5 Micron">*5 micron</option>
-                                                <option value="70">Tuz filt</option>
-                                                <option value="50">Akış vanası</option>
-                                                <option value="100">vana</option>
-
-                                            </select>
+                                        <div class="col-6">
+                                            <label for="defaultInputState" class="form-label ">Kullanılan Ürünler</label>
+                                                <select multiple="multiple" id="select" class="form-select" name="select[]">
+                                            <option value='50'>1.Filtre</option>
+                                            <option value='50'>2.Filtre</option>
+                                            <option value='20'>3.Filtre</option>
+                                            <option value='70'>4.Filtre</option>
+                                            <option value='50'>5.Filtre</option>
+                                            <option value='100'>6.Filtre</option>
+                                            <option value='70'>7.Filtre</option>
+                                        </select>
                                         </div>
-
-
                                         <div class="col-12 col-lg-6 col-md-6">
-                                            <label for="inputAddress" class="form-label">İşlem Ücreti(readonly?)</label>
+                                            <label for="inputAddress" class="form-label">İşlem Ücreti</label>
                                             <input type="text" class="form-control" id="cost" name="cost">
                                         </div>
                                         <div class="col-6">
-                                            <label for="defaultInputState" class="form-label ">Periyot</label>
-                                            <select form="musteriekleform" id="defaultInputState" name="ituru[]"
-                                                class="form-select select">
-                                                <option selected="">6</option>
-                                                <option>12</option>
-                                                <option>3</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>4</option>
-                                            </select>
-                                        </div>
+                                        <div class="d-flex justify-content-center mt-100">
+    <div class="col-md-6"> <select id="choices-multiple-remove-button" placeholder="Select upto 5 tags" multiple>
+            <option value="HTML">HTML</option>
+            <option value="Jquery">Jquery</option>
+            <option value="CSS">CSS</option>
+            <option value="Bootstrap 3">Bootstrap 3</option>
+            <option value="Bootstrap 4">Bootstrap 4</option>
+            <option value="Java">Java</option>
+            <option value="Javascript">Javascript</option>
+            <option value="Angular">Angular</option>
+            <option value="Python">Python</option>
+            <option value="Hybris">Hybris</option>
+            <option value="SQL">SQL</option>
+            <option value="NOSQL">NOSQL</option>
+            <option value="NodeJS">NodeJS</option>
+        </select> </div>
+</div>
 
                                         <div class="col-6">
                                             <label for="inputAddress2" class="form-label">Notlar</label>
@@ -237,30 +221,17 @@ background-color:white;
     <script src="../public/src/plugins/src/multiselect/jquery.multi-select.js"></script>
     <script>
 
-        /*Multi select get data and sum */
-        $("#choices-multiple-remove-button").on("change", function () {
-            var selValue = $("#choices-multiple-remove-button").val();
-
-            var selValue = selValue.map(function (x) {
-                return parseInt(x, 10);
-            });
-            const sum = selValue.reduce((partialSum, a) => partialSum + a, 0);
-            $("#cost").val(sum);
-        });
-        /* End Of Multi select get data and sum */
-
-        /* Multiselect Settings*/
-        $(document).ready(function () {
-
-            var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-                removeItemButton: true,
-                searchResultLimit: 5,
-                renderChoiceLimit: 8
-            });
-
-
-        });
-/* End Of Multiselect Settings*/
+$(document).ready(function(){
+    
+    var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+       removeItemButton: true,
+       maxItemCount:5,
+       searchResultLimit:5,
+       renderChoiceLimit:5
+     }); 
+    
+    
+});
 
 
 

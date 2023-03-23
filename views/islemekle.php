@@ -97,6 +97,22 @@
             border-width: 0 0.4em 0.4em 0.4em;
             border-color: transparent transparent #999 transparent;
         }
+
+        .choices[data-type*=select-multiple] .choices__inner,
+        .choices[data-type*=text] .choices__inner {
+            cursor: pointer;
+        }
+
+
+        .choices__inner,
+        .choices__input,
+        .choices__list {
+            background-color: white;
+        }
+
+        .choices__item {
+            color: #505463;
+        }
     </style>
 </head>
 
@@ -146,13 +162,11 @@
                                     <form class="row g-3">
                                         <div class="col-6">
                                             <label for="inputAddress" class="form-label">Müşteri</label>
-                                            <input type="text" class="form-control" id="inputAddress"
-                                                placeholder="1234 Main St">
+                                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
                                         </div>
                                         <div class="col-6">
                                             <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
-                                            <select form="musteriekleform" id="defaultInputState" name="ituru[]"
-                                                class="form-select">
+                                            <select form="musteriekleform" id="defaultInputState" name="ituru[]" class="form-select">
                                                 <option selected="">Seç</option>
                                                 <option>Mehmet</option>
                                                 <option>Cihan</option>
@@ -163,11 +177,10 @@
                                         <div class="col-12">
                                             <label for="defaultInputState" class="form-label ">Kullanılan
                                                 Ürünler</label>
-                                            <select id="choices-multiple-remove-button" name="islemyapan[]"
-                                                placeholder="Ürün Seçiniz" multiple>
-                                                <option value="50">*Alkalix Cihaz</option>
-                                                <option value="50">*Aqualine Cihaz</option>
-                                                <option value="20">*5 micron</option>
+                                            <select id="choices-multiple-remove-button" name="islemyapan[]" placeholder="Ürün Seçiniz" multiple>
+                                                <option value="50|Alkalix">*Alkalix Cihaz</option>
+                                                <option value="50|Aqualine">*Aqualine Cihaz</option>
+                                                <option value="20|5 Micron">*5 micron</option>
                                                 <option value="70">Tuz filt</option>
                                                 <option value="50">Akış vanası</option>
                                                 <option value="100">vana</option>
@@ -178,12 +191,15 @@
 
                                         <div class="col-12 col-lg-6 col-md-6">
                                             <label for="inputAddress" class="form-label">İşlem Ücreti(readonly?)</label>
-                                            <input type="text" class="form-control" id="cost" name="cost">
+
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="cost" name="cost">
+                                                <button class="btn btn-outline-primary" style="z-index:0;" type="button" onclick="getLocation()">İndirim Uygula</button>
+                                            </div>
                                         </div>
                                         <div class="col-6">
                                             <label for="defaultInputState" class="form-label ">Periyot</label>
-                                            <select form="musteriekleform" id="defaultInputState" name="ituru[]"
-                                                class="form-select select">
+                                            <select form="musteriekleform" id="defaultInputState" name="ituru[]" class="form-select select">
                                                 <option selected="">6</option>
                                                 <option>12</option>
                                                 <option>3</option>
@@ -195,8 +211,7 @@
 
                                         <div class="col-6">
                                             <label for="inputAddress2" class="form-label">Notlar</label>
-                                            <input type="text" class="form-control" id="inputAddress2"
-                                                placeholder="Apartment, studio, or floor">
+                                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
                                         </div>
 
                                         <div class="col-12">
@@ -220,17 +235,14 @@
     </div>
     <!-- END MAIN CONTAINER -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
-        integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="../public/src/plugins/src/multiselect/jquery.multi-select.js"></script>
     <script>
-
         /*Multi select get data and sum */
-        $("#choices-multiple-remove-button").on("change", function () {
+        $("#choices-multiple-remove-button").on("change", function() {
             var selValue = $("#choices-multiple-remove-button").val();
 
-            var selValue = selValue.map(function (x) {
+            var selValue = selValue.map(function(x) {
                 return parseInt(x, 10);
             });
             const sum = selValue.reduce((partialSum, a) => partialSum + a, 0);
@@ -239,7 +251,7 @@
         /* End Of Multi select get data and sum */
 
         /* Multiselect Settings*/
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
                 removeItemButton: true,
@@ -249,10 +261,7 @@
 
 
         });
-/* End Of Multiselect Settings*/
-
-
-
+        /* End Of Multiselect Settings*/
     </script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
