@@ -6,11 +6,11 @@
             <ul class="navbar-item theme-brand flex-row  text-center">
                 <li class="nav-item theme-logo">
                     <a href="index.html">
-                        <img src="../public/src/assets/img/logo2.svg" class="navbar-logo" alt="logo">
+                     <!--   <img src="../public/src/assets/img/logo2.svg" class="navbar-logo" alt="logo"> -->
                     </a>
                 </li>
                 <li class="nav-item theme-text">
-                    <a href="index.html" class="nav-link"> CORK </a>
+                    <a href="index.html" class="nav-link"> COCK </a>
                 </li>
             </ul>
 <!--  Search area **

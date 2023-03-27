@@ -201,7 +201,7 @@ $(document).ready(function() {
                 { extend: 'print', className: 'btn btn-sm' },
                 {
                     text: 'Yeni Müşteri',
-                    className: 'btn btn-lg mekle',
+                    className: 'btn btn-lg special1',
                     action: function() {
                         window.location.href = 'musteriekle.php';
                     }
@@ -474,7 +474,7 @@ $(document).ready(function() {
                 { extend: 'print', className: 'btn btn-sm' },
                 {
                     text: 'Yeni Ürün',
-                    className: 'btn btn-lg',
+                    className: 'btn btn-lg special1',
                     action: function() {
                         window.location.href = 'urunekle.php';
                     }
@@ -747,7 +747,7 @@ $(document).ready(function() {
                 { extend: 'print', className: 'btn btn-sm' },
                 {
                     text: 'İşlem Ekle',
-                    className: 'btn btn-lg',
+                    className: 'btn btn-lg special1',
                     action: function() {
                         window.location.href = 'islemekle.php';
                     }
