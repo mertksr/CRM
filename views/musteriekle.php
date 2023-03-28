@@ -284,9 +284,9 @@
                                 Türü</label>
                               <select form="musteriekleform" required id="defaultInputState" name="ituru[]" class="form-select">
                                 <option value="">Seç</option>
-                                <option value="1">Mobil1</option>
-                                <option value="2">Tel</option>
-                                <option value="3">Whatsapp</option>
+                                <option value="Mobil">Mobil1</option>
+                                <option value="Tel">Tel</option>
+                                <option value="WhatsApp">WhatsApp</option>
                               </select>
                             </div>
                             <div class="col-2 info-row-item p-0">

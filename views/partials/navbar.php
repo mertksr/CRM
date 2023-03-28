@@ -57,7 +57,7 @@
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'islemler' || basename($_SERVER['PHP_SELF'], '.php') == 'islemekle') {  echo "active"; } ?>">
                 <a href="islemler.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span>İşlemler</span>
+                        <span>İşlemler(Sil)</span>
                     </div>
                        
                     <div>

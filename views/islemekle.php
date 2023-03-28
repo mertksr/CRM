@@ -159,63 +159,60 @@
                                     </div>
                                 </div>
                                 <div class="widget-content widget-content-area">
-                                    <form class="row g-3">
+                                    <form class="row g-3" method="POST" id="islemekleform" action="../netting/islemislem.php">
                                         <div class="col-6">
                                             <label for="inputAddress" class="form-label">Müşteri No</label>
-                                            <input type="text" class="form-control" id="inputAddress">
+                                            <input type="text" name="musterino" class="form-control" id="inputAddress">
                                         </div>
                                         <div class="col-6">
                                             <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
-                                            <select form="musteriekleform" id="defaultInputState" name="ituru[]" class="form-select">
+                                            <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
                                                 <option selected="">Seç</option>
-                                                <option>Mehmet</option>
-                                                <option>Cihan</option>
-                                                <option>Bedirhan</option>
+                                                <option name="Mehmet">Mehmet</option>
+                                                <option name="Cihan">Cihan</option>
+                                                <option name="Bedirhan">Bedirhan</option>
                                             </select>
                                         </div>
 
                                         <div class="col-12">
                                             <label for="defaultInputState" class="form-label ">Kullanılan
                                                 Ürünler</label>
-                                            <select id="choices-multiple-remove-button" name="islemyapan[]" placeholder="Ürün Seçiniz" multiple>
-                                                <option value="50|Alkalix">*Alkalix Cihaz</option>
-                                                <option value="50|Aqualine">*Aqualine Cihaz</option>
-                                                <option value="20|5 Micron">*5 micron</option>
-                                                <option value="70">Tuz filt</option>
-                                                <option value="50">Akış vanası</option>
-                                                <option value="100">vana</option>
-
+                                            <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
+                                                <option value="1">*Alkalix Cihaz</option>
+                                                <option value="2">*Aqualine Cihaz</option>
+                                                <option value="3">*5 micron</option>
+                                                <option value="4">Tuz filt</option>
                                             </select>
                                         </div>
 
 
                                         <div class="col-12 col-lg-6 col-md-6">
-                                            <label for="inputAddress" class="form-label">İşlem Ücreti(readonly?)</label>
+                                            <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="cost" name="cost">
-                                                <button class="btn btn-outline-primary" style="z-index:0;" type="button" onclick="getLocation()">İndirim Uygula</button>
+                                                <input type="text" class="form-control" id="cost" name="islemucreti" readonly  style="color:#505463;">
+                                                <button class="btn btn-outline-primary" style="z-index:0;" type="button" onclick="makeDiscount()">İndirim Uygula</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <label for="defaultInputState" class="form-label ">Periyot</label>
-                                            <select form="musteriekleform" id="defaultInputState" name="ituru[]" class="form-select select">
-                                                <option selected="">6</option>
-                                                <option>12</option>
-                                                <option>3</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>4</option>
+                                            <select form="islemekleform" id="defaultInputState" name="periyot" class="form-select select">
+                                                <option value="6" selected="">6</option>
+                                                <option value="12">12</option>
+                                                <option value="3">3</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="4">4</option>
                                             </select>
                                         </div>
 
                                         <div class="col-6">
                                             <label for="inputAddress2" class="form-label">Notlar</label>
-                                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                                            <input type="text" class="form-control" name="islemnotlari" id="inputAddress2" placeholder="Apartment, studio, or floor">
                                         </div>
 
                                         <div class="col-12">
-                                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                                            <button type="submit" name="islemekle" class="btn btn-primary">Kaydet</button>
                                         </div>
                                     </form>
                                 </div>
@@ -240,27 +237,35 @@
     <script>
         /*Multi select get data and sum */
         $("#choices-multiple-remove-button").on("change", function() {
-            var selValue = $("#choices-multiple-remove-button").val();
+            var selectedValues = $("#choices-multiple-remove-button").val();
+            var selectedString = selectedValues.join(",");
+            $.ajax({
+    url: "../netting/urunlericagir.php",
+    method: "POST",
+    data: { products: selectedString }
+  }).done(function(response) {
+    // AJAX isteği tamamlandığında, fiyatları alın
+    var prices = JSON.parse(response);
+    // Toplam fiyatı hesaplayın
+    var total = 0;
+    for (var i = 0; i < prices.length; i++) {
+      total += parseFloat(prices[i]);
+    }
+    $("#cost").val(total + " TL");
+  });
 
-            var selValue = selValue.map(function(x) {
-                return parseInt(x, 10);
-            });
-            const sum = selValue.reduce((partialSum, a) => partialSum + a, 0);
-            $("#cost").val(sum);
         });
-        /* End Of Multi select get data and sum */
 
-        /* Multiselect Settings*/
-        $(document).ready(function() {
+     
+                $(document).ready(function() {
 
             var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
                 removeItemButton: true,
                 searchResultLimit: 5,
                 renderChoiceLimit: 8
             });
-
-
         });
+
         /* End Of Multiselect Settings*/
     </script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
