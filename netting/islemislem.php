@@ -12,36 +12,39 @@
     } else {
         
     
-    $query = $db->prepare("INSERT INTO musteriler SET
+    $query = $db->prepare("INSERT INTO islemler SET
+      	islemNo = :islemno,
     	islemMusteriNo = :musterino,
         islemYapanKisi = :yapankisi,
-        islemPeriyot = :periyot,
         islemUcret = :ucret,
-        islemNot = :islemnot,
-
+        islemPeriyot = :periyot,
+        islemNot = :islemnot
                 ");
 
     $insert = $query->execute(array(
+        "islemno" =>$number,
         "musterino" =>$_POST['musterino'],
         "yapankisi" => $_POST['islemyapan'],
-        "periyot" => $_POST['periyot'],
         "ucret" => $_POST['islemucreti'],
-        "islemnot" => $_POST['islemnotlari'],
+        "periyot" => $_POST['periyot'],
+        "islemnot" => $_POST['islemnotlari']
     ));
-    $yapilanislem = $_POST['yapilanislem'];
+    
+    $yapilanislem = $_POST['kullanilanurunler'];
     $last_id = $db->lastInsertId();
-    for($i=0; $i<count($iletisimBilgisi); $i++){
+    for($i=0; $i<count($yapilanislem); $i++){
         $query = $db->prepare("INSERT INTO kullanilanurun SET
         musteriNo = :musterino,
         islemNo = :islemno,
-        kullanilan = :iletisimMusteriNo
+        kullanilanUrunId = :urunid
         ");
         $insert = $query->execute(array(
-            "musterino" => $yapilanislem[$i],
+            "musterino" => $_POST['musterino'],
             "islemno" => $number,
-            "iletisimMusteriNo" => $number
+            "urunid" => $yapilanislem[$i]
         ));
-    } }
+        } 
+    }
     if ($insert) {
         $last_id = $db->lastInsertId();
           header("Location:../views/islemekle.php?yt=basarili");

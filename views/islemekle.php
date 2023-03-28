@@ -206,9 +206,9 @@
                                             </select>
                                         </div>
 
-                                        <div class="col-6">
+                                        <div class="col-12">
                                             <label for="inputAddress2" class="form-label">Notlar</label>
-                                            <input type="text" class="form-control" name="islemnotlari" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                                            <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
                                         </div>
 
                                         <div class="col-12">
