@@ -88,11 +88,11 @@
                                         </div>
                                         <div class="bs-stepper-content">
                                             <div id="defaultStep-one" class="content" role="tabpanel">
-                                                <form id="urunekleform" method="POST" action="aa.php">
-                                                    <div class="row">
-                                                    <div class="form-group mb-4 col-12 col-md-6">
+                                                <form id="urunekleform" method="POST" action="../netting/urunislem.php">
+                                                    <div class="row g-2">
+                                                    <div class="form-group mb-2 col-12 col-md-6">
                                                         <label for="defaultInputState" class="form-label p-1">Ürün Cinsi</label>
-                                                        <select id="defaultInputState" name="ad" form="urunekleform" class="form-select">
+                                                        <select id="defaultInputState" name="uruncinsi" form="urunekleform" class="form-select">
                                                             <option selected="">Seç</option>
                                                             <option>Açık Kasa</option>
                                                             <option>Kapalı Kasa</option>
@@ -100,9 +100,9 @@
                                                             <option>Parça</option>
                                                         </select>
                                                         </div>
-                                                        <div class="form-group mb-4 col-md-6">
+                                                        <div class="form-group mb-2 col-md-6">
                                                         <label for="defaultInputState" class="form-label p-1">Ürün Modeli</label>
-                                                        <select id="defaultInputState" form="urunekleform" class="form-select">
+                                                        <select id="defaultInputState" name="urunmodeli" form="urunekleform" class="form-select">
                                                             <option selected="">Seç</option>
                                                             <option>İnline</option>
                                                             <option>Nomal</option>
@@ -110,9 +110,13 @@
                                                             <option>Parça</option>
                                                         </select>
                                                     </div>
-                                                    <div class="form-group mb-2 col-12">
+                                                    <div class="form-group mb-2 col-6">
+                                                        <label for="defaultForm-name">Ürün Adı</label>
+                                                        <input type="input" form="urunekleform" name="urunad" class="form-control" id="defaultForm-name">
+                                                    </div>
+                                                    <div class="form-group mb-2 col-6">
                                                         <label for="defaultForm-name">Marka</label>
-                                                        <input type="input" form="urunekleform" class="form-control" id="defaultForm-name">
+                                                        <input type="input" form="urunekleform" name="urunmarka" class="form-control" id="defaultForm-name">
                                                     </div>
                                                     </div>
                                                 </form>
@@ -124,13 +128,13 @@
                                             </div>                               
                                             <div id="defaultStep-two" class="content" role="tabpanel">
                                 <div class="row">
-                                            <div class="form-group mb-4 col-12 col md-6 col-lg-6">
+                                            <div class="form-group mb-2 col-12 col md-6 col-lg-6">
                                                         <label for="defaultForm-name" class="p-1">Fiyat</label>
-                                                        <input type="input" form="urunekleform" name="soyad" class="form-control" id="defaultForm-name">
+                                                        <input type="input" form="urunekleform" name="urunfiyat" class="form-control" id="defaultForm-name">
                                                         </div>
                                                         <div class="form-group mb-1 col-12 col md-6 col-lg-6">
                                                         <label for="defaultForm-name" class="p-1">Garanti Süresi</label>
-                                                        <input type="input" form="urunekleform" class="form-control" id="defaultForm-name">
+                                                        <input type="input" form="urunekleform" name="garantisuresi" class="form-control" id="defaultForm-name">
                                                     </div>
                                                     </div>
 
@@ -142,9 +146,9 @@
                                             </div>
                                             <div id="defaultStep-three" class="content" role="tabpanel" >
 
-                                            <div class="form-group mb-4">                                  
+                                            <div class="form-group mb-2">                                  
                                                         <label for="defaultForm-name" class="p-1">Özel notlar</label>
-                                                        <input type="input" form="urunekleform" name="vd" class="form-control" id="defaultForm-name">
+                                                        <input type="input" form="urunekleform" name="ozelnotlar" class="form-control" id="defaultForm-name">
                                                     </div>
   
 
@@ -152,7 +156,7 @@
 
                                                 <div class="button-action mt-3">
                                                     <button class="btn btn-secondary btn-prev me-3">Önceki</button>
-                                                    <input type="submit" form="urunekleform" class="btn btn-success me-3">
+                                                    <button type="submit" form="urunekleform" name="urunekle" class="btn btn-success me-3">Gönder</button>
                                                 </div>
                                             </div>
                                         </div>
