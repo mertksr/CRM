@@ -191,7 +191,7 @@
 
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="cost" name="islemucreti" readonly  style="color:#505463;">
-                                                <button class="btn btn-outline-primary" style="z-index:0;" type="button" onclick="makeDiscount()">İndirim Uygula</button>
+                                                <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -266,7 +266,28 @@
             });
         });
 
-        /* End Of Multiselect Settings*/
+		$(document).ready(function() {
+			$("#makediscount").click(function() {
+				var fiyat = $("#cost").val();
+                if(fiyat =="0" || fiyat == "" || fiyat == null){
+                    alert("Ürün seçmeden indirim yapamazsınız!");
+                    return false;
+                }else{
+				$.ajax({
+					url: "../netting/ayarcek.php",
+					type: "POST",
+					dataType: "JSON",
+					success: function(data) {
+                    var indirim_tutari = parseFloat(data);
+                    var fiyat = parseFloat($("#cost").val());
+                    var yeni_fiyat = fiyat - indirim_tutari;
+                    $("#cost").val(yeni_fiyat + " TL");
+                    
+					}
+                   
+				});}
+			});
+		});
     </script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>

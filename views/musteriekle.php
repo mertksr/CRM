@@ -23,8 +23,9 @@
   <link rel="stylesheet" type="text/css" href="../public/src/assets/css/dark/scrollspyNav.css" />
   <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/stepper/custom-bsStepper.css">
   <!--  END CUSTOM STYLE FILE  -->
+  <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
 
-  <script src="https://use.fontawesome.com/8718f85db8.js"></script>
+  <script src="../public/src/fontawesome/all.js"></script>
   <style>
     .boxx {
       display: none;
@@ -1892,9 +1893,9 @@
                                 Türü</label>
                               <select form="musteriekleform" required id="defaultInputState" name="ituru[]" class="form-select">
                                 <option value="">Seç</option>
-                                <option value="1">Mobil1</option>
-                                <option value="2">Tel</option>
-                                <option value="3">Whatsapp</option>
+                                <option value="Mobil">Mobil1</option>
+                                <option value="Tel">Tel</option>
+                                <option value="WhatsApp">WhatsApp</option>
                               </select>
                             </div>
                                     <div class="col-2 info-row-item p-0">

@@ -1,7 +1,7 @@
 <?php
  include 'connect.php';
 
-        
+ <?php echo $iletisimcek['iletisimTuru']; ?> : <?php echo $iletisimcek['İletisimBilgisi']; ?>
  if (isset($_POST['urunekle'])) {
     $query = $db->prepare("INSERT INTO urunler SET
       	urunCinsi = :uruncins,
