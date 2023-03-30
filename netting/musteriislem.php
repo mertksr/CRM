@@ -16,6 +16,7 @@
 
     $query = $db->prepare("INSERT INTO musteriler SET
     mMusteriNo = :musterino,
+    mDurum = :durum,
     mRefNo = :refno,
     mKayitTuru = :kayitturu,
     mVergiDairesi = :vergidairesi,
@@ -43,6 +44,7 @@
 
     $insert = $query->execute(array(
         "musterino" => $number,
+        "durum" => 1,
         "refno" => $_POST['refno'],
         "kayitturu" => $_POST['kayitturu'],
         "vergidairesi" => $_POST['vergidairesi'],
