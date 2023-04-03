@@ -31,14 +31,28 @@
         .modal-content {
             background: whitesmoke;
         }
-        .list-unstyled{
-            background-color: #14274E;
+
+        .list-unstyled {
+            background-color: #0B2447;
         }
-        .btn-ozel{
+
+        .btn-ozel {
             background-color: #394867;
-            color : white;
-        
+            color: white;
+
         }
+
+        .contact-modal {
+            background-color: #EEEEEE !important;
+            color: #14274E !important;
+            cursor: default !important;
+        }
+        .page-item.active .page-link {
+    background-color: #394867;
+}
+div.dataTables_wrapper div.dataTables_info { 
+    color: #14274E !important;
+}
     </style>
     <!-- END PAGE LEVEL STYLES -->
     <script src="../public/src/fontawesome/all.js"></script>
@@ -88,8 +102,9 @@
                                             <tr>
 
 
-                                                <th style="max-width:20px;">No</th>
+                                                <th style="max-width:10px;padding-right:0;">No</th>
                                                 <th style="max-width:50px;">Ad Soyad</th>
+
                                                 <th style="max-width:30px;">Bölge</th>
                                                 <th style="max-width:40px;text-align:center;">Konum</th>
                                                 <th style="max-width:10px;text-align:center;">Sonraki Bakım</th>
@@ -110,69 +125,98 @@
 
                                         ?>
 
-                                            <tbody>
-                                                <tr>
 
-                                                    <td><?php echo $say ?></td>
-                                                    <td><?= $mustericek['mAdSoyad']; ?></td>
-                                                    <td><?php echo $mustericek['mBolge']; ?></td>
-                                                    <td style="text-align:center;max-width:10px"><a class="btn" href="https://maps.google.com/?q=<?= $mustericek['mKonum']; ?>" target="_Blank" type="button"><i class="fa-solid fa-paper-plane"></i></a></td>
+                                            <tr>
 
-                                                    <td style="text-align:center;"><?php echo $yeni_tarih; ?></td>
-                                                    <td style="text-align:center;max-width:20px;">
-                                                        <div class="text-center">
-                                                            <button type="button" class="btn btn-ozel mr-2" data-bs-toggle="modal" data-bs-target="#<?php echo $modalId; ?>">
+                                                <td style="max-width:5px;"><?php echo $say ?></td>
+                                                <td><?= $mustericek['mAdSoyad']; ?></td>
+                                                <td><?php echo $mustericek['mBolge']; ?></td>
+                                                <td style="text-align:center;max-width:10px"><a class="btn" href="https://maps.google.com/?q=<?= $mustericek['mKonum']; ?>" target="_Blank" type="button"><i class="fa-solid fa-paper-plane"></i></a></td>
+
+                                                <td style="text-align:center;"><?php echo $yeni_tarih; ?></td>
+                                                <td style="max-width:20px;">
+                                                    <div class="text-center">
+                                                        <button type="button" class="btn btn-ozel mr-2" data-bs-toggle="modal" data-bs-target="#<?php echo $modalId; ?>">
                                                             <i class="fa-solid fa-address-book"></i>
-                                                            </button>
-                                                        </div>
-                                                        <!-- Modal -->
-                                                        <div class="modal fade" id="<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLabel"><?php echo $mustericek['mAdSoyad']; ?> İletişim Bilgileri</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body row">
+                                                        </button>
+                                                    </div>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel"><span style="color:#E21818;"><?php echo $mustericek['mAdSoyad']; ?></span> İletişim Bilgileri</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body row">
 
-                                                                        <?php
-                                                                        $iletisimsor = $db->prepare("SELECT * from iletisim where iletisimMusteriNo = $musterino");
-                                                                        $iletisimsor->execute();
-                                                                        while ($iletisimcek = $iletisimsor->fetch(PDO::FETCH_ASSOC)) {
-                                                                            $iletisimbilgisi =  $iletisimcek["İletisimBilgisi"]
-                                                                        ?>
-                                                                            <div class="col-12">
-                                                                                <p><?php echo $iletisimcek['iletisimTuru']; ?> : <?php echo $iletisimcek['İletisimBilgisi'];
-                                                                                     if ($iletisimcek['iletisimTuru'] == "Tel" || $iletisimcek['iletisimTuru'] == "Mobil") {
-                                                                                         echo "<a href='https://google.com/$iletisimbilgisi'><i class='fa-solid fa-phone fa-2xl'></i></a>";
-                                                                                     } else if ($iletisimcek['iletisimTuru'] == "WhatsApp") {
-                                                                                         echo "<a href='https://wa.me/$iletisimbilgisi'><i class='fa-brands fa-whatsapp fa-2xl'></i></a>";
-                                                                                     }
-                                                                                     ?>
+                                                                    <?php
+                                                                    $iletisimsor = $db->prepare("SELECT * from iletisim where iletisimMusteriNo = $musterino");
+                                                                    $iletisimsor->execute();
+                                                                    while ($iletisimcek = $iletisimsor->fetch(PDO::FETCH_ASSOC)) {
+                                                                        $iletisimbilgisi =  $iletisimcek["İletisimBilgisi"]
+                                                                    ?>
+                                                                        <div class="col-6">
+                                                                            <p><?php if ($iletisimcek['iletisimTuru'] == "Tel" || $iletisimcek['iletisimTuru'] == "Mobil") {
+                                                                                    echo "<a href='https://google.com/$iletisimbilgisi'><i class='fa-solid fa-phone fa-2xl'></i></a>";
+                                                                                } else if ($iletisimcek['iletisimTuru'] == "WhatsApp") {
+                                                                                    echo "<a href='https://wa.me/$iletisimbilgisi'><i class='fa-brands fa-whatsapp fa-2xl'></i></a>";
+                                                                                }
+                                                                                ?> : <?php echo $iletisimcek['İletisimBilgisi'];
 
-                                                                                </p>
-                                                                            </div>
-                                                                        <?php }   ?>
+                                                                                            ?>
+
+                                                                            </p>
+                                                                        </div>
+                                                                    <?php }   ?>
+                                                                    <br><br>
+                                                                    <div class="row g-1">
+                                                                        <div class="form-group col-12">
+                                                                            <label for="exampleFormControlInput1">Adres</label>
+                                                                            <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $mustericek['mAdres'] ?></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-6">
+                                                                            <label for="exampleFormControlInput1">Bölge </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mBolge']; ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-6">
+                                                                            <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= date("d.m.Y", strtotime($mustericek['mSonIslem'])); ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-6">
+                                                                            <label for="exampleFormControlInput1">Notlar</label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mNot']; ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-6">
+                                                                            <label for="exampleFormControlInput1">Bakım Periyodu</label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mPeriyot'] . ' Ay'; ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-12">
+                                                                            <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar??</label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="">
+                                                                        </div>
+
 
                                                                     </div>
-                                                                    <div class="modal-footer">
-                                                                        <button class="btn btn-light-dark" data-bs-dismiss="modal">Kapat</button>
-                                                                    </div>
+
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-dark" data-bs-dismiss="modal">Kapat</button>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
 
-                                                    </td>
+                                                </td>
 
-                                                    <td style="text-align:center;max-width:20px;">
-                                                        <div class="btn-group">
-                                                        <button type="button" class="btn btn-ozel btn-sm"><i class="fa-solid fa-pencil"></i></button>
+                                                <td style="text-align:center;max-width:20px;">
+                                                    <div class="btn-group">
+                                                        <a href='musteridetay.php?no=<?= $mustericek['mMusteriNo'];?>' class="btn btn-ozel btn-sm"><i class="fa-solid fa-pencil"></i></a>
 
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         <?php } ?>
                                     </table>
                                 </div>
