@@ -36,6 +36,14 @@
     label {
       margin-bottom: 0 !important;
     }
+    .btn-nxt , .btn-prev{
+      background-color: #394867 !important;
+      border:none !important;
+      box-shadow:none !important;
+    }
+    .btn-nxt:hover , .btn-prev:hover{
+      background-color: #6B728E !important;
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -243,11 +251,7 @@
                                 <option value="">Mahalle seçiniz...</option>
                               </select>
                             </div>
-                            <div class="col-12 col-sm-6">
-                              <label for=" defaultInputAddress" class="form-label">
-                                Bölge</label>
-                              <input form="musteriekleform" name="bolge" type="text" class="form-control" id="defaultInputAddress">
-                            </div>
+
                             <div class="col-12 col-sm-6">
                               <label for="defaultInputAddress" class="form-label">Adres</label>
                               <input form="musteriekleform" name="adres" type="text" class="form-control" id="defaultInputAddress">

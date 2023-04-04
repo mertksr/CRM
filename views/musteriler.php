@@ -122,6 +122,10 @@ div.dataTables_wrapper div.dataTables_info {
                                             $yeni_tarih = date('d.m.Y', strtotime($tarih . '+' . $mustericek['mPeriyot'] . ' months'));
                                             $musterino =  $mustericek["mMusteriNo"];
                                             $modalId = "modal" . $mustericek["mMusteriNo"];
+$mahalle = $mustericek['mBolge'];
+                                            $mahallesor = $db->prepare("SELECT * from neighborhood where NeighborhoodID =  $mahalle");
+                                            $mahallesor->execute();
+                                            $mahallecek = $mahallesor->fetch(PDO::FETCH_ASSOC);
 
                                         ?>
 
@@ -177,7 +181,7 @@ div.dataTables_wrapper div.dataTables_info {
                                                                         </div>
                                                                         <div class="form-group col-6">
                                                                             <label for="exampleFormControlInput1">Bölge </label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mBolge']; ?>">
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mahallecek['NeighborhoodName']; ?>">
                                                                         </div>
                                                                         <div class="form-group col-6">
                                                                             <label for="exampleFormControlInput1">Son Bakım Tarihi</label>

@@ -21,6 +21,16 @@
     <link rel="stylesheet" type="text/css" href="../public/src/assets/css/dark/scrollspyNav.css"/>
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/stepper/custom-bsStepper.css">
     <!--  END CUSTOM STYLE FILE  -->
+    <style>
+            .btn-nxt , .btn-prev{
+      background-color: #394867 !important;
+      border:none !important;
+      box-shadow:none !important;
+    }
+    .btn-nxt:hover , .btn-prev:hover{
+      background-color: #6B728E !important;
+    }
+    </style>
 </head>
 <body class="layout-boxed" data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100">
     

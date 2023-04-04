@@ -41,7 +41,16 @@
                 width: 320px;
             }
         }
+        .islemkaydet{
+      background-color: #394867 !important;
+      border:none !important;
+      box-shadow:none !important;
+    color:#fff;
+    }
+    .islemkaydet{
+      background-color: #6B728E !important;
 
+    }
         .multi-select-menu {
             position: absolute;
             left: 0;
@@ -212,7 +221,7 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <button type="submit" name="islemekle" class="btn btn-primary">Kaydet</button>
+                                            <button type="submit" name="islemekle" class="btn islemkaydet">Kaydet</button>
                                         </div>
                                     </form>
                                 </div>
