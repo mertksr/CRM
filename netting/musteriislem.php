@@ -62,7 +62,7 @@
         "ticsicilno" => $_POST['ticaretsicilno'],
         "odasicilno" => $_POST['odasicilno'],
         "mersisno" => $_POST['mersisno'],
-        "bolge" => $_POST['bolge'],
+        "bolge" => $_POST['mahalle'],
         "adres" => $_POST['adres'],
         "ilce" => $_POST['ilce'],
         "il" => $_POST['il'],

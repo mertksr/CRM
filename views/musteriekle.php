@@ -400,13 +400,6 @@ $(document).on('change', '#ilce_select', function() {
         }
     });
 });
-new TomSelect("#mahalle_select",{
-    create: true,
-    sortField: {
-        field: "text",
-        direction: "asc"
-    }
-});
 /*                     **
 *
 *
