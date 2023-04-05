@@ -33,7 +33,7 @@
         }
 
         .list-unstyled {
-            background-color: #0B2447;
+            background-color: #16213E;
         }
 
         .btn-ozel {
@@ -109,7 +109,8 @@ div.dataTables_wrapper div.dataTables_info {
                                                 <th style="max-width:40px;text-align:center;">Konum</th>
                                                 <th style="max-width:10px;text-align:center;">Sonraki Bakım</th>
                                                 <th style="max-width:20px;text-align:center;">İletişim</th>
-                                                <th style="max-width:20px;text-align:center;">Detay</th>
+                                                <th style="max-width:20px;text-align:center;">İşlem Ekle</th>
+                                                <th style="max-width:20px;text-align:center;">Düzenle</th>
                                             </tr>
                                         </thead>
                                         <?php
@@ -134,7 +135,7 @@ $mahalle = $mustericek['mBolge'];
 
                                                 <td style="max-width:5px;"><?php echo $say ?></td>
                                                 <td><?= $mustericek['mAdSoyad']; ?></td>
-                                                <td><?php echo $mustericek['mBolge']; ?></td>
+                                                <td><?php echo $mahallecek['NeighborhoodName']; ?></td>
                                                 <td style="text-align:center;max-width:10px"><a class="btn" href="https://maps.google.com/?q=<?= $mustericek['mKonum']; ?>" target="_Blank" type="button"><i class="fa-solid fa-paper-plane"></i></a></td>
 
                                                 <td style="text-align:center;"><?php echo $yeni_tarih; ?></td>
@@ -213,7 +214,12 @@ $mahalle = $mustericek['mBolge'];
                                                     </div>
 
                                                 </td>
+                                                <td style="text-align:center;max-width:20px;">
+                                                    <div class="btn-group">
+                                                        <a href='islemler.php?no=<?= $mustericek['mMusteriNo'];?>' class="btn btn-ozel btn-sm"><i class="fa-solid fa-plus"></i></a>
 
+                                                    </div>
+                                                </td>
                                                 <td style="text-align:center;max-width:20px;">
                                                     <div class="btn-group">
                                                         <a href='musteridetay.php?no=<?= $mustericek['mMusteriNo'];?>' class="btn btn-ozel btn-sm"><i class="fa-solid fa-pencil"></i></a>

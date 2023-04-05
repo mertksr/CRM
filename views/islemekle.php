@@ -1,3 +1,4 @@
+<?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,6 +52,7 @@
       background-color: #6B728E !important;
 
     }
+    
         .multi-select-menu {
             position: absolute;
             left: 0;
@@ -122,6 +124,11 @@
         .choices__item {
             color: #505463;
         }
+        .info-input {
+            background-color: #EEEEEE !important;
+            color: #14274E !important;
+            cursor: default !important;
+        }
     </style>
 </head>
 
@@ -167,11 +174,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php 
+                                $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
+                                $musterisor->execute(array($_GET['no']));
+                                $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
+                                ?>
                                 <div class="widget-content widget-content-area">
                                     <form class="row g-3" method="POST" id="islemekleform" action="../netting/islemislem.php">
                                         <div class="col-6">
-                                            <label for="inputAddress" class="form-label">Müşteri No</label>
-                                            <input type="text" name="musterino" class="form-control" id="inputAddress">
+                                            <label for="inputAddress" class="form-label">Müşteri Adı Soyadı</label>
+                                            <input type="text" readonly value="<?= $mustericek['mAdSoyad'] ?>" class="form-control info-input" id="inputAddress">
                                         </div>
                                         <div class="col-6">
                                             <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
@@ -219,7 +231,7 @@
                                             <label for="inputAddress2" class="form-label">Notlar</label>
                                             <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
                                         </div>
-
+<input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
                                         <div class="col-12">
                                             <button type="submit" name="islemekle" class="btn islemkaydet">Kaydet</button>
                                         </div>

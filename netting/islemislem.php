@@ -44,15 +44,16 @@
             "urunid" => $yapilanislem[$i]
         ));
         } 
+        $musterino = $_POST['musterino'];
     }
     if ($insert) {
         $last_id = $db->lastInsertId();
-          header("Location:../views/islemekle.php?yt=basarili");
+          header("Location:../views/islemekle.php?no=$musterino&yt=basarili");
           exit();
 
     } else {
 
-         header("Location:../views/islemekle.php?yt=basarisiz");
+         header("Location:../views/islemekle.php?no=$musterino&yt=basarisiz");
          exit();
     }
 }
