@@ -1,5 +1,4 @@
-
-<?php include '../netting/connect.php'?>
+<?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,14 +35,18 @@
         label {
             margin-bottom: 0 !important;
         }
-        .btn-nxt , .btn-prev{
-      background-color: #394867 !important;
-      border:none !important;
-      box-shadow:none !important;
-    }
-    .btn-nxt:hover , .btn-prev:hover{
-      background-color: #6B728E !important;
-    }
+
+        .btn-nxt,
+        .btn-prev {
+            background-color: #394867 !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-nxt:hover,
+        .btn-prev:hover {
+            background-color: #6B728E !important;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -96,16 +99,29 @@
                     $ilsor = $db->prepare("SELECT * from city where CityID =  $il");
                     $ilsor->execute();
                     $ilcek = $ilsor->fetch(PDO::FETCH_ASSOC);
-                    
+
                     $ilcesor = $db->prepare("SELECT * from town where TownID = $ilce ");
                     $ilcesor->execute();
                     $ilcecek = $ilcesor->fetch(PDO::FETCH_ASSOC);
-                    
+
                     $mahsor = $db->prepare("SELECT * from neighborhood where NeighborhoodID = $mahalle ");
                     $mahsor->execute();
                     $mahcek = $mahsor->fetch(PDO::FETCH_ASSOC);
-                    
-                    
+
+                    $sql = "SELECT iletisimTuru, iletisimBilgisi FROM iletisim WHERE iletisimMusteriNo = " . $_GET['no'] . "";
+                    $stmt = $db->query($sql);
+
+                    $contacts = array(); // İletişim bilgilerinin saklanacağı dizi
+
+                    if ($stmt->rowCount() > 0) {
+                        while ($row = $stmt->fetch()) {
+                            $contact_info = $row['iletisimTuru'];
+                            $contact_type = $row['iletisimBilgisi'];
+                            $contact = array("tur" => $contact_info, "bilgi" => $contact_type);
+                            array_push($contacts, $contact);
+                        }
+                    }
+
                     ?>
                     <div class="row layout-top-spacing" id="cancel-row">
                         <div id="wizard_Default" class="col-lg-12 layout-spacing">
@@ -150,14 +166,18 @@
                                                         <div class="form-group mb-1 col-6">
                                                             <label>Kayıt Türü</label>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" disabled  type="radio" value="Gerçek Kişi" name="kayitturu" id="flexRadioDefault1" <?php  if($mustericek['mKayitTuru'] == "Gerçek Kişi") { echo "checked"; }  ?>>
+                                                                <input class="form-check-input" disabled type="radio" value="Gerçek Kişi" name="kayitturu" id="flexRadioDefault1" <?php if ($mustericek['mKayitTuru'] == "Gerçek Kişi") {
+                                                                                                                                                                                        echo "checked";
+                                                                                                                                                                                    }  ?>>
                                                                 <label for="flexRadioDefault1">
                                                                     Gerçek Kişi
                                                                 </label>
                                                             </div>
 
                                                             <div class="form-check form-check-danger">
-                                                                <input class="form-check-input" disabled  only type="radio" value="Tüzel Kişi" name="kayitturu" id="flexRadioDefault2"<?php  if($mustericek['mKayitTuru'] == "Tüzel Kişi") { echo "checked"; }  ?>>
+                                                                <input class="form-check-input" disabled only type="radio" value="Tüzel Kişi" name="kayitturu" id="flexRadioDefault2" <?php if ($mustericek['mKayitTuru'] == "Tüzel Kişi") {
+                                                                                                                                                                                            echo "checked";
+                                                                                                                                                                                        }  ?>>
                                                                 <label for="flexRadioDefault2">
                                                                     Tüzel Kişi
                                                                 </label>
@@ -280,7 +300,7 @@
 
 
                                                         <div class="input-group">
-                                                            <input type="text"  value="<?= $mustericek['mKonum']; ?>" form="musteriekleform" class="form-control" name="konum" id="locationInput" placeholder="Konum" readonly>
+                                                            <input type="text" value="<?= $mustericek['mKonum']; ?>" form="musteriekleform" class="form-control" name="konum" id="locationInput" placeholder="Konum" readonly>
                                                             <button class="btn btn-outline-primary" type="button" onclick="getLocation()">Konum
                                                                 Bul</button>
                                                             <button class="btn btn-outline-success" type="button" onclick="goLocation()" id="goLocationBtn">Haritada
@@ -356,64 +376,68 @@
     </div>
     <!-- END MAIN CONTAINER -->
     <script>
- const ilsec = document.getElementById("il_select_edit").value;
- const ilcesec = document.getElementById("ilce_select_edit").value;
- const mahsec = document.getElementById("mah_select_edit").value;
- $(document).ready(function() {
-    // İl verilerini çek
-    $.ajax({
-        url: "../netting/il_getir.php",
-        type: "POST",
-        dataType: "json",
-        success:function(data) {
-            var select = $('#il_select');
-            select.html('<option value="">-- Seçiniz --</option>');
-            $.each(data, function(i, item){
-                select.append('<option value="' + item.CityID + '">' + item.CityName + '</option>');
+        const ilsec = document.getElementById("il_select_edit").value;
+        const ilcesec = document.getElementById("ilce_select_edit").value;
+        const mahsec = document.getElementById("mah_select_edit").value;
+        $(document).ready(function() {
+            // İl verilerini çek
+            $.ajax({
+                url: "../netting/il_getir.php",
+                type: "POST",
+                dataType: "json",
+                success: function(data) {
+                    var select = $('#il_select');
+                    select.html('<option value="">-- Seçiniz --</option>');
+                    $.each(data, function(i, item) {
+                        select.append('<option value="' + item.CityID + '">' + item.CityName + '</option>');
+                    });
+                    select.val(ilsec);
+                    select.trigger('change');
+                }
             });
-            select.val(ilsec);
-            select.trigger('change');
-        }
-    });
-});
+        });
 
-// İl seçim kutusundan ilçeleri getir
-$(document).on('change', '#il_select', function() {
-    var il_id = $(this).val();
-    $.ajax({
-        url: "../netting/ilce_getir.php",
-        type: "POST",
-        dataType: "json",
-        data: {il_id: il_id},
-        success:function(data) {
-            var select = $('#ilce_select');
-            select.html('<option value="">-- Seçiniz --</option>');
-            $.each(data, function(i, item){
-                select.append('<option value="' + item.TownID + '">' + item.TownName + '</option>');
+        // İl seçim kutusundan ilçeleri getir
+        $(document).on('change', '#il_select', function() {
+            var il_id = $(this).val();
+            $.ajax({
+                url: "../netting/ilce_getir.php",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    il_id: il_id
+                },
+                success: function(data) {
+                    var select = $('#ilce_select');
+                    select.html('<option value="">-- Seçiniz --</option>');
+                    $.each(data, function(i, item) {
+                        select.append('<option value="' + item.TownID + '">' + item.TownName + '</option>');
+                    });
+                    select.val(ilcesec);
+                    select.trigger('change');
+                }
             });
-            select.val(ilcesec);
-            select.trigger('change');
-        }
-    });
-});
-// Mahalle seçim kutusundan mahalleleri getir
-$(document).on('change', '#ilce_select', function() {
-    var ilce_id = $(this).val();
-    $.ajax({
-        url: "../netting/mahalle_getir.php",
-        type: "POST",
-        dataType: "json",
-        data: {ilce_id: ilce_id},
-        success:function(data) {
-            var select = $('#mahalle_select');
-            select.html('<option value="">-- Seçiniz --</option>');
-            $.each(data, function(i, item){
-                select.append('<option value="' + item.NeighborhoodID + '">' + item.NeighborhoodName + '</option>');
+        });
+        // Mahalle seçim kutusundan mahalleleri getir
+        $(document).on('change', '#ilce_select', function() {
+            var ilce_id = $(this).val();
+            $.ajax({
+                url: "../netting/mahalle_getir.php",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    ilce_id: ilce_id
+                },
+                success: function(data) {
+                    var select = $('#mahalle_select');
+                    select.html('<option value="">-- Seçiniz --</option>');
+                    $.each(data, function(i, item) {
+                        select.append('<option value="' + item.NeighborhoodID + '">' + item.NeighborhoodName + '</option>');
+                    });
+                    select.val(mahsec);
+                }
             });
-            select.val(mahsec);
-        }
-    });
-});
+        });
 
         var locationInput = document.getElementById("locationInput");
 
@@ -474,12 +498,39 @@ $(document).on('change', '#ilce_select', function() {
                                 </div> `;
             var x = 1; //Initial field counter is 1
             //Once add button is clicked
+            var iletisimBilgileri = <?php echo json_encode($contacts); ?>;
+            for (var i = 0; i < iletisimBilgileri.length; i++) {
+                $(wrapper).append(`
+    <div class="row g-3 mb-2">
+      <div class="col-6 info-row-item">
+        <label for="defaultInputCity" class="form-label">İletişim Bilgisi</label>
+        <input form="musteriekleform" required type="text" class="form-control" id="defaultInputCity" name="ibilgi[]" value="${iletisimBilgileri[i].bilgi}">
+      </div>
+      <div class="col-4 info-row-item">
+        <label for="defaultInputState" class="form-label">İletişim Türü</label>
+        <select form="musteriekleform" required id="defaultInputState" name="ituru[]" class="form-select">
+          <option value="">Seç</option>
+          <option value="Mobil" ${iletisimBilgileri[i].tur == 'Mobil' ? 'selected' : ''}>Mobil</option>
+          <option value="Tel" ${iletisimBilgileri[i].tur == 'Tel' ? 'selected' : ''}>Tel</option>
+          <option value="WhatsApp" ${iletisimBilgileri[i].tur == 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
+        </select>
+      </div>
+      <div class="col-2 info-row-item p-0">
+        <label for="defaultInputState" class="form-label">Sil</label>
+        <button id="add-contact" type="button" class="btn btn-danger remove_button add_button" style="width:100%;height:65%;">
+          <i class="fa-solid fa-circle-minus fa-lg"></i>
+        </button>
+      </div>
+    </div>
+  `);
+            }
             $(addButton).click(function() {
                 //Check maximum number of input fields
                 if (x < maxField) {
                     x++; //Increment field counter
                     $(wrapper).append(fieldHTML); //Add field html
                 }
+
             });
 
             //Once remove button is clicked
@@ -492,9 +543,12 @@ $(document).on('change', '#ilce_select', function() {
 
 
 
+
+
+
         const box = document.getElementsByClassName("boxx");
 
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             if (document.getElementById('flexRadioDefault2').checked) {
                 for (let i = 0; i < box.length; i++) {
