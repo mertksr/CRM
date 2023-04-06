@@ -61,8 +61,12 @@
                     <div class="row">
                     
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                        
                             <div class="statbox widget box box-shadow">
+                                    <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="islemekle.php?no=<?= $_GET['no']; ?>">İşlem Ekle</a>
+
                                 <div class="widget-content widget-content-area">
+                                    
                                     <table id="islemler" class="table dt-table-hover" style="width:100%">
                                         <thead>
                                             <tr>
@@ -89,7 +93,7 @@ $say++;
                                             <tr> 
                                                 <td><?= $say; ?></td>
                                                 <td><?= $islemcek['islemYapanKisi']; ?></td>
-                                                <td><?= date("H:i d.m.Y", strtotime($islemcek['islemTarihi'])); ?></td>
+                                                <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
                                                 <td><?= $islemcek['islemUcret']; ?></td>
 
                                                 <td><?= $islemcek['islemNot']; ?> </td>
@@ -137,8 +141,6 @@ $say++;
     </div>
     <!-- END MAIN CONTAINER -->
 
-    
-    
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/plugins/src/global/vendors.min.js"></script>
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>

@@ -48,7 +48,7 @@
     }
     if ($insert) {
         $last_id = $db->lastInsertId();
-          header("Location:../views/islemekle.php?no=$musterino&yt=basarili");
+          header("Location:../views/islemler.php?no=$musterino&yt=basarili");
           exit();
 
     } else {

@@ -61,6 +61,8 @@
                     
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                             <div class="statbox widget box box-shadow">
+                            <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="urunekle.php">Yeni Ürün</a>
+
                                 <div class="widget-content widget-content-area">
                                     <table id="urunler" class="table dt-table-hover" style="width:100%">
                                         <thead>

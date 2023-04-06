@@ -36,14 +36,7 @@ $(document).ready(function() {
             buttons: [
 
                 { extend: 'excel', className: 'btn btn-sm' },
-                { extend: 'print', className: 'btn btn-sm' },
-                {
-                    text: 'Yeni Müşteri',
-                    className: 'btn btn-lg special1',
-                    action: function() {
-                        window.location.href = 'musteriekle.php';
-                    }
-                }
+                { extend: 'print', className: 'btn btn-sm' }
             ]
         },
         "oLanguage": {
@@ -309,14 +302,7 @@ $(document).ready(function() {
             buttons: [
 
                 { extend: 'excel', className: 'btn btn-sm' },
-                { extend: 'print', className: 'btn btn-sm' },
-                {
-                    text: 'Yeni Ürün',
-                    className: 'btn btn-lg special1',
-                    action: function() {
-                        window.location.href = 'urunekle.php';
-                    }
-                }
+                { extend: 'print', className: 'btn btn-sm' }
             ]
         },
         "oLanguage": {
@@ -582,14 +568,8 @@ $(document).ready(function() {
             buttons: [
 
                 { extend: 'excel', className: 'btn btn-sm' },
-                { extend: 'print', className: 'btn btn-sm' },
-                {
-                    text: 'İşlem Ekle',
-                    className: 'btn btn-lg special1',
-                    action: function() {
-                        window.location.href = 'islemekle.php';
-                    }
-                }
+                { extend: 'print', className: 'btn btn-sm' }
+            
             ]
         },
         "oLanguage": {

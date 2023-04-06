@@ -37,7 +37,7 @@
         }
 
         .btn-ozel {
-            background-color: #394867;
+            background-color: #394867 !important;
             color: white;
 
         }
@@ -96,6 +96,8 @@ div.dataTables_wrapper div.dataTables_info {
 
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                             <div class="statbox widget box box-shadow">
+                            <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="musteriekle.php">Yeni Müşteri</a>
+
                                 <div class="widget-content widget-content-area">
                                     <table id="html5-extension" class="table dt-table-hover" style="width:100%">
                                         <thead>
@@ -106,11 +108,10 @@ div.dataTables_wrapper div.dataTables_info {
                                                 <th style="max-width:50px;">Ad Soyad</th>
 
                                                 <th style="max-width:30px;">Bölge</th>
-                                                <th style="max-width:40px;text-align:center;">Konum</th>
                                                 <th style="max-width:10px;text-align:center;">Sonraki Bakım</th>
                                                 <th style="max-width:20px;text-align:center;">İletişim</th>
-                                                <th style="max-width:20px;text-align:center;">İşlem Ekle</th>
-                                                <th style="max-width:20px;text-align:center;">Düzenle</th>
+                                                <th style="max-width:20px;text-align:center;">İşlemler</th>
+
                                             </tr>
                                         </thead>
                                         <?php
@@ -123,7 +124,7 @@ div.dataTables_wrapper div.dataTables_info {
                                             $yeni_tarih = date('d.m.Y', strtotime($tarih . '+' . $mustericek['mPeriyot'] . ' months'));
                                             $musterino =  $mustericek["mMusteriNo"];
                                             $modalId = "modal" . $mustericek["mMusteriNo"];
-$mahalle = $mustericek['mBolge'];
+                                            $mahalle = $mustericek['mBolge'];
                                             $mahallesor = $db->prepare("SELECT * from neighborhood where NeighborhoodID =  $mahalle");
                                             $mahallesor->execute();
                                             $mahallecek = $mahallesor->fetch(PDO::FETCH_ASSOC);
@@ -136,7 +137,6 @@ $mahalle = $mustericek['mBolge'];
                                                 <td style="max-width:5px;"><?php echo $say ?></td>
                                                 <td><?= $mustericek['mAdSoyad']; ?></td>
                                                 <td><?php echo $mahallecek['NeighborhoodName']; ?></td>
-                                                <td style="text-align:center;max-width:10px"><a class="btn" href="https://maps.google.com/?q=<?= $mustericek['mKonum']; ?>" target="_Blank" type="button"><i class="fa-solid fa-paper-plane"></i></a></td>
 
                                                 <td style="text-align:center;"><?php echo $yeni_tarih; ?></td>
                                                 <td style="max-width:20px;">
@@ -214,17 +214,23 @@ $mahalle = $mustericek['mBolge'];
                                                     </div>
 
                                                 </td>
-                                                <td style="text-align:center;max-width:20px;">
-                                                    <div class="btn-group">
-                                                        <a href='islemler.php?no=<?= $mustericek['mMusteriNo'];?>' class="btn btn-ozel btn-sm"><i class="fa-solid fa-plus"></i></a>
+  
 
-                                                    </div>
-                                                </td>
-                                                <td style="text-align:center;max-width:20px;">
+                                                <td  style="text-align:center;">
                                                     <div class="btn-group">
-                                                        <a href='musteridetay.php?no=<?= $mustericek['mMusteriNo'];?>' class="btn btn-ozel btn-sm"><i class="fa-solid fa-pencil"></i></a>
+                                                       <a class="btn btn-dark btn-sm btn-ozel" href='musteridetay.php?no=<?= $mustericek['mMusteriNo'];?>'>Düzenle</a> 
+                                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split btn-ozel" id="dropdownMenuReference2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuReference2">
+                                                            <a class="dropdown-item" href='islemler.php?no=<?= $mustericek['mMusteriNo'];?>'>Servis Kaydı</a>
+                                                            <?php if($mustericek['mKonum'] != "") {echo ' <a class="dropdown-item" target="_Blank" href="https://maps.google.com/?q= ' . $mustericek["mKonum"] . ' ">Konum Aç</a> '; }?>  
+                                                           <a class="dropdown-item" href="#">Ertele</a>
 
-                                                    </div>
+                                                            <a class="dropdown-item" href="#">Pasife Al</a>   
+
+                                                        </div>
+                                                        </div>
                                                 </td>
                                             </tr>
                                         <?php } ?>
