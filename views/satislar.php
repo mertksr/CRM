@@ -26,6 +26,7 @@
 
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/dt-global_style.css">
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">
+
     <!-- END PAGE LEVEL STYLES -->
 </head>
 
@@ -66,72 +67,55 @@
                     <div class="row">
 
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-                        <?php
-                                        $msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mno");
-                                        $msor->execute(array(
-                                            'mno' => $_GET['no']
-                                        ));                                   
-                                       $mcek = $msor->fetch(PDO::FETCH_ASSOC);
-                                       $mahalle = $mcek['mBolge'];
-                                       $mahallesor = $db->prepare("SELECT * from neighborhood where NeighborhoodID =  $mahalle");
-                                       $mahallesor->execute();
-                                       $mahallecek = $mahallesor->fetch(PDO::FETCH_ASSOC);
-                                       ?>
+
                             <div class="statbox widget box box-shadow">
-                               
-                                    <h5><?= $mcek['mAdSoyad'] . ' / ' . $mahallecek['NeighborhoodName'] ?></h5>
-                                     <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="islemekle.php?no=<?= $_GET['no']; ?>">İşlem Ekle</a>
-                             
+                                <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="islemekle.php?no=<?= $_GET['no']; ?>">İşlem Ekle</a>
+
                                 <div class="widget-content widget-content-area">
 
-                                    <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">
+                                    <table id="islemler" class="table dt-table-hover" style="width:100%">
                                         <thead>
                                             <tr>
-
                                                 <th>No</th>
-                                                <th>Yapan Kişi</th>
-                                                <th>İşlem Zamanı</th>
-                                                <th>Ücret</th>
+                                                <th>Müşteri Ad Soyad</th>
+                                                <th>Ürün</th>
+                                                <th>Satış Tarihi</th>
+                                                <th>Urun Fiyatı</th>
+                                                <th>Yapılan İndirim</th>
+                                                <th>Garanti</th>
+                                                <th>Garanti Süresi</th>
+                                                <th>Garanti Bitiş</th>
+                                                <th>Temsilci</th>
                                                 <th>Not</th>
-                                                <th>Kullanılan Ürünler</th>
+                                                <th>İşlemler</th>
+
 
                                             </tr>
                                         </thead>
                                         <?php
-                                        $islemsor = $db->prepare("SELECT * from islemler WHERE islemMusteriNo = :islemMusteriNo");
-                                        $islemsor->execute(array(
-                                            'islemMusteriNo' => $_GET['no']
-                                        ));
+                                        $satissor = $db->prepare("SELECT * from satislar");
+                                        $satissor->execute();
                                         $say = 0;
-                                        while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
+                                        while ($satiscek = $satissor->fetch(PDO::FETCH_ASSOC)) {
                                             $say++;
 
                                         ?>
 
                                             <tr>
                                                 <td><?= $say; ?></td>
-                                                <td><?= $islemcek['islemYapanKisi']; ?></td>
-                                                <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
-                                                <td><?= $islemcek['islemUcret']; ?></td>
+                                                <td>Merrt k</td>
+                                                <td><?= $satiscek['sUrun']; ?></td>
+                                                <td><?= date("d.m.Y H:i", strtotime($satiscek['sTarih'])); ?></td>
+                                                <td><?= $satiscek['sTutar']; ?></td>
+                                                <td><?= $satiscek['sIndirim']; ?></td>
+                                                <td><?= $satiscek['sGaranti']; ?></td>
+                                                <td><?= $satiscek['sGarantiSuresi']; ?></td>
+                                                <td><?= $satiscek['sGarantiBitis']; ?></td>
+                                                <td><?= $satiscek['sTemsilci']; ?></td>
+                                                <td><?= $satiscek['sNot']; ?></td>
+                                                <td>Düzenle</td>
 
-                                                <td><?= $islemcek['islemNot']; ?> </td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-dark btn-sm">Open</button>
-                                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
-                                                                <polyline points="6 9 12 15 18 9"></polyline>
-                                                            </svg>
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                                                            <a class="dropdown-item" href="#">Action</a>
-                                                            <a class="dropdown-item" href="#">Another action</a>
-                                                            <a class="dropdown-item" href="#">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#">Separated link</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
+
                                             </tr>
                                         <?php } ?>
                                     </table>
@@ -161,6 +145,7 @@
         </div>
         <!--  END CONTENT AREA  -->
     </div>
+    <!-- END MAIN CONTAINER -->
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/plugins/src/global/vendors.min.js"></script>
@@ -171,8 +156,7 @@
     <script src="../public/layouts/horizontal-light-menu/app.js"></script>
     <script src="../public/src/assets/js/custom.js"></script>
     <!-- END GLOBAL MANDATORY SCRIPTS -->
-    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
     <script src="../public/src/plugins/src/table/datatable/datatables.js"></script>
     <script src="../public/src/plugins/src/table/datatable/button-ext/dataTables.buttons.min.js"></script>

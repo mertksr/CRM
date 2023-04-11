@@ -52,6 +52,37 @@
                 </a>
             </li>
 
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'randevular' || basename($_SERVER['PHP_SELF'], '.php') == 'randevuekle') {  echo "active"; } ?>">
+                <a href="randevular.php" class="dropdown-toggle">                    
+                    <div class="">                        
+                        <span>Randevular</span>
+                    </div>
+                       
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-chevron-right">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </a>
+            </li>
+
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'satislar' || basename($_SERVER['PHP_SELF'], '.php') == 'satisekle') {  echo "active"; } ?>">
+                <a href="satislar.php" class="dropdown-toggle">                    
+                    <div class="">                        
+                        <span>Satışlar</span>
+                    </div>
+                       
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-chevron-right">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </a>
+            </li>
 
 
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'islemler' || basename($_SERVER['PHP_SELF'], '.php') == 'islemekle') {  echo "active"; } ?>">

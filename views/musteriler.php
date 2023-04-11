@@ -28,9 +28,7 @@
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">
     <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
     <style>
-        .modal-content {
-            background: whitesmoke;
-        }
+
 
         .list-unstyled {
             background-color: #16213E;
@@ -41,7 +39,9 @@
             color: white;
 
         }
-
+        .modal-content {
+            background: whitesmoke;
+        }
         .contact-modal {
             background-color: #EEEEEE !important;
             color: #14274E !important;
@@ -223,11 +223,13 @@ div.dataTables_wrapper div.dataTables_info {
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                                         </button>
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuReference2">
-                                                            <a class="dropdown-item" href='islemler.php?no=<?= $mustericek['mMusteriNo'];?>'>Servis Kaydı</a>
+                                                            <a class="dropdown-item" href='islemler.php?no=<?= $mustericek['mMusteriNo'];?>'>Servis Kayıtları</a>
+                                                            <a class="dropdown-item" href='randevular.php?no=<?= $mustericek['mMusteriNo'];?>'>Randevular</a>
+                                                            <a class="dropdown-item" href='satislar.php?no=<?= $mustericek['mMusteriNo'];?>'>Satışlar</a>
+
+
                                                             <?php if($mustericek['mKonum'] != "") {echo ' <a class="dropdown-item" target="_Blank" href="https://maps.google.com/?q= ' . $mustericek["mKonum"] . ' ">Konum Aç</a> '; }?>  
                                                            <a class="dropdown-item" href="#">Ertele</a>
-
-                                                            <a class="dropdown-item" href="#">Pasife Al</a>   
 
                                                         </div>
                                                         </div>
