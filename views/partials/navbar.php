@@ -52,7 +52,7 @@
                 </a>
             </li>
 
-            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'randevular' || basename($_SERVER['PHP_SELF'], '.php') == 'randevuekle') {  echo "active"; } ?>">
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'randevular' || basename($_SERVER['PHP_SELF'], '.php') == 'randevuekle'|| basename($_SERVER['PHP_SELF'], '.php') == 'mrandevular' || basename($_SERVER['PHP_SELF'], '.php') == 'randevuduzenle') {  echo "active"; } ?>">
                 <a href="randevular.php" class="dropdown-toggle">                    
                     <div class="">                        
                         <span>Randevular</span>

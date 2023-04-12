@@ -224,7 +224,7 @@ div.dataTables_wrapper div.dataTables_info {
                                                         </button>
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuReference2">
                                                             <a class="dropdown-item" href='islemler.php?no=<?= $mustericek['mMusteriNo'];?>'>Servis Kayıtları</a>
-                                                            <a class="dropdown-item" href='randevular.php?no=<?= $mustericek['mMusteriNo'];?>'>Randevular</a>
+                                                            <a class="dropdown-item" href='mrandevular.php?no=<?= $mustericek['mMusteriNo'];?>'>Randevular</a>
                                                             <a class="dropdown-item" href='satislar.php?no=<?= $mustericek['mMusteriNo'];?>'>Satışlar</a>
 
 

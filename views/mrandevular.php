@@ -106,9 +106,15 @@
                     <div class="row">
 
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-
+                        <?php $msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :id");
+                                        $msor->execute(array(
+                                            'id' => $_GET['no']));
+              
+                                       $mcek = $msor->fetch(PDO::FETCH_ASSOC);?>
                             <div class="statbox widget box box-shadow">
-
+          <h5><span  style="color:#FE6244;"><?= $mcek['mAdSoyad']; ?></span> Randevu Kayıtları</h5>                   
+          <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="randevuekle.php?no=<?= $_GET['no']; ?>">Yeni Randevu</a>
+ 
                                 <div class="widget-content widget-content-area">
 
                                     <table id="islemler" class="table dt-table-hover" style="width:100%">
@@ -129,8 +135,9 @@
                                             </tr>
                                         </thead>
                                         <?php
-                                        $randevusor = $db->prepare("SELECT * from randevular ORDER BY rNo DESC");
-                                        $randevusor->execute();
+                                        $randevusor = $db->prepare("SELECT * from randevular WHERE rMID = :id ORDER BY rNo DESC");
+                                        $randevusor->execute(array(
+                                            'id' => $_GET['no']));
                                         $say = 0;
                                         while ($randevucek = $randevusor->fetch(PDO::FETCH_ASSOC)) {
                                             $say++;
@@ -147,7 +154,7 @@
 
                                             <tr>
                                                 <td><?= $say; ?></td>
-                                                <td><?= $mustericek['mAdSoyad']?></td>
+                                                <td>Merrt k</td>
                                                 <td><?= date("d.m.Y", strtotime($randevucek['rGorusmeTarihi'])); ?></td>
                                                 <td><?= $randevucek['rHizmetTuru']; ?></td>
                                                 <td><?= date("d.m.Y", strtotime($randevucek['rTarih'])); ?></td>
@@ -246,7 +253,7 @@
                                                         <i class="fa-solid fa-calendar-plus"></i>
                                                 </td>
                                                 <td style="text-align:center;">
-                                                <a class="btn btn-ozel mr-2" href="randevuduzenle.php?no=<?= $randevucek['rMID']?>&rno=<?= $randevucek['rNo']?>">
+                                                    <a class="btn btn-ozel mr-2" href="randevuduzenle.php?no=<?= $randevucek['rMID']?>&rno=<?= $randevucek['rNo']?>">
                                                         <i class="fa-solid fa-pen-to-square"></i> </a>
                                                 </td>
 
