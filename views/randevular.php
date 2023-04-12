@@ -129,7 +129,7 @@
                                             </tr>
                                         </thead>
                                         <?php
-                                        $randevusor = $db->prepare("SELECT * from randevular ORDER BY rNo DESC");
+                                        $randevusor = $db->prepare("SELECT * from randevular ORDER BY rDurum DESC");
                                         $randevusor->execute();
                                         $say = 0;
                                         while ($randevucek = $randevusor->fetch(PDO::FETCH_ASSOC)) {

@@ -135,7 +135,7 @@
                                             </tr>
                                         </thead>
                                         <?php
-                                        $randevusor = $db->prepare("SELECT * from randevular WHERE rMID = :id ORDER BY rNo DESC");
+                                        $randevusor = $db->prepare("SELECT * from randevular WHERE rMID = :id ORDER BY rDurum DESC");
                                         $randevusor->execute(array(
                                             'id' => $_GET['no']));
                                         $say = 0;

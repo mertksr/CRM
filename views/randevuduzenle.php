@@ -166,13 +166,15 @@
                 
                     <div class="row layout-top-spacing" id="cancel-row">
                                                      <?php 
-                                $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
-                                $musterisor->execute(array($_GET['no']));
-                                $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
+
 
                                 $rsor = $db->prepare("SELECT * from randevular where rNo =  ?");
                                 $rsor->execute(array($_GET['rno']));
                                 $rcek = $rsor->fetch(PDO::FETCH_ASSOC);
+
+                                $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
+                                $musterisor->execute(array($rcek['rMID']));
+                                $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
                                 ?>   
                         <div id="flLoginForm" class="col-lg-12  layout-spacing">
                         <a class="btn btn-warning mb-3" href="mrandevular.php?no=<?= $mustericek['mMusteriNo'];?>">Geri Dön</a>
@@ -234,7 +236,7 @@
 
 
 
-<input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
+<input type="hidden" name="rNo" value="<?= $_GET['rno'] ?>">
                                         <div class="col-12">
                                             <button type="submit" name="randevuduzenle" class="btn islemkaydet">Kaydet</button>
                                         </div>
