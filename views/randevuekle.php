@@ -196,10 +196,15 @@
                                             <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
                                             <select form="randevuekleform" id="defaultInputState" name="hizmetturu" class="form-select">
                                                 <option selected="">Seç</option>
-                                                <option name="Periyodik Bakım">Periyodik Bakım</option>
-                                                <option name="Teknik Servis">Teknik Servis</option>
-                                                <option name="Cihaz Satışı">Cihaz Satışı</option>
-                                                <option name="Ürün Satışı">Ürün Satışı</option>
+                                                <?php 
+
+$hizmetsor = $db->prepare("SELECT * FROM hizmetler");
+$hizmetsor->execute();
+while($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)){
+?>
+                                                <option value="<?= $hizmetcek['hNo'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
+
+<?php  } ?>
 
                                             </select>
                                         </div>

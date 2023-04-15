@@ -80,8 +80,9 @@
                             <div class="statbox widget box box-shadow">
                                
                                     <h5><?= $mcek['mAdSoyad'] . ' / ' . $mahallecek['NeighborhoodName'] ?></h5>
-                                     <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="islemekle.php?no=<?= $_GET['no']; ?>">İşlem Ekle</a>
-                             
+                                    <div  style="display:flex;justify-content:right;">  
+                                     <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="islemekle.php?no=<?= $_GET['no']; ?>">Servis Kaydı Ekle</a>
+                                    </div>
                                 <div class="widget-content widget-content-area">
 
                                     <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">

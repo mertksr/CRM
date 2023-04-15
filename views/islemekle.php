@@ -42,17 +42,19 @@
                 width: 320px;
             }
         }
-        .islemkaydet{
-      background-color: #394867 !important;
-      border:none !important;
-      box-shadow:none !important;
-    color:#fff;
-    }
-    .islemkaydet{
-      background-color: #6B728E !important;
 
-    }
-    
+        .islemkaydet {
+            background-color: #394867 !important;
+            border: none !important;
+            box-shadow: none !important;
+            color: #fff;
+        }
+
+        .islemkaydet {
+            background-color: #6B728E !important;
+
+        }
+
         .multi-select-menu {
             position: absolute;
             left: 0;
@@ -124,6 +126,7 @@
         .choices__item {
             color: #505463;
         }
+
         .info-input {
             background-color: #EEEEEE !important;
             color: #14274E !important;
@@ -174,28 +177,34 @@
                                         </div>
                                     </div>
                                 </div>
-                                <?php 
+                                <?php
                                 $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
                                 $musterisor->execute(array($_GET['no']));
                                 $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
                                 ?>
                                 <div class="widget-content widget-content-area">
-                                    <form class="row g-3" method="POST" id="islemekleform" action="../netting/islemislem.php">
-                                        <div class="col-6">
+                                    <form class="row g-3" method="POST" id="islemekleform" action="../netting/islemislem.php" enctype="multipart/form-data">
+                                        <div class="col-12 col-lg-6 col-md-6">
                                             <label for="inputAddress" class="form-label">Müşteri Adı Soyadı</label>
                                             <input type="text" readonly value="<?= $mustericek['mAdSoyad'] ?>" class="form-control info-input" id="inputAddress">
                                         </div>
-                                        <div class="col-6">
-                                            <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
-                                            <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
-                                                <option selected="">Seç</option>
-                                                <option name="Mehmet">Mehmet</option>
-                                                <option name="Cihan">Cihan</option>
-                                                <option name="Bedirhan">Bedirhan</option>
+
+                                        <div class="col-lg-6 col-md-6">
+                                            <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
+                                            <select id="hizmetler" name="hizmetler[]" placeholder="Ürün Seçiniz" multiple>
+                                                <?php
+
+                                                $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
+                                                $hizmetsor->execute();
+                                                while ($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)) {
+                                                ?>
+                                                    <option value="<?= $hizmetcek['HizmetTuru'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
+
+                                                <?php  } ?>
                                             </select>
                                         </div>
 
-                                        <div class="col-12">
+                                        <div class="col-lg-6 col-md-6">
                                             <label for="defaultInputState" class="form-label ">Kullanılan
                                                 Ürünler</label>
                                             <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
@@ -211,10 +220,20 @@
                                             <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="cost" name="islemucreti" readonly  style="color:#505463;">
+                                                <input type="text" class="form-control" id="cost" name="islemucreti" readonly style="color:#505463;">
                                                 <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
                                             </div>
                                         </div>
+                                        <div class="col-6">
+                                            <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
+                                            <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
+                                                <option selected="">Seç</option>
+                                                <option name="Mehmet">Mehmet</option>
+                                                <option name="Cihan">Cihan</option>
+                                                <option name="Bedirhan">Bedirhan</option>
+                                            </select>
+                                        </div>
+
                                         <div class="col-6">
                                             <label for="defaultInputState" class="form-label ">Periyot</label>
                                             <select form="islemekleform" id="defaultInputState" name="periyot" class="form-select select">
@@ -231,10 +250,13 @@
                                             <label for="inputAddress2" class="form-label">Notlar</label>
                                             <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
                                         </div>
-<input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
+                                        <input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
+                                        <input class="form-control file-upload-input" type="file" name="resimler[]" multiple accept="image/*">
+
                                         <div class="col-12">
                                             <button type="submit" name="islemekle" class="btn islemkaydet">Kaydet</button>
                                         </div>
+<input type="hidden" value="" name="indirimtutari" id="indirimtutari">
                                     </form>
                                 </div>
                             </div>
@@ -261,54 +283,72 @@
             var selectedValues = $("#choices-multiple-remove-button").val();
             var selectedString = selectedValues.join(",");
             $.ajax({
-    url: "../netting/urunlericagir.php",
-    method: "POST",
-    data: { products: selectedString }
-  }).done(function(response) {
-    // AJAX isteği tamamlandığında, fiyatları alın
-    var prices = JSON.parse(response);
-    // Toplam fiyatı hesaplayın
-    var total = 0;
-    for (var i = 0; i < prices.length; i++) {
-      total += parseFloat(prices[i]);
-    }
-    $("#cost").val(total + " TL");
-  });
+                url: "../netting/urunlericagir.php",
+                method: "POST",
+                data: {
+                    products: selectedString
+                }
+            }).done(function(response) {
+                // AJAX isteği tamamlandığında, fiyatları alın
+                var prices = JSON.parse(response);
+                // Toplam fiyatı hesaplayın
+                var total = 0;
+                for (var i = 0; i < prices.length; i++) {
+                    total += parseFloat(prices[i]);
+                }
+                $("#cost").val(total + " TL");
+            });
 
         });
 
-     
-                $(document).ready(function() {
+
+        $(document).ready(function() {
 
             var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-                removeItemButton: true,
-                searchResultLimit: 5,
-                renderChoiceLimit: 8
+                removeItemButton: true
+                // searchResultLimit: 5,
+                // renderChoiceLimit: 8
+            });
+        });
+        $("#hizmetler").on("change", function() {
+            var selectedValues = $("#hizmetler").val();
+            var selectedString = selectedValues.join(",");
+        });
+        $(document).ready(function() {
+            var multipleCancelButton = new Choices('#hizmetler', {
+                removeItemButton: true
             });
         });
 
-		$(document).ready(function() {
-			$("#makediscount").click(function() {
-				var fiyat = $("#cost").val();
-                if(fiyat =="0" || fiyat == "" || fiyat == null){
+        $(document).ready(function() {
+
+            $("#makediscount").click(function() {
+                var fiyat = $("#cost").val();
+                if (fiyat == "0" || fiyat == "" || fiyat == null) {
                     alert("Ürün seçmeden indirim yapamazsınız!");
                     return false;
-                }else{
-				$.ajax({
-					url: "../netting/ayarcek.php",
-					type: "POST",
-					dataType: "JSON",
-					success: function(data) {
-                    var indirim_tutari = parseFloat(data);
-                    var fiyat = parseFloat($("#cost").val());
-                    var yeni_fiyat = fiyat - indirim_tutari;
-                    $("#cost").val(yeni_fiyat + " TL");
+                } else {
+                    // $("#makediscount").off("click"); 
+                    $("#makediscount").removeClass('btn-outline-primary');
+                    $("#makediscount").addClass('btn-outline-danger');
+
+                    $.ajax({
+                        url: "../netting/ayarcek.php",
+                        type: "POST",
+                        dataType: "JSON",
+                        success: function(data) {
+                            var indirim_tutari = parseFloat(data);
+                            var fiyat = parseFloat($("#cost").val());
+                            var yeni_fiyat = fiyat - indirim_tutari;
+                            $("#cost").val(yeni_fiyat + " TL");
+                            $("#indirimtutari").val(1);
+                        }
+
+                    });
                     
-					}
-                   
-				});}
-			});
-		});
+                }
+            });
+        });
     </script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>

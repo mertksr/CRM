@@ -126,7 +126,7 @@
                       <div id="defaultStep-one" class="content" role="tabpanel">
                         <form id="musteriekleform" method="post" action="../netting/musteriislem.php" class="needs-validation">
                           <div class="row g-2">
-                            <div class="form-group mb-1 col-6">
+                            <div class="form-group mb-1 col-12">
                               <label>Kayıt Türü</label>
                               <div class="form-check">
                                 <input class="form-check-input" type="radio" value="Gerçek Kişi" name="kayitturu" id="flexRadioDefault1" checked>
@@ -150,10 +150,7 @@
                               <label for="defaultForm-name">TC No</label>
                               <input form="musteriekleform" name="tcno" type="text" class="form-control" id="defaultForm-name">
                             </div>
-                            <div class="form-group mb-1 col-6 col-md-6 col-lg-6">
-                              <label for="defaultForm-name">Referans No</label>
-                              <input form="musteriekleform" name="refno" type="text" class="form-control" id="defaultForm-name">
-                            </div>
+
                             <div class="form-group mt-0 col-6 col-md-6 col-lg-6">
                               <label for="defaultForm-name" class="p-1">Doğum Günü</label>
                               <input form="musteriekleform" name="dogumgunu" type="date" class="form-control" id="defaultForm-name">
@@ -222,7 +219,7 @@
 
 
                         </form>
-                        <div class="button-action mt-1">
+                        <div class="button-action mt-2">
                           <button class="btn btn-secondary btn-prev me-3" disabled>Önceki</button>
                           <button class="btn btn-secondary btn-nxt">Sonraki</button>
                         </div>
@@ -271,7 +268,7 @@
 
                         </form>
 
-                        <div class="button-action mt-1">
+                        <div class="button-action mt-2">
                           <button class="btn btn-secondary btn-prev me-3">Önceki</button>
                           <button class="btn btn-secondary btn-nxt">Sonraki</button>
                         </div>
@@ -280,25 +277,35 @@
 
 
                         <div class="info-row">
-                          <div class="row g-3">
+                          <div class="row g-2">
 
                           <div class="col-12">
                               <label for="defaultInputCity" class="form-label">Notlar</label>
                               <input form="musteriekleform"  type="text" class="form-control" id="defaultInputCity" name="not">
                             </div>
-                            <div class="col-6 info-row-item">
+                            <div class="form-group col-12">
+                              <label for="defaultForm-name">Referans Bilgisi</label>
+                              <input form="musteriekleform" name="refno" type="text" class="form-control" id="defaultForm-name">
+                            </div>
+                            <div class="col-5 info-row-item">
                               <label for="defaultInputCity" class="form-label">İletişim
                                 Bilgisi</label>
                               <input form="musteriekleform" required type="text" class="form-control" id="defaultInputCity" name="ibilgi[]">
                             </div>
+                                                                  
+                            <div class="col-1 info-row-item" style="text-align:center;">
+                            <label for="defaultInputCity" class="form-label"><i class='fa-brands fa-whatsapp fa-xl'></i></label>
+                            <input form="musteriekleform" class="form-check-input" style="width:100%;height:50%;"  name="iwp" type="checkbox" value="1" id="inlineFormCheck">
+                                        </div>
+                            
                             <div class="col-4 info-row-item">
                               <label for="defaultInputState" class="form-label ">İletişim
                                 Türü</label>
                               <select form="musteriekleform" required id="defaultInputState" name="ituru[]" class="form-select">
                                 <option value="">Seç</option>
-                                <option value="Mobil">Mobil1</option>
-                                <option value="Tel">Tel</option>
-                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Mobil">Mobil</option>
+                                <option value="Yedek">Yedek</option>
+
                               </select>
                             </div>
                             <div class="col-2 info-row-item p-0">
@@ -447,26 +454,28 @@ $(document).on('change', '#ilce_select', function() {
       var addButton = $('.add_button'); //Add button selector
       var wrapper = $('.info-row'); //Input field wrapper
       var fieldHTML = `   
-                                <div class="row  g-3">      
-                                <div class="col-6 info-row-item">
-                              <label for="defaultInputCity" class="form-label">İletişim
-                                Bilgisi</label>
+                                <div class="row  g-2 mt-1">      
+                                <div class="col-5 info-row-item">
+
                               <input form="musteriekleform" required type="text" class="form-control" id="defaultInputCity" name="ibilgi[]">
                             </div>
+                                                                  
+                            <div class="col-1 info-row-item">
+
+                            <input form="musteriekleform" class="form-check-input" style="width:100%;height:74%;" type="checkbox" name="iwp" value="1" id="inlineFormCheck">
+                                        </div>
                             <div class="col-4 info-row-item">
-                              <label for="defaultInputState" class="form-label ">İletişim
-                                Türü</label>
+
                               <select form="musteriekleform" required id="defaultInputState" name="ituru[]" class="form-select">
                                 <option value="">Seç</option>
-                                <option value="Mobil">Mobil1</option>
-                                <option value="Tel">Tel</option>
-                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Mobil">Mobil</option>
+                                <option value="Tel">Yedek</option>
                               </select>
                             </div>
                                     <div class="col-2 info-row-item p-0">
-                                    <label for="defaultInputState" class="form-label ">Sil</label>
+                           
                                     <button id="add-contact" type="button"
-                                        class="btn btn-danger remove_button add_button" style="width:100%;height:65%;"><i
+                                        class="btn btn-danger remove_button add_button" style="width:100%;height:100%;"><i
                                     class="fa-solid fa-circle-minus fa-lg"></i></button>
                                     </div>
                                 </div> `;

@@ -28,8 +28,6 @@
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">
     <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
     <style>
-
-
         .list-unstyled {
             background-color: #16213E;
         }
@@ -39,20 +37,24 @@
             color: white;
 
         }
+
         .modal-content {
             background: whitesmoke;
         }
+
         .contact-modal {
             background-color: #EEEEEE !important;
             color: #14274E !important;
             cursor: default !important;
         }
+
         .page-item.active .page-link {
-    background-color: #394867;
-}
-div.dataTables_wrapper div.dataTables_info { 
-    color: #14274E !important;
-}
+            background-color: #394867;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            color: #14274E !important;
+        }
     </style>
     <!-- END PAGE LEVEL STYLES -->
     <script src="../public/src/fontawesome/all.js"></script>
@@ -96,8 +98,9 @@ div.dataTables_wrapper div.dataTables_info {
 
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                             <div class="statbox widget box box-shadow">
-                            <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="musteriekle.php">Yeni Müşteri</a>
-
+                                <div  style="display:flex;justify-content:right;">                                                
+                                <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="musteriekle.php">Yeni Müşteri</a>
+                                </div>
                                 <div class="widget-content widget-content-area">
                                     <table id="html5-extension" class="table dt-table-hover" style="width:100%">
                                         <thead>
@@ -109,6 +112,7 @@ div.dataTables_wrapper div.dataTables_info {
 
                                                 <th style="max-width:30px;">Bölge</th>
                                                 <th style="max-width:10px;text-align:center;">Sonraki Bakım</th>
+                                                <th style="max-width:10px;text-align:center;">Bakıma Kalan Süre</th>
                                                 <th style="max-width:20px;text-align:center;">İletişim</th>
                                                 <th style="max-width:20px;text-align:center;">İşlemler</th>
 
@@ -138,7 +142,49 @@ div.dataTables_wrapper div.dataTables_info {
                                                 <td><?= $mustericek['mAdSoyad']; ?></td>
                                                 <td><?php echo $mahallecek['NeighborhoodName']; ?></td>
 
-                                                <td style="text-align:center;"><?php echo $yeni_tarih; ?></td>
+                                                <td style="text-align:center;"><?php echo $yeni_tarih; ?>
+                                                <td style="text-align:center;"><?php
+
+                                                                                $query = "SELECT * FROM islemler WHERE islemMusteriNo = :customer_id ORDER BY islemTarihi DESC LIMIT 1";
+                                                                                $islemsor = $db->prepare($query);
+                                                                                $islemsor->bindParam(':customer_id', $mustericek['mMusteriNo']);
+
+
+                                                                                $islemsor->execute();
+                                                                                $count = $islemsor->rowCount();
+
+                                                                                $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
+                                                                                $tarih = $islemcek['islemTarihi'];
+                                                                                $tarih = date('Y-m-d', strtotime($tarih));
+                                                                                // Tarihi DateTime nesnesine dönüştürelim:
+                                                                                $datetime_tarih = new DateTime($tarih);
+
+                                                                                // Bugünün tarihini DateTime nesnesine dönüştürelim:
+                                                                                $datetime_bugun = new DateTime();
+
+                                                                                // İki tarih arasındaki farkı bulalım:
+                                                                                $fark = $datetime_tarih->diff($datetime_bugun);
+
+                                                                                // Farkı gün olarak alalım:
+                                                                                $gun_farki = $fark->format("%a");
+
+                                                                                // Eğer kalan gün sayısı 30 veya daha az ise, kırmızı renkte bir metin yazdıralım:
+                                                                                if ($count > 0) {
+                                                                                    if ($gun_farki <= 14) {
+                                                                                        echo "<span class='badge badge-danger me-4'>$gun_farki Gün</span>";
+                                                                                    }
+                                                                                    // Değilse, turuncu renkte bir metin yazdıralım:
+                                                                                    else if ($gun_farki <= 30) {
+                                                                                        echo "<span class='badge badge-warning me-4'>$gun_farki Gün</span>";
+                                                                                    } else {
+                                                                                        echo "<span class='badge badge-primary me-4'>$gun_farki Gün</span>";
+                                                                                    }
+                                                                                } else {
+                                                                                    echo "<span class='badge badge-dark me-4'>Bakım Bilgisi Yok</span>";
+                                                                                }
+                                                                                ?>
+                                                </td>
+
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
                                                         <button type="button" class="btn btn-ozel mr-2" data-bs-toggle="modal" data-bs-target="#<?php echo $modalId; ?>">
@@ -150,8 +196,11 @@ div.dataTables_wrapper div.dataTables_info {
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
+
                                                                     <h5 class="modal-title" id="exampleModalLabel"><span style="color:#E21818;"><?php echo $mustericek['mAdSoyad']; ?></span> İletişim Bilgileri</h5>
+
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                                                                 </div>
                                                                 <div class="modal-body row">
 
@@ -164,104 +213,120 @@ div.dataTables_wrapper div.dataTables_info {
                                                                         <div class="col-6">
                                                                             <p><?php if ($iletisimcek['iletisimTuru'] == "Tel" || $iletisimcek['iletisimTuru'] == "Mobil") {
                                                                                     echo "<a href='https://google.com/$iletisimbilgisi'><i class='fa-solid fa-phone fa-2xl'></i></a>";
-                                                                                } else if ($iletisimcek['iletisimTuru'] == "WhatsApp") {
-                                                                                    echo "<a href='https://wa.me/$iletisimbilgisi'><i class='fa-brands fa-whatsapp fa-2xl'></i></a>";
                                                                                 }
-                                                                                ?> : <?php echo $iletisimcek['İletisimBilgisi'];
 
-                                                                                            ?>
+                                                                                ?> : <?php echo $iletisimcek['İletisimBilgisi']; ?>
 
                                                                             </p>
                                                                         </div>
-                                                                    <?php }   ?>
-                                                                    <br><br>
-                                                                    <div class="row g-1">
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Adres</label>
-                                                                            <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $mustericek['mAdres'] ?></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Bölge </label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mahallecek['NeighborhoodName']; ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= date("d.m.Y", strtotime($mustericek['mSonIslem'])); ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Notlar</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mNot']; ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Bakım Periyodu</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mPeriyot'] . ' Ay'; ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar??</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="">
-                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <p>
+                                                                        <?php
+                                                                        if ($iletisimcek['iletisimTuru'] == "Tel" || $iletisimcek['iletisimTuru'] == "Mobil" && $iletisimcek['iletisimWp'] == "1") {
+                                                                            echo "<a href='https://wa.me/$iletisimbilgisi'><i class='fa-brands fa-whatsapp fa-2xl'></i></a>";
+                                                                        }
+                                                                        ?> : <?php echo $iletisimcek['İletisimBilgisi'];
 
+                                                                                        ?>
 
-                                                                    </div>
-
-
+                                                                        </p>
                                                                 </div>
-                                                                <div class="modal-footer">
-                                                                    <button class="btn btn-dark" data-bs-dismiss="modal">Kapat</button>
+                                                            <?php }   ?>
+                                                            <br><br>
+                                                            <div class="row g-1">
+                                                                <div class="form-group col-12">
+                                                                    <label for="exampleFormControlInput1">Adres</label>
+                                                                    <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $mustericek['mAdres'] ?></textarea>
                                                                 </div>
+                                                                <div class="form-group col-6">
+                                                                    <label for="exampleFormControlInput1">Bölge </label>
+                                                                    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mahallecek['NeighborhoodName']; ?>">
+                                                                </div>
+                                                                <div class="form-group col-6">
+                                                                    <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
+                                                                    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= date("d.m.Y", strtotime($mustericek['mSonIslem'])); ?>">
+                                                                </div>
+                                                                <div class="form-group col-6">
+                                                                    <label for="exampleFormControlInput1">Notlar</label>
+                                                                    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mNot']; ?>">
+                                                                </div>
+                                                                <div class="form-group col-6">
+                                                                    <label for="exampleFormControlInput1">Bakım Periyodu</label>
+                                                                    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mPeriyot'] . ' Ay'; ?>">
+                                                                </div>
+                                                                <div class="form-group col-12">
+                                                                    <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar??</label>
+                                                                    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="">
+                                                                </div>
+
+
+                                                            </div>
+
+
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <a class="btn special1 m-3" style="color:#EFF5F5;" href="randevuekle.php?no=<?= $mustericek['mMusteriNo']; ?>"> <i class="fa-solid fa-calendar-plus"></i></a>
+
+                                                                <button class="btn btn-dark" data-bs-dismiss="modal">Kapat</button>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                </td>
-  
-
-                                                <td  style="text-align:center;">
-                                                    <div class="btn-group">
-                                                       <a class="btn btn-dark btn-sm btn-ozel" href='musteridetay.php?no=<?= $mustericek['mMusteriNo'];?>'>Düzenle</a> 
-                                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split btn-ozel" id="dropdownMenuReference2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuReference2">
-                                                            <a class="dropdown-item" href='islemler.php?no=<?= $mustericek['mMusteriNo'];?>'>Servis Kayıtları</a>
-                                                            <a class="dropdown-item" href='mrandevular.php?no=<?= $mustericek['mMusteriNo'];?>'>Randevular</a>
-                                                            <a class="dropdown-item" href='satislar.php?no=<?= $mustericek['mMusteriNo'];?>'>Satışlar</a>
-
-
-                                                            <?php if($mustericek['mKonum'] != "") {echo ' <a class="dropdown-item" target="_Blank" href="https://maps.google.com/?q= ' . $mustericek["mKonum"] . ' ">Konum Aç</a> '; }?>  
-                                                           <a class="dropdown-item" href="#">Ertele</a>
-
-                                                        </div>
-                                                        </div>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                    </table>
                                 </div>
+
+                                </td>
+
+
+                                <td style="text-align:center;">
+                                    <div class="btn-group">
+                                        <a class="btn btn-dark btn-sm btn-ozel" href='musteridetay.php?no=<?= $mustericek['mMusteriNo']; ?>'>Düzenle</a>
+                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split btn-ozel" id="dropdownMenuReference2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuReference2">
+                                            <a class="dropdown-item" href='islemler.php?no=<?= $mustericek['mMusteriNo']; ?>'>Servis Kayıtları</a>
+                                            <a class="dropdown-item" href='mrandevular.php?no=<?= $mustericek['mMusteriNo']; ?>'>Randevular</a>
+                                            <a class="dropdown-item" href='satislar.php?no=<?= $mustericek['mMusteriNo']; ?>'>Satışlar</a>
+
+
+                                            <?php if ($mustericek['mKonum'] != "") {
+                                                echo ' <a class="dropdown-item" target="_Blank" href="https://maps.google.com/?q= ' . $mustericek["mKonum"] . ' ">Konum Aç</a> ';
+                                            } ?>
+                                            <a class="dropdown-item" href="#">Ertele</a>
+
+                                        </div>
+                                    </div>
+                                </td>
+                                </tr>
+                            <?php } ?>
+                            </table>
                             </div>
                         </div>
-
                     </div>
 
-
                 </div>
+
 
             </div>
 
-            <!--  BEGIN FOOTER  -->
-            <div class="footer-wrapper">
-                <div class="footer-section f-section-1">
-                    <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
-                </div>
-                <div class="footer-section f-section-2">
-                    <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg></p>
-                </div>
+        </div>
+
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
             </div>
-            <!--  END CONTENT AREA  -->
+            <div class="footer-section f-section-2">
+                <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg></p>
+            </div>
         </div>
         <!--  END CONTENT AREA  -->
+    </div>
+    <!--  END CONTENT AREA  -->
     </div>
     <!-- END MAIN CONTAINER -->
 

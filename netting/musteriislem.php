@@ -73,27 +73,32 @@
     ));
     $iletisimBilgisi = $_POST['ibilgi'];
     $iletisimTuru = $_POST['ituru'];
+    $iletisimWp = $_POST['iwp'];
+
     $last_id = $db->lastInsertId();
     for($i=0; $i<count($iletisimBilgisi); $i++){
         $query = $db->prepare("INSERT INTO iletisim SET
         iletisimBilgisi = :iletisimBilgisi,
         iletisimTuru = :iletisimTuru,
-        iletisimMusteriNo = :iletisimMusteriNo
+        iletisimMusteriNo = :iletisimMusteriNo,
+        iletisimWp = :iletisimwp
         ");
         $insert = $query->execute(array(
             "iletisimBilgisi" => $iletisimBilgisi[$i],
             "iletisimTuru" => $iletisimTuru[$i],
-            "iletisimMusteriNo" => $number
+            "iletisimMusteriNo" => $number,
+            "iletisimwp" => $iletisimWp
+
         ));
     } }
-    if ($insert) {
-        $last_id = $db->lastInsertId();
-          header("Location:../views/musteriekle.php?yt=basarili");
-          exit();
+    // if ($insert) {
+    //     $last_id = $db->lastInsertId();
+    //       header("Location:../views/musteriekle.php?yt=basarili");
+    //       exit();
 
-    } else {
+    // } else {
 
-         header("Location:../views/musteriekle.php?yt=basarisiz");
-         exit();
-    }
+    //      header("Location:../views/musteriekle.php?yt=basarisiz");
+    //      exit();
+    // }
 }

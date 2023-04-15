@@ -112,9 +112,10 @@
               
                                        $mcek = $msor->fetch(PDO::FETCH_ASSOC);?>
                             <div class="statbox widget box box-shadow">
-          <h5><span  style="color:#FE6244;"><?= $mcek['mAdSoyad']; ?></span> Randevu Kayıtları</h5>                   
+          <h5><span  style="color:#FE6244;"><?= $mcek['mAdSoyad']; ?></span> Randevu Kayıtları</h5>          
+          <div  style="display:flex;justify-content:right;">           
           <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="randevuekle.php?no=<?= $_GET['no']; ?>">Yeni Randevu</a>
- 
+          </div>
                                 <div class="widget-content widget-content-area">
 
                                     <table id="islemler" class="table dt-table-hover" style="width:100%">
