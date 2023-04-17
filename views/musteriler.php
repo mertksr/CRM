@@ -155,7 +155,7 @@
 
                                                                                 $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
                                                                                 $tarih = $islemcek['islemTarihi'];
-                                                                                $tarih = date('Y-m-d', strtotime($tarih));
+                                                                                $tarih = date('Y-m-d', strtotime('+'. $islemcek['islemPeriyot'] .' months'));
                                                                                 // Tarihi DateTime nesnesine dönüştürelim:
                                                                                 $datetime_tarih = new DateTime($tarih);
 

@@ -208,10 +208,15 @@
                                             <label for="defaultInputState" class="form-label ">Kullanılan
                                                 Ürünler</label>
                                             <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
-                                                <option value="1">*Alkalix Cihaz</option>
-                                                <option value="2">*Aqualine Cihaz</option>
-                                                <option value="3">*5 micron</option>
-                                                <option value="4">Tuz filt</option>
+                                                <?php
+
+                                                $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                $urunsor->execute();
+                                                while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+                                                ?>
+                                                    <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
+                                                <?php  } ?>
+
                                             </select>
                                         </div>
 
@@ -256,7 +261,8 @@
                                         <div class="col-12">
                                             <button type="submit" name="islemekle" class="btn islemkaydet">Kaydet</button>
                                         </div>
-<input type="hidden" value="" name="indirimtutari" id="indirimtutari">
+                                        <input type="hidden" value="" name="tamfiyat" id="tamfiyat">
+                                        <input type="hidden" value="" name="indirimlifiyat" id="indirimtutari">
                                     </form>
                                 </div>
                             </div>
@@ -337,15 +343,27 @@
                         type: "POST",
                         dataType: "JSON",
                         success: function(data) {
-                            var indirim_tutari = parseFloat(data);
                             var fiyat = parseFloat($("#cost").val());
+                            var basamak = fiyat.toString().length;
+                            var indirim_tutari = fiyat * 0.1;
                             var yeni_fiyat = fiyat - indirim_tutari;
-                            $("#cost").val(yeni_fiyat + " TL");
-                            $("#indirimtutari").val(1);
+                            var roundedPrice;
+                            if (basamak == 4 || basamak == 5) {
+                                 roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                                if (yeni_fiyat - roundedPrice >= 50) {
+                                    roundedPrice += 100;
+                                }
+                            } else if (basamak == 3 || basamak == 2) {
+                                 roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                            }
+
+                            $("#cost").val(roundedPrice + " TL");
+                            $("#indirimtutari").val(roundedPrice);
+                            $("#tamfiyat").val(fiyat);
                         }
 
                     });
-                    
+
                 }
             });
         });

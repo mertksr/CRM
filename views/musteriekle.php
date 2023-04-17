@@ -242,7 +242,7 @@
                                 <option value="">İlçe seçiniz...</option>
                               </select>
                             </div>
-                            <div class="col-6">
+                            <div class="col-12 col-lg-6 col-md-6">
                               <label for="defaultInputAddress" class="form-label">Mahalle</label>
                               <select class="field__input form-control" form="musteriekleform"  id="mahalle_select" name="mahalle" >
                                 <option value="">Mahalle seçiniz...</option>

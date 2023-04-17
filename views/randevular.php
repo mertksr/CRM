@@ -266,7 +266,7 @@
                                                                 <p style="color:red;">RANDEVUYU KAPATMADAN ÖNCE YAPTIĞINIZ İŞLEMİ KAYDEDİN!!!</p>
                                                                 <form action="../netting/randevuislem.php" method="POST">
                                                                     <div class="col-6">
-                                                                        <a style="width:100%;" class="btn btn-warning" href="islemler.php?no=<?= $mustericek['mMusteriNo']; ?>">Servis Kaydı Ekle</a>
+                                                                        <a style="width:100%;" class="btn btn-warning" href="islemekle.php?no=<?= $mustericek['mMusteriNo']; ?>">Servis Kaydı Ekle</a>
                                                                     </div>
 
                                                                     <div class="col-6">

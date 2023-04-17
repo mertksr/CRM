@@ -19,6 +19,7 @@
     	islemMusteriNo = :musterino,
         islemYapanKisi = :yapankisi,
         islemUcret = :ucret,
+        islemIndirimliFiyat = :indirimlifiyat,
         islemTuru = :hizmetturu,
         islemPeriyot = :periyot,
         islemNot = :islemnot
@@ -28,7 +29,8 @@
         "islemno" =>$number,
         "musterino" =>$_POST['musterino'],
         "yapankisi" => $_POST['islemyapan'],
-        "ucret" => $_POST['islemucreti'],
+        "ucret" => $_POST['tamfiyat'],
+        "indirimlifiyat" => $_POST['indirimlifiyat'],
         "hizmetturu" => $hizmetler_str,
         "periyot" => $_POST['periyot'],
         "islemnot" => $_POST['islemnotlari']
@@ -61,10 +63,10 @@
             $gecici_dosya = $_FILES["resimler"]["tmp_name"][$i];
             $hata = $_FILES["resimler"]["error"][$i];
     
-            if($hata > 0) {
+            if($hata > 0 && $hata != 4) {
                 die("Resimler yüklenirken bir hata oluştu.");
             }
-            else {
+            else if($hata != 4) {
                 $dosya_uzantisi = pathinfo($dosya_adi, PATHINFO_EXTENSION);
     
                 if(in_array($dosya_uzantisi, $izin_verilen_uzantilar)) {

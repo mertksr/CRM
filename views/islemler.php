@@ -12,6 +12,8 @@
     <link href="../public/layouts/horizontal-light-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
     <script src="../public/layouts/horizontal-light-menu/loader.js"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
+
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link href="../public/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
@@ -92,9 +94,10 @@
                                                 <th>No</th>
                                                 <th>Yapan Kişi</th>
                                                 <th>İşlem Zamanı</th>
+                                                <th>İşlem Türü</th>
                                                 <th>Ücret</th>
                                                 <th>Not</th>
-                                                <th>Kullanılan Ürünler</th>
+                                                <th>Detay</th>
 
                                             </tr>
                                         </thead>
@@ -106,31 +109,22 @@
                                         $say = 0;
                                         while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
                                             $say++;
-
+$islemturu = unserialize($islemcek['islemTuru']);
                                         ?>
 
                                             <tr>
                                                 <td><?= $say; ?></td>
                                                 <td><?= $islemcek['islemYapanKisi']; ?></td>
                                                 <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
+                                                <td><?=  implode(", ", $islemturu);  ?></td>
+
                                                 <td><?= $islemcek['islemUcret']; ?></td>
 
                                                 <td><?= $islemcek['islemNot']; ?> </td>
-                                                <td>
+                                                <td style="text-align:center;">
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn btn-dark btn-sm">Open</button>
-                                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
-                                                                <polyline points="6 9 12 15 18 9"></polyline>
-                                                            </svg>
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                                                            <a class="dropdown-item" href="#">Action</a>
-                                                            <a class="dropdown-item" href="#">Another action</a>
-                                                            <a class="dropdown-item" href="#">Something else here</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#">Separated link</a>
-                                                        </div>
+                                                        <a href="islemdetay.php?no=<?= $_GET['no']; ?>&islemno=<?= $islemcek['islemNo']?>" class="btn btn-dark btn-sm"><i class="fa-solid fa-circle-info"></i></a>
+
                                                     </div>
                                                 </td>
                                             </tr>
@@ -162,6 +156,7 @@
         </div>
         <!--  END CONTENT AREA  -->
     </div>
+    <script src="../public/src/fontawesome/all.js"></script>
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/plugins/src/global/vendors.min.js"></script>
