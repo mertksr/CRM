@@ -118,7 +118,7 @@ $islemturu = unserialize($islemcek['islemTuru']);
                                                 <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
                                                 <td><?=  implode(", ", $islemturu);  ?></td>
 
-                                                <td><?= $islemcek['islemUcret']; ?></td>
+                                                <td><?= $islemcek['islemUcret']; ?> TL</td>
 
                                                 <td><?= $islemcek['islemNot']; ?> </td>
                                                 <td style="text-align:center;">

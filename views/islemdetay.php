@@ -82,19 +82,25 @@
                                 $musterisor->execute(array($_GET['no']));
                                 $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
                            
-                                $urunsor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
-                                $urunsor->execute(array($_GET['no']));
-                                $uruncek = $urunsor->fetch(PDO::FETCH_ASSOC);
-
-                                $islemsor = $db->prepare("SELECT * from islemler WHERE islemNo = :islemNo");
-                                $islemsor->execute(array(
-                                    'islemNo' => $_GET['islemno']
-                                ));
-
-                               $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
+                                $urunsor = $db->prepare("SELECT * FROM urunler");
+                                $urunsor->execute();
+                                $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
+                                
+                                $islemno = $_GET['islemno'];
+                                $islemsor = $db->prepare("SELECT * FROM islemler WHERE islemNo = :islemNo");
+                                $islemsor->execute(array('islemNo' => $islemno));
+                                $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
                                 $islemturu = unserialize($islemcek['islemTuru']);
-                              
-
+                                $kullanilanurun = unserialize($islemcek['islemKullanilanUrun']);
+                                $islemurun = [];
+                                
+                                foreach ($kullanilanurun as $urunid) {
+                                    foreach ($urunler as $urun) {
+                                        if ($urunid == $urun['urunid']) {
+                                            array_push($islemurun, $urun['urunAd']);
+                                        }
+                                    }
+                                }
                                 ?>
                                 <div class="widget-content widget-content-area">
                                     <form class="row g-2" method="POST" id="islemekleform" action="../netting/islemislem.php" enctype="multipart/form-data">
@@ -112,7 +118,9 @@
 
                                         <div class="col-12">
                                             <label for="inputAddress2" class="form-label">Kulanılan Ürünler</label>
-                                            <textarea type="text" readonly class="form-control info-input" name="islemnotlari" id="inputAddress2"></textarea>
+<textarea  readonly class="form-control info-input">
+<?=  implode(", ", $islemurun);  ?>
+</textarea>
                                         </div>
 
 
@@ -120,23 +128,23 @@
                                             <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
                                             <div class="input-group">
-                                                <input type="text" class="form-control info-input" id="cost" name="islemucreti" readonly style="color:#505463;">                                            </div>
+                                                <input type="text" class="form-control info-input" value="<?= $islemcek['islemUcret']; ?>" id="cost" name="islemucreti" readonly style="color:#505463;">                                            </div>
                                         </div>
 
                                         <div class="col-6">
                                             <label for="inputAddress2" class="form-label">İşlem Yapan</label>
-                                            <input type="text" readonly class="form-control info-input" name="islemnotlari" id="inputAddress2">
+                                            <input type="text" readonly class="form-control info-input" value="<?= $islemcek['islemYapanKisi']; ?>" name="islemnotlari" id="inputAddress2">
                                         </div>
 
 
                                         <div class="col-6">
                                             <label for="inputAddress2" class="form-label">Periyot</label>
-                                            <input type="text" readonly class="form-control info-input" name="islemnotlari" id="inputAddress2">
+                                            <input type="text" readonly class="form-control info-input" value="<?= $islemcek['islemPeriyot']; ?>" name="islemnotlari" id="inputAddress2">
                                         </div>
 
                                         <div class="col-6">
                                             <label for="inputAddress2" class="form-label">Notlar</label>
-                                            <input type="text" readonly class="form-control info-input" name="islemnotlari" id="inputAddress2">
+                                            <input type="text" readonly class="form-control info-input" value="<?= $islemcek['islemNot']; ?>" name="islemnotlari" id="inputAddress2">
                                         </div>
                                
 

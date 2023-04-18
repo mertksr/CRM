@@ -13,7 +13,8 @@
         
         $hizmetler = $_POST['hizmetler'];
         $hizmetler_str = serialize($hizmetler);
-    
+        $yapilanislem = $_POST['kullanilanurunler'];
+         $yapilanislem_str = serialize($yapilanislem);
     $query = $db->prepare("INSERT INTO islemler SET
       	islemNo = :islemno,
     	islemMusteriNo = :musterino,
@@ -21,6 +22,7 @@
         islemUcret = :ucret,
         islemIndirimliFiyat = :indirimlifiyat,
         islemTuru = :hizmetturu,
+        islemKullanilanUrun = :kullanilanurunler,
         islemPeriyot = :periyot,
         islemNot = :islemnot
                 ");
@@ -32,24 +34,12 @@
         "ucret" => $_POST['tamfiyat'],
         "indirimlifiyat" => $_POST['indirimlifiyat'],
         "hizmetturu" => $hizmetler_str,
+        "kullanilanurunler" => $yapilanislem_str,
         "periyot" => $_POST['periyot'],
         "islemnot" => $_POST['islemnotlari']
     ));
     
-    $yapilanislem = $_POST['kullanilanurunler'];
-    $last_id = $db->lastInsertId();
-    for($i=0; $i<count($yapilanislem); $i++){
-        $query = $db->prepare("INSERT INTO kullanilanurun SET
-        musteriNo = :musterino,
-        islemNo = :islemno,
-        kullanilanUrunId = :urunid
-        ");
-        $insert = $query->execute(array(
-            "musterino" => $_POST['musterino'],
-            "islemno" => $number,
-            "urunid" => $yapilanislem[$i]
-        ));
-        } 
+
         $musterino = $_POST['musterino'];
 
         $izin_verilen_uzantilar = array("jpg", "jpeg", "png", "gif");

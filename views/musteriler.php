@@ -166,19 +166,17 @@
                                                                                 $fark = $datetime_tarih->diff($datetime_bugun);
 
                                                                                 // Farkı gün olarak alalım:
-                                                                                $gun_farki = $fark->format("%a");
+                                                                                $ayfarkı = $fark->format("%m");
 
                                                                                 // Eğer kalan gün sayısı 30 veya daha az ise, kırmızı renkte bir metin yazdıralım:
                                                                                 if ($count > 0) {
-                                                                                    if ($gun_farki <= 14) {
-                                                                                        echo "<span class='badge badge-danger me-4'>$gun_farki Gün</span>";
+                                                                                    if ($ayfarkı <= 1) {
+                                                                                        echo "<span class='badge badge-danger me-4'>$ayfarkı Ay</span>";
                                                                                     }
                                                                                     // Değilse, turuncu renkte bir metin yazdıralım:
-                                                                                    else if ($gun_farki <= 30) {
-                                                                                        echo "<span class='badge badge-warning me-4'>$gun_farki Gün</span>";
-                                                                                    } else {
-                                                                                        echo "<span class='badge badge-primary me-4'>$gun_farki Gün</span>";
-                                                                                    }
+                                                                                    else if ($ayfarkı > 1) {
+                                                                                        echo "<span class='badge badge-primary me-4'>$ayfarkı Ay</span>";
+                                                                                    } 
                                                                                 } else {
                                                                                     echo "<span class='badge badge-dark me-4'>Bakım Bilgisi Yok</span>";
                                                                                 }
