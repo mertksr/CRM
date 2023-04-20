@@ -42,17 +42,19 @@
                 width: 320px;
             }
         }
-        .islemkaydet{
-      background-color: #394867 !important;
-      border:none !important;
-      box-shadow:none !important;
-    color:#fff;
-    }
-    .islemkaydet{
-      background-color: #6B728E !important;
 
-    }
-    
+        .islemkaydet {
+            background-color: #394867 !important;
+            border: none !important;
+            box-shadow: none !important;
+            color: #fff;
+        }
+
+        .islemkaydet {
+            background-color: #6B728E !important;
+
+        }
+
         .multi-select-menu {
             position: absolute;
             left: 0;
@@ -124,6 +126,7 @@
         .choices__item {
             color: #505463;
         }
+
         .info-input {
             background-color: #EEEEEE !important;
             color: #14274E !important;
@@ -158,18 +161,18 @@
 
         <?php include 'partials/navbar.php' ?>
         <!--  END SIDEBAR  -->
-                                <?php 
-                                $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
-                                $musterisor->execute(array($_GET['no']));
-                                $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
-                                ?>
+        <?php
+        $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
+        $musterisor->execute(array($_GET['no']));
+        $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
+        ?>
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
             <div class="container">
                 <div class="container" style="margin: 0 auto;">
                     <div class="row layout-top-spacing" id="cancel-row">
                         <div id="flLoginForm" class="col-lg-12  layout-spacing">
-                        <a class="btn btn-warning mb-3" href="mrandevular.php?no=<?= $mustericek['mMusteriNo'];?>">Geri Dön</a>
+                            <a class="btn btn-warning mb-3" href="mrandevular.php?no=<?= $mustericek['mMusteriNo']; ?>">Geri Dön</a>
                             <div class="statbox widget box box-shadow">
                                 <div class="widget-header">
                                     <div class="row">
@@ -181,51 +184,41 @@
 
                                 <div class="widget-content widget-content-area">
                                     <form class="row g-2" method="POST" id="randevuekleform" action="../netting/randevuislem.php">
-                                     
-                                        <div class="col-6">
+
+                                        <div class="col-4">
                                             <label for="inputAddress" class="form-label">Müşteri Adı Soyadı</label>
-                                            <input type="text" readonly value="<?= $mustericek['mAdSoyad'] ?>" class="form-control info-input" id="inputAddress">
+                                            <input type="text" readonly style="text-transform:uppercase;" value="<?= $mustericek['mAdSoyad'] ?>" class="form-control info-input" id="inputAddress">
                                         </div>
 
-                                        <div class="col-6">
-                                            <label for="inputAddress" class="form-label">Görüşme Tarihi</label>
-                                            <input type="date" name="gorusmetarihi" class="form-control" id="inputAddress">
-                                        </div>
 
-                                        <div class="col-6">
+
+                                        <div class="col-4">
                                             <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
                                             <select form="randevuekleform" id="defaultInputState" name="hizmetturu" class="form-select">
                                                 <option selected="">Seç</option>
-                                                <?php 
+                                                <?php
 
-$hizmetsor = $db->prepare("SELECT * FROM hizmetler");
-$hizmetsor->execute();
-while($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)){
-?>
-                                                <option value="<?= $hizmetcek['hNo'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
+                                                $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
+                                                $hizmetsor->execute();
+                                                while ($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)) {
+                                                ?>
+                                                    <option value="<?= $hizmetcek['hNo'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
 
-<?php  } ?>
+                                                <?php  } ?>
 
                                             </select>
                                         </div>
 
-                                        <div class="col-6">
-                                            <label for="inputAddress" class="form-label">Randevu Tarihi</label>
-                                            <input type="date" name="randevutarihi" class="form-control" id="inputAddress">
-                                        </div>
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             <label for="defaultInputState" class="form-label ">Temsilci</label>
                                             <select form="randevuekleform" id="defaultInputState" name="temsilci" class="form-select">
                                                 <option selected="">Seç</option>
-                                                <option name="Mehmet">Mehmet</option>
-                                                <option name="Cihan">Cihan</option>
                                                 <option name="Bedirhan">Bedirhan</option>
+                                                <option name="Cihan">Cihan</option>
+                                                <option name="Mehmet">Mehmet</option>
                                             </select>
                                         </div>
-                                        <div class="col-6">
-                                            <label for="inputAddress" class="form-label">Teklif</label>
-                                            <input type="text" name="teklif" class="form-control" id="inputAddress">
-                                        </div>
+
                                         <div class="col-12">
                                             <label for="inputAddress" class="form-label">Notlar</label>
                                             <input type="text" name="notlar" class="form-control" id="inputAddress">
@@ -233,7 +226,7 @@ while($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)){
 
 
 
-<input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
+                                        <input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
                                         <div class="col-12">
                                             <button type="submit" name="randevuekle" class="btn islemkaydet">Kaydet</button>
                                         </div>
