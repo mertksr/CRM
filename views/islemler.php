@@ -110,7 +110,8 @@
                                         while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
                                             $say++;
 $islemturu = unserialize($islemcek['islemTuru']);
-                                        ?>
+$alınanucret = $islemcek['islemUcret'] - $islemcek['islemIndirimliFiyat'];
+$alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
 
                                             <tr>
                                                 <td><?= $say; ?></td>
@@ -118,7 +119,7 @@ $islemturu = unserialize($islemcek['islemTuru']);
                                                 <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
                                                 <td><?=  implode(", ", $islemturu);  ?></td>
 
-                                                <td><?= $islemcek['islemUcret']; ?> TL</td>
+                                                <td><?= $alınanucretfrmt; ?> TL</td>
 
                                                 <td><?= $islemcek['islemNot']; ?> </td>
                                                 <td style="text-align:center;">

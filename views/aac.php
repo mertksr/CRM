@@ -69,7 +69,7 @@
     </div>
 
     <!--  BEGIN SIDEBAR  -->
-    <?php include 'partials/navbar.php' ?>
+ 
 
     <!--  END SIDEBAR  -->
 

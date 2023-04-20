@@ -357,9 +357,8 @@
                                  roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
                             }
 
-                            $("#cost").val(roundedPrice + " TL");
+                            $("#cost").val(roundedPrice);
                             $("#indirimtutari").val(roundedPrice);
-                            $("#tamfiyat").val(fiyat);
                         }
 
                     });

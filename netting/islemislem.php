@@ -31,7 +31,7 @@
         "islemno" =>$number,
         "musterino" =>$_POST['musterino'],
         "yapankisi" => $_POST['islemyapan'],
-        "ucret" => $_POST['tamfiyat'],
+        "ucret" => $_POST['islemucreti'],
         "indirimlifiyat" => $_POST['indirimlifiyat'],
         "hizmetturu" => $hizmetler_str,
         "kullanilanurunler" => $yapilanislem_str,

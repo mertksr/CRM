@@ -152,9 +152,11 @@
                             </div>
 
                             <div class="form-group mt-0 col-6 col-md-6 col-lg-6">
-                              <label for="defaultForm-name" class="p-1">Doğum Günü</label>
+                              <label for="defaultForm-name">Doğum Günü</label>
                               <input form="musteriekleform" name="dogumgunu" type="date" class="form-control" id="defaultForm-name">
                             </div>
+
+  
                             <div class="form-group mb-1 col-6 col-md-6 col-lg-6">
                               <label for="defaultForm-name">Çalıştığı Firma</label>
                               <input form="musteriekleform" name="calistigifirma" type="text" class="form-control" id="defaultForm-name">
@@ -469,7 +471,7 @@ $(document).on('change', '#ilce_select', function() {
                               <select form="musteriekleform" required id="defaultInputState" name="ituru[]" class="form-select">
                                 <option value="">Seç</option>
                                 <option value="Mobil">Mobil</option>
-                                <option value="Tel">Yedek</option>
+                                <option value="Yedek">Yedek</option>
                               </select>
                             </div>
                                     <div class="col-2 info-row-item p-0">

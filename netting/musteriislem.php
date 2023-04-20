@@ -11,7 +11,25 @@
         $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
     } else {
         
-   
+        $iletisimBilgisi = $_POST['ibilgi'];
+        $iletisimTuru = $_POST['ituru'];
+
+        $iletisimWp = isset($_POST['iwp']) ? '1' : '0';
+        for($i=0; $i<count($iletisimBilgisi); $i++){
+            $query = $db->prepare("INSERT INTO iletisim SET
+            iletisimBilgisi = :iletisimBilgisi,
+            iletisimTuru = :iletisimTuru,
+            iletisimMusteriNo = :iletisimMusteriNo,
+            iletisimWp = :iletisimwp
+            ");
+            $insert = $query->execute(array(
+                "iletisimBilgisi" => $iletisimBilgisi[$i],
+                "iletisimTuru" => $iletisimTuru[$i],
+                "iletisimMusteriNo" => $number,
+                "iletisimwp" => $iletisimWp
+    
+            ));
+        } 
 
 
     $query = $db->prepare("INSERT INTO musteriler SET
@@ -71,34 +89,15 @@
 
 
     ));
-    $iletisimBilgisi = $_POST['ibilgi'];
-    $iletisimTuru = $_POST['ituru'];
-    $iletisimWp = $_POST['iwp'];
+}
+    if ($insert) {
+        $last_id = $db->lastInsertId();
+          header("Location:../views/musteriler.php?yt=basarili");
+          exit();
 
-    $last_id = $db->lastInsertId();
-    for($i=0; $i<count($iletisimBilgisi); $i++){
-        $query = $db->prepare("INSERT INTO iletisim SET
-        iletisimBilgisi = :iletisimBilgisi,
-        iletisimTuru = :iletisimTuru,
-        iletisimMusteriNo = :iletisimMusteriNo,
-        iletisimWp = :iletisimwp
-        ");
-        $insert = $query->execute(array(
-            "iletisimBilgisi" => $iletisimBilgisi[$i],
-            "iletisimTuru" => $iletisimTuru[$i],
-            "iletisimMusteriNo" => $number,
-            "iletisimwp" => $iletisimWp
+    } else {
 
-        ));
-    } }
-    // if ($insert) {
-    //     $last_id = $db->lastInsertId();
-    //       header("Location:../views/musteriekle.php?yt=basarili");
-    //       exit();
-
-    // } else {
-
-    //      header("Location:../views/musteriekle.php?yt=basarisiz");
-    //      exit();
-    // }
+         header("Location:../views/musteriekle.php?yt=basarisiz");
+         exit();
+    }
 }
