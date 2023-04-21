@@ -28,7 +28,10 @@
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">
     <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
     <script src="../public/src/fontawesome/all.js"></script>
-
+    <script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"></script>
     <style>
         .list-unstyled {
             background-color: #16213E;
@@ -113,12 +116,12 @@
                                         <tr>
 
 
-                                            <th style="max-width:50px;"><input type="text" class="form-control" placeholder="Ad Soyad"></th>
+                                            <th style="max-width:50px;"><input type="text" class="form-control" id="specialsearch" placeholder="Ad Soyad"></th>
 
-                                            <th style="max-width:30px;"><input type="text" class="form-control" placeholder="Bölge"></th>
+                                            <th style="max-width:30px;"><input type="text" class="form-control" id="specialsearch" placeholder="Bölge"></th>
                                             <th style="max-width:10px;text-align:center;">Önceki Bakım</th>
-                                            <th style="max-width:10px;text-align:center;"><input type="text" class="form-control" placeholder="Bakım"></th>
-                                            <th style="max-width:10px;text-align:center;"><input type="text" class="form-control" placeholder="Sonraki Bakım"></th>
+                                            <th style="max-width:10px;text-align:center;"><input type="text" class="form-control" id="specialsearch" placeholder="Bakım"></th>
+                                            <th style="max-width:10px;text-align:center;"><input type="text" class="form-control" id="specialsearch" placeholder="Sonraki Bakım"></th>
                                             <th style="max-width:20px;text-align:center;">İletişim</th>
                                             <th style="max-width:20px;text-align:center;">Randevu</th>
                                             <th style="max-width:20px;text-align:center;">Düzenle</th>
@@ -131,9 +134,9 @@
                                         <?php
                                         $musterisor = $db->prepare("SELECT * from musteriler");
                                         $musterisor->execute();
-
+$say = 0;
                                         while ($mustericek = $musterisor->fetch(PDO::FETCH_ASSOC)) {
-
+$say++;
                                             $tarih = $mustericek['mSonIslem'];
                                             $yeni_tarih = date('d.m.Y', strtotime($tarih . '+' . $mustericek['mPeriyot'] . ' months'));
                                             $musterino =  $mustericek["mMusteriNo"];
@@ -266,7 +269,7 @@
 
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" class="btn special1 mr-2" style="color:#EFF5F5;" data-bs-toggle="modal" data-bs-target="#randevu<?php echo $modalId; ?>">
+                                                        <button type="button" class="btn special1 mr-2"  style="color:#EFF5F5;" data-bs-toggle="modal" data-bs-target="#randevu<?php echo $modalId; ?>">
                                                             <i class="fa-solid fa-calendar-plus"></i>
                                                         </button>
                                                     </div>
@@ -283,12 +286,12 @@
                                                                 </div>
                                                                 <div class="modal-body row">
 
+                                                                    <form id="formRandevu-<?= $say; ?>" method="POST" >
+                                                                        <div class="row g-1">
 
-                                                                    <div class="row g-1">
-                                                                        <form>
                                                                             <div class="col-6">
                                                                                 <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
-                                                                                <select form="randevuekleform" id="defaultInputState" name="hizmetturu" class="form-select">
+                                                                                <select id="defaultInputState" form="formRandevu-<?= $say; ?>" name="hizmetturu" class="form-select">
                                                                                     <option selected="">Seç</option>
                                                                                     <?php
 
@@ -299,7 +302,7 @@
 
 
                                                                                     ?>
-                                                                                            <option value="<?= $hizmetcek['hNo'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
+                                                                                            <option value="<?= $hizmetcek['HizmetTuru'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
 
                                                                                     <?php }
                                                                                     } ?>
@@ -309,30 +312,33 @@
 
                                                                             <div class="col-6">
                                                                                 <label for="defaultInputState" class="form-label ">Teknisyen</label>
-                                                                                <select form="randevuekleform" id="defaultInputState" name="temsilci" class="form-select">
+                                                                                <select id="defaultInputState" form="formRandevu-<?= $say; ?>" name="teknisyen" class="form-select">
                                                                                     <option selected="">Seç</option>
-                                                                                    <option name="Bedirhan">Bedirhan</option>
-                                                                                    <option name="Cihan">Cihan</option>
-                                                                                    <option name="Mehmet">Mehmet</option>
+                                                                                    <option value="Bedirhan">Bedirhan</option>
+                                                                                    <option value="Cihan">Cihan</option>
+                                                                                    <option value="Mehmet">Mehmet</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-12">
                                                                                 <label for="exampleFormControlInput1">Notlar</label>
-                                                                                <input type="text" style="text-transform:uppercase;" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                                                <input type="text" form="formRandevu-<?= $say; ?>" name="notlar"  style="text-transform:uppercase;" class="form-control">
+
                                                                             </div>
+                                                                            <input type="hidden" name="musterino" form="formRandevu-<?= $say; ?>" value="<?= $mustericek['mMusteriNo']; ?>">
 
-                                                                        </form>
+                                                                            <input type="hidden" id="modalid" name="modalid" form="formRandevu-<?= $say; ?>" value="<?php echo $modalId; ?>">
 
-                                                                    </div>
+                                                                        </div>
 
 
                                                                 </div>
 
                                                                 <div class="modal-footer">
-                                                                    <button type="submit" class="btn btn-success" style="color:#EFF5F5;" href="randevuekle.php?no=<?= $mustericek['mMusteriNo']; ?>">Kaydet</button>
+                                                                    <button type="submit" form="formRandevu-<?= $say; ?>"  class="btn btn-success" style="color:#EFF5F5;">Kaydet</button>
 
 
                                                                 </div>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -389,11 +395,11 @@
                                                                     <div class="row g-1">
                                                                         <div class="form-group col-12">
                                                                             <label for="exampleFormControlInput1">Adres</label>
-                                                                            <textarea type="text" readonly style="height:60px;text-transform:uppercase;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $mustericek['mAdres'] ?></textarea>
+                                                                            <textarea type="text" readonly style="height:60px;text-transform:uppercase;" name="adres" class="form-control contact-modal" id="exampleFormControlInput1"></textarea>
                                                                         </div>
                                                                         <div class="form-group col-6">
                                                                             <label for="exampleFormControlInput1">Bölge </label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mahallecek['NeighborhoodName']; ?>">
+                                                                            <input type="text" readonly class="form-control contact-modal" name="bolge" id="bolge"  id="exampleFormControlInput1">
                                                                         </div>
                                                                         <div class="form-group col-6">
                                                                             <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
@@ -412,7 +418,7 @@
                                                                             <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="">
                                                                         </div>
                                                                         <div class="input-group">
-                                                                            <input type="text" form="musteriekleform" class="form-control" name="konum" id="locationInput" placeholder="Konum" readonly>
+                                                                            <input type="text" form="musteriekleform" value="<?= $mustericek['mKonum']; ?>" class="form-control" name="konum" id="konum" readonly>
                                                                             <button class="btn btn-outline-primary" type="button" onclick="getLocation()">Konum
                                                                                 Bul</button>
                                                                             <button class="btn btn-outline-success" type="button" onclick="goLocation()" id="goLocationBtn">Haritada
@@ -492,8 +498,46 @@
     <!-- END MAIN CONTAINER -->
 
     <script>
+$(document).ready(function() {
 
-        var locationInput = document.getElementById("locationInput");
+    var customerId = 040235;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var data = JSON.parse(this.responseText);
+      document.getElementById("adres").value = row.mAdres;
+      document.getElementById("bolge").value = "data.bolge";
+    }
+  };
+  xhttp.open("GET", "../netting/musterigetir.php?no=" + customerId, true);
+  xhttp.send();
+}
+
+
+
+
+    $("form[id^='formRandevu']").submit(function(e) {
+            e.preventDefault();
+    var formData = $(this).serialize(); // Form verilerini toplar ve string halinde döndürür
+    $.ajax({
+      type: "POST",
+      url: "../netting/randevuekle.php", // Verilerin kaydedileceği PHP dosyasının URL'si
+      data: formData,
+      success: function(response) {
+        // AJAX isteği başarılıysa burada yapılacak işlemler
+        alert("Veriler başarıyla kaydedildi.");
+        $("form[id^='formRandevu'] input[type='text'], form[id^='formRandevu'] select").val('');
+
+      },
+      error: function() {
+        // AJAX isteği başarısız olduğunda burada yapılacak işlemler
+        alert("Veriler kaydedilirken bir hata oluştu.");
+      }
+    });
+  });
+});
+
+        var locationInput = document.getElementById("konum");
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -520,7 +564,10 @@
 
         }
     </script>
-
+<script
+  src="https://code.jquery.com/jquery-3.6.4.js"
+  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+  crossorigin="anonymous"></script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/plugins/src/global/vendors.min.js"></script>
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>

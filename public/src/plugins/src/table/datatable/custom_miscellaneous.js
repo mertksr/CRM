@@ -295,7 +295,7 @@ $(document).ready(function() {
             ]
     });
 
-$('input[type="text"]').on( 'keyup', function () {
+$('input[id="specialsearch"]').on( 'keyup', function () {
    // table.columns().search( '' ); // Reset all column searches
     table.column( $(this).parent().index() ).search( this.value ).draw(); // Apply the search on the corresponding column
 });//     $('#musteriler thead tr').clone(true).appendTo( '#musteriler thead' );
