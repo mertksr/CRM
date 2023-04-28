@@ -61,6 +61,7 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
     } 
     $output .= ' <br><br>
    <div class="row g-1">
+   <input type="hidden" data-adsoyad="'.$mustericek['mAdSoyad'].'" id="madsoyad">
    <div class="form-group col-12">
    <label for="exampleFormControlInput1">Adres</label>
    <textarea type="text" readonly style="height:60px;text-transform:uppercase;" class="form-control contact-modal" id="exampleFormControlInput1">'. $mustericek['mAdres'] .'</textarea>
@@ -88,4 +89,5 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
         </div>
     ';  
     echo $output;  
+    
 }

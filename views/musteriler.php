@@ -180,7 +180,7 @@
 
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" name="detay" value="detay" id="<?php echo $mustericek["mMusteriNo"]; ?>" class="btn btn-ozel mr-2 detay">
+                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?= $mustericek['mAdSoyad']; ?>" id="<?php echo $mustericek["mMusteriNo"]; ?>" class="btn btn-ozel mr-2 detay">
                                                             <i class="fa-solid fa-address-book"></i>
                                                         </button>
                                                     </div>
@@ -335,7 +335,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
 
-                        <h4 class="modal-title" id="exampleModalLabel" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php echo $mustericek['mAdSoyad']; ?></h4>
+                        <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php echo $mustericek['mAdSoyad']; ?></h4>
 
                         <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -369,7 +369,10 @@
             </div>
             <!-- END MAIN CONTAINER -->
             <script>
+              
                 $(document).on('click', '.detay', function() {
+          
+ var adsoyad = $(this).attr("data-adsoyad");
                     var mMusteriNo = $(this).attr("id");
                     if (mMusteriNo != '') {
                         $.ajax({
@@ -379,7 +382,7 @@
                                 mMusteriNo: mMusteriNo
                             },
                             success: function(data) {
-
+                                $('#detaymodaladsoyad').html(adsoyad);
                                 $('#musteridetaybody').html(data);
                                 $('#detayModal').modal('show');
                             }
