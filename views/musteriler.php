@@ -17,6 +17,7 @@
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
     <!-- BEGIN PAGE LEVEL STYLES -->
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/src/table/datatable/datatables.css">
@@ -28,10 +29,7 @@
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">
     <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
     <script src="../public/src/fontawesome/all.js"></script>
-    <script
-  src="https://code.jquery.com/jquery-3.6.4.js"
-  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-  crossorigin="anonymous"></script>
+    <script src="../public/src/jquery/jquery-3.6.4.min.js"></script>
     <style>
         .list-unstyled {
             background-color: #16213E;
@@ -66,6 +64,7 @@
             display: none !important;
         }
     </style>
+
     <!-- END PAGE LEVEL STYLES -->
 </head>
 
@@ -108,7 +107,8 @@
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                             <div class="statbox widget box box-shadow"></div>
                             <div style="display:flex;justify-content:right;">
-                                <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="musteriekle.php">Yeni Müşteri</a>
+                                <a class="btn btn-lg special1 mb-3 aaa" style="color:#EFF5F5;" href="musteriekle.php">Yeni Müşteri</a>
+                                <button class="btn btn-primary aaa">aa</button>
                             </div>
                             <div class="widget-content widget-content-area">
                                 <table id="musteriler" class="table dt-table-hover" style="width:100%">
@@ -134,9 +134,9 @@
                                         <?php
                                         $musterisor = $db->prepare("SELECT * from musteriler");
                                         $musterisor->execute();
-$say = 0;
+                                        $say = 0;
                                         while ($mustericek = $musterisor->fetch(PDO::FETCH_ASSOC)) {
-$say++;
+                                            $say++;
                                             $tarih = $mustericek['mSonIslem'];
                                             $yeni_tarih = date('d.m.Y', strtotime($tarih . '+' . $mustericek['mPeriyot'] . ' months'));
                                             $musterino =  $mustericek["mMusteriNo"];
@@ -180,86 +180,9 @@ $say++;
 
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" class="btn btn-ozel mr-2" data-bs-toggle="modal" data-bs-target="#<?php echo $modalId; ?>">
+                                                        <button type="button" name="detay" value="detay" id="<?php echo $mustericek["mMusteriNo"]; ?>" class="btn btn-ozel mr-2 detay">
                                                             <i class="fa-solid fa-address-book"></i>
                                                         </button>
-                                                    </div>
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-
-                                                                    <h4 class="modal-title" id="exampleModalLabel" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php echo $mustericek['mAdSoyad']; ?></h4>
-
-                                                                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                                                                </div>
-                                                                <div class="modal-body row">
-
-                                                                    <?php
-                                                                    $iletisimsor = $db->prepare("SELECT * from iletisim where iletisimMusteriNo = $musterino");
-                                                                    $iletisimsor->execute();
-                                                                    while ($iletisimcek = $iletisimsor->fetch(PDO::FETCH_ASSOC)) {
-                                                                        $iletisimbilgisi =  $iletisimcek["İletisimBilgisi"]
-                                                                    ?>
-                                                                        <div class="col-6">
-                                                                            <p><?php if ($iletisimcek['iletisimTuru'] == "Mobil" || $iletisimcek['iletisimTuru'] == "Yedek") {
-                                                                                    echo "<a href='https://google.com/$iletisimbilgisi'><i class='fa-solid fa-phone fa-2xl'></i></a>";
-                                                                                }
-
-                                                                                ?> : <?php echo $iletisimcek['İletisimBilgisi']; ?>
-
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-6">
-                                                                            <p>
-                                                                                <?php
-                                                                                if ($iletisimcek['iletisimWp'] == "1") {
-                                                                                    echo "<a href='https://wa.me/$iletisimbilgisi'><i class='fa-brands fa-whatsapp fa-2xl'></i></a> "  . " : $iletisimbilgisi";
-                                                                                }
-
-                                                                                ?>
-
-                                                                            </p>
-                                                                        </div>
-                                                                    <?php }   ?>
-                                                                    <br><br>
-                                                                    <div class="row g-1">
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Adres</label>
-                                                                            <textarea type="text" readonly style="height:60px;text-transform:uppercase;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $mustericek['mAdres'] ?></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Bölge </label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mahallecek['NeighborhoodName']; ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= date("d.m.Y", strtotime($mustericek['mSonIslem'])); ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Notlar</label>
-                                                                            <input type="text" readonly style="text-transform:uppercase;" class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mNot']; ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Bakım Periyodu</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $islemcek['islemPeriyot'] . ' Ay'; ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar??</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="">
-                                                                        </div>
-
-
-                                                                    </div>
-
-
-                                                                </div>
-
-
-                                                            </div>
-                                                        </div>
                                                     </div>
 
                                                 </td>
@@ -269,7 +192,7 @@ $say++;
 
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" class="btn special1 mr-2"  style="color:#EFF5F5;" data-bs-toggle="modal" data-bs-target="#randevu<?php echo $modalId; ?>">
+                                                        <button type="button" class="btn special1 mr-2" style="color:#EFF5F5;" data-bs-toggle="modal" data-bs-target="#randevu<?php echo $modalId; ?>">
                                                             <i class="fa-solid fa-calendar-plus"></i>
                                                         </button>
                                                     </div>
@@ -286,7 +209,7 @@ $say++;
                                                                 </div>
                                                                 <div class="modal-body row">
 
-                                                                    <form id="formRandevu-<?= $say; ?>" method="POST" >
+                                                                    <form id="formRandevu-<?= $say; ?>" method="POST">
                                                                         <div class="row g-1">
 
                                                                             <div class="col-6">
@@ -321,7 +244,7 @@ $say++;
                                                                             </div>
                                                                             <div class="form-group col-12">
                                                                                 <label for="exampleFormControlInput1">Notlar</label>
-                                                                                <input type="text" form="formRandevu-<?= $say; ?>" name="notlar"  style="text-transform:uppercase;" class="form-control">
+                                                                                <input type="text" form="formRandevu-<?= $say; ?>" name="notlar" style="text-transform:uppercase;" class="form-control">
 
                                                                             </div>
                                                                             <input type="hidden" name="musterino" form="formRandevu-<?= $say; ?>" value="<?= $mustericek['mMusteriNo']; ?>">
@@ -334,7 +257,7 @@ $say++;
                                                                 </div>
 
                                                                 <div class="modal-footer">
-                                                                    <button type="submit" form="formRandevu-<?= $say; ?>"  class="btn btn-success" style="color:#EFF5F5;">Kaydet</button>
+                                                                    <button type="submit" form="formRandevu-<?= $say; ?>" class="btn btn-success" style="color:#EFF5F5;">Kaydet</button>
 
 
                                                                 </div>
@@ -347,96 +270,9 @@ $say++;
 
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" class="btn btn-ozel mr-2" data-bs-toggle="modal" data-bs-target="#duzenle<?php echo $modalId; ?>">
+                                                        <button type="button" class="btn btn-ozel mr-2" data-bs-toggle="modal" onclick="openModal()" data-bs-target="#duzenle<?php echo $modalId; ?>">
                                                             <i class="fa-solid fa-pen"></i>
                                                         </button>
-                                                    </div>
-                                                    <!-- Modal -->
-                                                    <div class="modal  fade" id="duzenle<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-
-                                                                    <h4 class="modal-title" id="exampleModalLabel" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php echo $mustericek['mAdSoyad']; ?></h4>
-
-                                                                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                                                                </div>
-                                                                <div class="modal-body row">
-
-                                                                    <?php
-                                                                    $iletisimsor = $db->prepare("SELECT * from iletisim where iletisimMusteriNo = $musterino");
-                                                                    $iletisimsor->execute();
-                                                                    while ($iletisimcek = $iletisimsor->fetch(PDO::FETCH_ASSOC)) {
-                                                                        $iletisimbilgisi =  $iletisimcek["İletisimBilgisi"]
-                                                                    ?>
-                                                                        <div class="col-6">
-                                                                            <p><?php if ($iletisimcek['iletisimTuru'] == "Mobil" || $iletisimcek['iletisimTuru'] == "Yedek") {
-                                                                                    echo "<a href='https://google.com/$iletisimbilgisi'><i class='fa-solid fa-phone fa-2xl'></i></a>";
-                                                                                }
-
-                                                                                ?> : <?php echo $iletisimcek['İletisimBilgisi']; ?>
-
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-6">
-                                                                            <p>
-                                                                                <?php
-                                                                                if ($iletisimcek['iletisimWp'] == "1") {
-                                                                                    echo "<a href='https://wa.me/$iletisimbilgisi'><i class='fa-brands fa-whatsapp fa-2xl'></i></a> "  . " : $iletisimbilgisi";
-                                                                                }
-
-                                                                                ?>
-
-                                                                            </p>
-                                                                        </div>
-                                                                    <?php }   ?>
-                                                                    <br><br>
-                                                                    <div class="row g-1">
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Adres</label>
-                                                                            <textarea type="text" readonly style="height:60px;text-transform:uppercase;" name="adres" class="form-control contact-modal" id="exampleFormControlInput1"></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Bölge </label>
-                                                                            <input type="text" readonly class="form-control contact-modal" name="bolge" id="bolge"  id="exampleFormControlInput1">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= date("d.m.Y", strtotime($mustericek['mSonIslem'])); ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Notlar</label>
-                                                                            <input type="text" readonly style="text-transform:uppercase;" class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mNot']; ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Bakım Periyodu</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $islemcek['islemPeriyot'] . ' Ay'; ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar??</label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="">
-                                                                        </div>
-                                                                        <div class="input-group">
-                                                                            <input type="text" form="musteriekleform" value="<?= $mustericek['mKonum']; ?>" class="form-control" name="konum" id="konum" readonly>
-                                                                            <button class="btn btn-outline-primary" type="button" onclick="getLocation()">Konum
-                                                                                Bul</button>
-                                                                            <button class="btn btn-outline-success" type="button" onclick="goLocation()" id="goLocationBtn">Haritada
-                                                                                Aç</button>
-                                                                        </div>
-
-                                                                    </div>
-
-
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" class="btn btn-success" style="color:#EFF5F5;" href="randevuekle.php?no=<?= $mustericek['mMusteriNo']; ?>">Kaydet</button>
-
-
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
                                                     </div>
 
                                                 </td>
@@ -474,118 +310,154 @@ $say++;
                     </div>
 
                 </div>
-
+                <input id="asd" type="text"></input>
 
             </div>
 
         </div>
-
-        <!--  BEGIN FOOTER  -->
-        <div class="footer-wrapper">
-            <div class="footer-section f-section-1">
-                <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
+        <!-- <div id="detayModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Employee Details</h4>
+                    </div>
+                    <div class="modal-body" id="musteridetaybody">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
-            <div class="footer-section f-section-2">
-                <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg></p>
+        </div> -->
+        <div id="detayModal" class="modal fade">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <h4 class="modal-title" id="exampleModalLabel" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php echo $mustericek['mAdSoyad']; ?></h4>
+
+                        <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    </div>
+                    <div class="modal-body row" id="musteridetaybody"></div>
+                    </div>
+
+
+</div>
+
+
+</div>
+</div>
+</div>
+
+
+                    <!--  BEGIN FOOTER  -->
+                    <div class="footer-wrapper">
+                        <div class="footer-section f-section-1">
+                            <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
+                        </div>
+                        <div class="footer-section f-section-2">
+                            <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg></p>
+                        </div>
+                    </div>
+                    <!--  END CONTENT AREA  -->
+                </div>
+                <!--  END CONTENT AREA  -->
             </div>
-        </div>
-        <!--  END CONTENT AREA  -->
-    </div>
-    <!--  END CONTENT AREA  -->
-    </div>
-    <!-- END MAIN CONTAINER -->
+            <!-- END MAIN CONTAINER -->
+            <script>
+                $(document).on('click', '.detay', function() {
+                    var mMusteriNo = $(this).attr("id");
+                    if (mMusteriNo != '') {
+                        $.ajax({
+                            url: "../netting/musteridetaygetir.php",
+                            method: "POST",
+                            data: {
+                                mMusteriNo: mMusteriNo
+                            },
+                            success: function(data) {
 
-    <script>
-$(document).ready(function() {
-
-    var customerId = 040235;
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var data = JSON.parse(this.responseText);
-      document.getElementById("adres").value = row.mAdres;
-      document.getElementById("bolge").value = "data.bolge";
-    }
-  };
-  xhttp.open("GET", "../netting/musterigetir.php?no=" + customerId, true);
-  xhttp.send();
-}
+                                $('#musteridetaybody').html(data);
+                                $('#detayModal').modal('show');
+                            }
+                        });
+                    }
+                });
+            </script>
 
 
 
+            <script>
+                $("form[id^='formRandevu']").submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize(); // Form verilerini toplar ve string halinde döndürür
+                $.ajax({
+                    type: "POST",
+                    url: "../netting/randevuekle.php", // Verilerin kaydedileceği PHP dosyasının URL'si
+                    data: formData,
+                    success: function(response) {
+                        // AJAX isteği başarılıysa burada yapılacak işlemler
+                        alert("Veriler başarıyla kaydedildi.");
+                        $("form[id^='formRandevu'] input[type='text'], form[id^='formRandevu'] select").val('');
 
-    $("form[id^='formRandevu']").submit(function(e) {
-            e.preventDefault();
-    var formData = $(this).serialize(); // Form verilerini toplar ve string halinde döndürür
-    $.ajax({
-      type: "POST",
-      url: "../netting/randevuekle.php", // Verilerin kaydedileceği PHP dosyasının URL'si
-      data: formData,
-      success: function(response) {
-        // AJAX isteği başarılıysa burada yapılacak işlemler
-        alert("Veriler başarıyla kaydedildi.");
-        $("form[id^='formRandevu'] input[type='text'], form[id^='formRandevu'] select").val('');
+                    },
+                    error: function() {
+                        // AJAX isteği başarısız olduğunda burada yapılacak işlemler
+                        alert("Veriler kaydedilirken bir hata oluştu.");
+                    }
+                });
+                });
+                });
 
-      },
-      error: function() {
-        // AJAX isteği başarısız olduğunda burada yapılacak işlemler
-        alert("Veriler kaydedilirken bir hata oluştu.");
-      }
-    });
-  });
-});
+                var locationInput = document.getElementById("konum");
 
-        var locationInput = document.getElementById("konum");
+                function getLocation() {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.watchPosition(showPosition);
+                    } else {
+                        locationInput.innerHTML = "Geolocation is not supported by this browser.";
+                    }
+                }
 
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(showPosition);
-            } else {
-                locationInput.innerHTML = "Geolocation is not supported by this browser.";
-            }
-        }
+                function showPosition(position) {
+                    locationInput.value = position.coords.latitude + "," + position.coords.longitude;
+                }
 
-        function showPosition(position) {
-            locationInput.value = position.coords.latitude + "," + position.coords.longitude;
-        }
+                const goLocationBtn = document.getElementById("goLocationBtn");
 
-        const goLocationBtn = document.getElementById("goLocationBtn");
+                function goLocation() {
+                    if (locationInput.value == "") {
+                        alert("Önce Konumunuzu Bulmalısınız")
+                    } else {
+                        window.open('https://maps.google.com/?q=' + locationInput.value, '_blank');
+                        // goLocationBtn.target= '_blank';
+                        // window.location.href = "https://maps.google.com/?q=" + locationInput.value;
+                    }
 
-        function goLocation() {
-            if (locationInput.value == "") {
-                alert("Önce Konumunuzu Bulmalısınız")
-            } else {
-                window.open('https://maps.google.com/?q=' + locationInput.value, '_blank');
-                // goLocationBtn.target= '_blank';
-                // window.location.href = "https://maps.google.com/?q=" + locationInput.value;
-            }
+                }
+            </script>
+            <script src="../public/src/jquery/jquery-3.6.4.min.js"></script>
+            <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+            <script src="../public/src/plugins/src/global/vendors.min.js"></script>
+            <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script src="../public/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+            <script src="../public/src/plugins/src/mousetrap/mousetrap.min.js"></script>
+            <script src="../public/src/plugins/src/waves/waves.min.js"></script>
+            <script src="../public/layouts/horizontal-light-menu/app.js"></script>
+            <script src="../public/src/assets/js/custom.js"></script>
+            <!-- END GLOBAL MANDATORY SCRIPTS -->
 
-        }
-    </script>
-<script
-  src="https://code.jquery.com/jquery-3.6.4.js"
-  integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-  crossorigin="anonymous"></script>
-    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-    <script src="../public/src/plugins/src/global/vendors.min.js"></script>
-    <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../public/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="../public/src/plugins/src/mousetrap/mousetrap.min.js"></script>
-    <script src="../public/src/plugins/src/waves/waves.min.js"></script>
-    <script src="../public/layouts/horizontal-light-menu/app.js"></script>
-    <script src="../public/src/assets/js/custom.js"></script>
-    <!-- END GLOBAL MANDATORY SCRIPTS -->
-
-    <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    <script src="../public/src/plugins/src/table/datatable/datatables.js"></script>
-    <script src="../public/src/plugins/src/table/datatable/button-ext/dataTables.buttons.min.js"></script>
-    <script src="../public/src/plugins/src/table/datatable/button-ext/jszip.min.js"></script>
-    <script src="../public/src/plugins/src/table/datatable/button-ext/buttons.html5.min.js"></script>
-    <script src="../public/src/plugins/src/table/datatable/button-ext/buttons.print.min.js"></script>
-    <script src="../public/src/plugins/src/table/datatable/custom_miscellaneous.js"></script>
-    <!-- END PAGE LEVEL SCRIPTS -->
+            <!-- BEGIN PAGE LEVEL SCRIPTS -->
+            <script src="../public/src/plugins/src/table/datatable/datatables.js"></script>
+            <script src="../public/src/plugins/src/table/datatable/button-ext/dataTables.buttons.min.js"></script>
+            <script src="../public/src/plugins/src/table/datatable/button-ext/jszip.min.js"></script>
+            <script src="../public/src/plugins/src/table/datatable/button-ext/buttons.html5.min.js"></script>
+            <script src="../public/src/plugins/src/table/datatable/button-ext/buttons.print.min.js"></script>
+            <script src="../public/src/plugins/src/table/datatable/custom_miscellaneous.js"></script>
+            <!-- END PAGE LEVEL SCRIPTS -->
 </body>
 
 </html>
