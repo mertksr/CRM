@@ -10,7 +10,7 @@
                     </a>
                 </li>
                 <li class="nav-item theme-text">
-                    <a href="index.html" class="nav-link"> COCK </a>
+                    <a href="index.html" class="nav-link"> MK </a>
                 </li>
             </ul>
 <!--  Search area **

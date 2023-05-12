@@ -74,14 +74,11 @@
                                             'mno' => $_GET['no']
                                         ));                                   
                                        $mcek = $msor->fetch(PDO::FETCH_ASSOC);
-                                       $mahalle = $mcek['mBolge'];
-                                       $mahallesor = $db->prepare("SELECT * from neighborhood where NeighborhoodID =  $mahalle");
-                                       $mahallesor->execute();
-                                       $mahallecek = $mahallesor->fetch(PDO::FETCH_ASSOC);
+
                                        ?>
                             <div class="statbox widget box box-shadow">
                                
-                                    <h5><?= $mcek['mAdSoyad'] . ' / ' . $mahallecek['NeighborhoodName'] ?></h5>
+                                    <h5><?= $mcek['mAdSoyad'] . ' / ' . $mcek['mBolge']; ?></h5>
                                     <div  style="display:flex;justify-content:right;">  
                                      <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="islemekle.php?no=<?= $_GET['no']; ?>">Servis Kaydı Ekle</a>
                                     </div>

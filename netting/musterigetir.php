@@ -1,12 +1,13 @@
 <?php  
  //fetch.php  
- $connect = mysqli_connect("localhost", "root", "", "");  
+include 'connect.php'; 
  if(isset($_POST["mMusteriNo"]))  
  {  
-      $query = "SELECT * FROM musteriler WHERE mMusteriNo = '".$_POST["mMusteriNo"]."'";  
-      $result = mysqli_query($connect, $query);  
-      $row = mysqli_fetch_array($result);  
-      echo json_encode($row);  
+     $musterisor = $db->prepare("SELECT * FROM musteriler WHERE mMusteriNo = '".$_POST["mMusteriNo"]."'");
+     $musterisor->execute();
+     $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
+
+      echo json_encode($mustericek);  
  }  
  ?>
  

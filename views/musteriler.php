@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>Miscellaneous DataTables | CORK - Multipurpose Bootstrap Dashboard Template </title>
+    <title>MK</title>
     <link rel="icon" type="image/x-icon" href="../public/src/assets/img/favicon.ico" />
     <link href="../public/layouts/horizontal-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
@@ -18,6 +18,8 @@
     <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+    <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- BEGIN PAGE LEVEL STYLES -->
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/src/table/datatable/datatables.css">
@@ -107,9 +109,10 @@
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                             <div class="statbox widget box box-shadow"></div>
                             <div style="display:flex;justify-content:right;">
-                                <a class="btn btn-lg special1 mb-3 aaa" style="color:#EFF5F5;" href="musteriekle.php">Yeni Müşteri</a>
-                                <button class="btn btn-primary aaa">aa</button>
+                                <button type="button" class="btn special1 mr-2" style="color:#EFF5F5;" name="musterieklemodalbtn" id="musterieklemodalbtn" data-bs-toggle="modal" data-bs-target="#musterieklemodal" class="btn btn-warning">Yeni Müşteri</button>
+
                             </div>
+
                             <div class="widget-content widget-content-area">
                                 <table id="musteriler" class="table dt-table-hover" style="width:100%">
                                     <thead>
@@ -124,13 +127,14 @@
                                             <th style="max-width:10px;text-align:center;"><input type="text" class="form-control" id="specialsearch" placeholder="Sonraki Bakım"></th>
                                             <th style="max-width:20px;text-align:center;">İletişim</th>
                                             <th style="max-width:20px;text-align:center;">Randevu</th>
-                                            <th style="max-width:20px;text-align:center;">Düzenle</th>
+                                            <th style="max-width:20px;text-align:center;">Servis</th>
+                                            <th style="max-width:20px;text-align:center;">Satış</th>
 
                                             <th style="max-width:20px;text-align:center;">İşlemler</th>
 
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="musterilerbody">
                                         <?php
                                         $musterisor = $db->prepare("SELECT * from musteriler");
                                         $musterisor->execute();
@@ -141,10 +145,7 @@
                                             $yeni_tarih = date('d.m.Y', strtotime($tarih . '+' . $mustericek['mPeriyot'] . ' months'));
                                             $musterino =  $mustericek["mMusteriNo"];
                                             $modalId = "modal" . $mustericek["mMusteriNo"];
-                                            $mahalle = $mustericek['mBolge'];
-                                            $mahallesor = $db->prepare("SELECT * from neighborhood where NeighborhoodID =  $mahalle");
-                                            $mahallesor->execute();
-                                            $mahallecek = $mahallesor->fetch(PDO::FETCH_ASSOC);
+
 
                                             $query = "SELECT * FROM islemler WHERE islemMusteriNo = :customer_id ORDER BY islemTarihi DESC LIMIT 1";
                                             $islemsor = $db->prepare($query);
@@ -155,12 +156,19 @@
                                             $count = $islemsor->rowCount();
 
                                             $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
-                                            $tarih = date('d.m.Y', strtotime($islemcek['islemTarihi']));
-                                            $sonrakibakim = date('Y-m-d', strtotime('+' . $islemcek['islemPeriyot'] . ' months'));
-                                            setlocale(LC_TIME, "tr_TR"); // Türkçe yerel ayarlarını kullan
+                                            if (isset($islemcek['islemTarihi'])) {
+                                                setlocale(LC_TIME, "tr_TR"); // Türkçe yerel ayarlarını kullan
+                                                $tarih = date('d.m.Y', strtotime($islemcek['islemTarihi']));
+                                                $sonrakibakim = date('Y-m-d', strtotime('+' . $islemcek['islemPeriyot'] . ' months'));
+                                                $sonrakibakim =  strftime("%B %Y", strtotime("$sonrakibakim"));
+                                                $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
+                                            } else {
+                                                $tarih = "BAKIM BİLGİSİ YOK";
+                                                $sonrakibakim = "BAKIM BİLGİSİ YOK";
+                                            }
 
-                                            $sonrakibakim =  strftime("%B %Y", strtotime("$sonrakibakim"));
-                                            $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
+
+
 
                                         ?>
 
@@ -168,12 +176,12 @@
                                             <tr>
 
                                                 <td style="text-transform:uppercase;"><?= $mustericek['mAdSoyad']; ?></td>
-                                                <td><?php echo $mahallecek['NeighborhoodName']; ?></td>
+                                                <td><?php echo $mustericek['mBolge']; ?></td>
 
-                                                <td style="text-align:center;"><?php echo $tarih; ?>
+                                                <td style="text-align:center;"><?php echo $tarih; ?></td>
                                                 <td style="text-align:center;text-transform:uppercase;"><?php
 
-                                                                                                        echo $islemcek['islemPeriyot'] . " Ay";
+                                                                                                        echo $mustericek['mPeriyot'] . " Ay";
                                                                                                         ?>
                                                 </td>
                                                 <td style="text-align:center;text-transform:uppercase;"><?php echo $sonrakibakim; ?>
@@ -238,7 +246,6 @@
                                                                                 <select id="defaultInputState" form="formRandevu-<?= $say; ?>" name="teknisyen" class="form-select">
                                                                                     <option selected="">Seç</option>
                                                                                     <option value="Bedirhan">Bedirhan</option>
-                                                                                    <option value="Cihan">Cihan</option>
                                                                                     <option value="Mehmet">Mehmet</option>
                                                                                 </select>
                                                                             </div>
@@ -267,50 +274,45 @@
                                                     </div>
 
                                                 </td>
-
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" class="btn btn-ozel mr-2" data-bs-toggle="modal" onclick="openModal()" data-bs-target="#duzenle<?php echo $modalId; ?>">
-                                                            <i class="fa-solid fa-pen"></i>
-                                                        </button>
+
+                                                        <a class="btn btn-ozel mr-2 musteriduzenlebtn" href='islemler.php?no=<?= $mustericek['mMusteriNo']; ?>'>
+                                                            <i class="fa-solid fa-gears"></i>
+                                                        </a>
+                                                    </div>
+
+                                                </td>
+                                                <td style="max-width:20px;">
+                                                    <div class="text-center">
+
+                                                        <a class="btn btn-ozel mr-2 musteriduzenlebtn " href="satislar.php?no=<?= $mustericek['mMusteriNo']; ?>">
+                                                            <i class="fas fa-sack-dollar"></i>
+                                                        </a>
                                                     </div>
 
                                                 </td>
 
                                                 <td style="text-align:center;">
-                                                    <div class="btn-group">
-                                                        <a class="btn btn-dark btn-sm btn-ozel" href='musteridetay.php?no=<?= $mustericek['mMusteriNo']; ?>'>Düzenle</a>
-                                                        <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split btn-ozel" id="dropdownMenuReference2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
-                                                                <polyline points="6 9 12 15 18 9"></polyline>
-                                                            </svg>
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuReference2">
-                                                            <a class="dropdown-item" href='islemler.php?no=<?= $mustericek['mMusteriNo']; ?>'>Servis Kayıtları</a>
-                                                            <a class="dropdown-item" href='mrandevular.php?no=<?= $mustericek['mMusteriNo']; ?>'>Randevular</a>
-                                                            <a class="dropdown-item" href='satislar.php?no=<?= $mustericek['mMusteriNo']; ?>'>Satışlar</a>
+                                                    <div class="btn-group ">
+                                                        <a class="btn btn-dark btn-sm btn-ozel" href='musteriduzenle.php?no=<?= $mustericek['mMusteriNo']; ?>'>Düzenle</a>
+                                                         
+                                                        <a class="btn btn-sm btn-ozel btn-outline" href='musteriduzenle.php?no=<?= $mustericek['mMusteriNo']; ?>'>Ertele</a>
 
-
-                                                            <?php if ($mustericek['mKonum'] != "") {
-                                                                echo ' <a class="dropdown-item" target="_Blank" href="https://maps.google.com/?q= ' . $mustericek["mKonum"] . ' ">Konum Aç</a> ';
-                                                            } ?>
-                                                            <a class="dropdown-item" href="#">Ertele</a>
-
-                                                        </div>
+                  
                                                     </div>
                                                 </td>
                                             </tr>
 
 
                                         <?php } ?>
-
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <input id="asd" type="text"></input>
 
             </div>
 
@@ -330,137 +332,212 @@
                 </div>
             </div>
         </div> -->
-        <div id="detayModal" class="modal fade">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
 
-                        <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php echo $mustericek['mAdSoyad']; ?></h4>
-
-                        <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                    </div>
-                    <div class="modal-body row" id="musteridetaybody"></div>
-                    </div>
-
-
-</div>
-
-
-</div>
-</div>
-</div>
-
-
-                    <!--  BEGIN FOOTER  -->
-                    <div class="footer-wrapper">
-                        <div class="footer-section f-section-1">
-                            <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
-                        </div>
-                        <div class="footer-section f-section-2">
-                            <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                </svg></p>
-                        </div>
-                    </div>
-                    <!--  END CONTENT AREA  -->
+    </div>
+    </div>
+    <div id="detayModal" class="modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php echo $mustericek['mAdSoyad']; ?></h4>
+                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <!--  END CONTENT AREA  -->
+                <div class="modal-body row" id="musteridetaybody"></div>
             </div>
-            <!-- END MAIN CONTAINER -->
-            <script>
-              
-                $(document).on('click', '.detay', function() {
-          
- var adsoyad = $(this).attr("data-adsoyad");
-                    var mMusteriNo = $(this).attr("id");
-                    if (mMusteriNo != '') {
-                        $.ajax({
-                            url: "../netting/musteridetaygetir.php",
-                            method: "POST",
-                            data: {
-                                mMusteriNo: mMusteriNo
-                            },
-                            success: function(data) {
-                                $('#detaymodaladsoyad').html(adsoyad);
-                                $('#musteridetaybody').html(data);
-                                $('#detayModal').modal('show');
-                            }
-                        });
-                    }
-                });
-            </script>
+        </div>
+    </div>
+    <div id="musterieklemodal" class="modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">Müşteri Ekle</h4>
+                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" id="musteriekleform" type="POST" action="../netting/musteriislem.php">
+                    <div class="modal-body row g-1" id="musteridetaybody">
 
 
+                        <div class="form-group col-12">
+                            <label for="exampleFormControlInput1" class="mb-1">Ad Soyad</label>
+                            <input type="text" class="form-control" name="adsoyad" id="adsoyad">
+                        </div>
 
-            <script>
-                $("form[id^='formRandevu']").submit(function(e) {
-                e.preventDefault();
-                var formData = $(this).serialize(); // Form verilerini toplar ve string halinde döndürür
-                $.ajax({
-                    type: "POST",
-                    url: "../netting/randevuekle.php", // Verilerin kaydedileceği PHP dosyasının URL'si
-                    data: formData,
-                    success: function(response) {
-                        // AJAX isteği başarılıysa burada yapılacak işlemler
-                        alert("Veriler başarıyla kaydedildi.");
-                        $("form[id^='formRandevu'] input[type='text'], form[id^='formRandevu'] select").val('');
+                        <div class="form-group col-6">
+                            <label for="exampleFormControlInput1" class="mb-1">Tel1</label>
+                            <input type="text" class="form-control" name="tel1" id="tel1">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="exampleFormControlInput1" class="mb-1">Tel2</label>
+                            <input type="text" class="form-control" name="tel2" id="tel2">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="defaultInputState" class="form-label mb-1">Bölge</label>
+                            <select id="bolge" name="bolge" class="form-select">
+                                <option>Seçim yapın</option>
+                                <?php
 
-                    },
-                    error: function() {
-                        // AJAX isteği başarısız olduğunda burada yapılacak işlemler
-                        alert("Veriler kaydedilirken bir hata oluştu.");
-                    }
-                });
-                });
-                });
+                                $bolgesor = $db->prepare("SELECT * FROM neighborhood WHERE DistrictID = 335 ORDER BY NeighborhoodName ASC");
+                                $bolgesor->execute();
+                                while ($bolgecek = $bolgesor->fetch(PDO::FETCH_ASSOC)) {
+                                ?>
+                                    <option value="<?= $bolgecek['NeighborhoodName']; ?>"><?= $bolgecek['NeighborhoodName']; ?></option>
+                                <?php  } ?>
 
-                var locationInput = document.getElementById("konum");
+                            </select>
+                        </div>
+                        <div class="input-group col-6">
 
-                function getLocation() {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.watchPosition(showPosition);
-                    } else {
-                        locationInput.innerHTML = "Geolocation is not supported by this browser.";
-                    }
+                            <input type="text" form="musteriekleform" class="form-control" name="konum" id="konum" readonly placeholder="Konum Bul">
+                            <button class="btn btn-outline-primary" type="button" onclick="getLocation()">Konum
+                                Bul</button>
+                            <button class="btn btn-outline-success" type="button" onclick="goLocation()" id="goLocationBtn">Haritada
+                                Aç</button>
+                        </div>
+
+                        <div class="form-group col-12">
+                            <label for="exampleFormControlInput1" class="mb-1">Adres</label>
+                            <input type="text" class="form-control" name="adres" id="adres">
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="exampleFormControlInput1" class="mb-1">Notlar</label>
+                            <input type="text" class="form-control" name="notlar" id="notlar">
+                        </div>
+                        <div class=" col-12">
+                            <label for=" defaultInputState" class="form-label ">Bakım Periyodu</label>
+                            <select id="defaultInputState" name="periyot" class="form-select select">
+                                <option value="6">6</option>
+                                <option value="12">12</option>
+                                <option value="3">3</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="musteriekle" class="btn btn-success" style="color:#EFF5F5;">Kaydet</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--  BEGIN FOOTER  -->
+    <div class="footer-wrapper">
+        <div class="footer-section f-section-1">
+            <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
+        </div>
+        <div class="footer-section f-section-2">
+            <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg></p>
+        </div>
+    </div>s
+    <!--  END CONTENT AREA  -->
+    </div>
+    <!--  END CONTENT AREA  -->
+    </div>
+    <!-- END MAIN CONTAINER -->
+    <script>
+        $(document).ready(function() {
+
+
+            $(document).on('click', '.detay', function() {
+                var adsoyad = $(this).attr("data-adsoyad");
+                var mMusteriNo = $(this).attr("id");
+                if (mMusteriNo != '') {
+                    $.ajax({
+                        url: "../netting/musteridetaygetir.php",
+                        method: "POST",
+                        data: {
+                            mMusteriNo: mMusteriNo
+                        },
+                        success: function(data) {
+                            $('#detaymodaladsoyad').html(adsoyad);
+                            $('#musteridetaybody').html(data);
+                            $('#detayModal').modal('show');
+                        }
+                    });
                 }
+            });
+        });
 
-                function showPosition(position) {
-                    locationInput.value = position.coords.latitude + "," + position.coords.longitude;
+        $("form[id^='formRandevu']").submit(function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize(); // Form verilerini toplar ve string halinde döndürür
+            $.ajax({
+                type: "POST",
+                url: "../netting/randevuekle.php", // Verilerin kaydedileceği PHP dosyasının URL'si
+                data: formData,
+                success: function(response) {
+                    // AJAX isteği başarılıysa burada yapılacak işlemler
+                    alert("Veriler başarıyla kaydedildi.");
+                    $("form[id^='formRandevu'] input[type='text'], form[id^='formRandevu'] select").val('');
+
+                },
+                error: function() {
+                    // AJAX isteği başarısız olduğunda burada yapılacak işlemler
+                    alert("Veriler kaydedilirken bir hata oluştu.");
                 }
+            });
+        });
 
-                const goLocationBtn = document.getElementById("goLocationBtn");
 
-                function goLocation() {
-                    if (locationInput.value == "") {
-                        alert("Önce Konumunuzu Bulmalısınız")
-                    } else {
-                        window.open('https://maps.google.com/?q=' + locationInput.value, '_blank');
-                        // goLocationBtn.target= '_blank';
-                        // window.location.href = "https://maps.google.com/?q=" + locationInput.value;
-                    }
+        var locationInput = document.getElementById("konum");
 
-                }
-            </script>
-            <script src="../public/src/jquery/jquery-3.6.4.min.js"></script>
-            <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-            <script src="../public/src/plugins/src/global/vendors.min.js"></script>
-            <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
-            <script src="../public/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-            <script src="../public/src/plugins/src/mousetrap/mousetrap.min.js"></script>
-            <script src="../public/src/plugins/src/waves/waves.min.js"></script>
-            <script src="../public/layouts/horizontal-light-menu/app.js"></script>
-            <script src="../public/src/assets/js/custom.js"></script>
-            <!-- END GLOBAL MANDATORY SCRIPTS -->
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(showPosition);
+            } else {
+                locationInput.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
 
-            <!-- BEGIN PAGE LEVEL SCRIPTS -->
-            <script src="../public/src/plugins/src/table/datatable/datatables.js"></script>
-            <script src="../public/src/plugins/src/table/datatable/button-ext/dataTables.buttons.min.js"></script>
-            <script src="../public/src/plugins/src/table/datatable/button-ext/jszip.min.js"></script>
-            <script src="../public/src/plugins/src/table/datatable/button-ext/buttons.html5.min.js"></script>
-            <script src="../public/src/plugins/src/table/datatable/button-ext/buttons.print.min.js"></script>
-            <script src="../public/src/plugins/src/table/datatable/custom_miscellaneous.js"></script>
-            <!-- END PAGE LEVEL SCRIPTS -->
+        function showPosition(position) {
+            locationInput.value = position.coords.latitude + "," + position.coords.longitude;
+        }
+
+        const goLocationBtn = document.getElementById("goLocationBtn");
+
+        function goLocation() {
+            if (locationInput.value == "") {
+                alert("Önce Konumunuzu Bulmalısınız")
+            } else {
+                window.open('https://maps.google.com/?q=' + locationInput.value, '_blank');
+                // goLocationBtn.target= '_blank';
+                // window.location.href = "https://maps.google.com/?q=" + locationInput.value;
+            }
+
+        }
+    </script>
+    <script src="../public/src/jquery/jquery-3.6.4.min.js"></script>
+    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+    <script src="../public/src/plugins/src/global/vendors.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+    <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../public/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="../public/src/plugins/src/mousetrap/mousetrap.min.js"></script>
+    <script src="../public/src/plugins/src/waves/waves.min.js"></script>
+    <script src="../public/layouts/horizontal-light-menu/app.js"></script>
+    <script src="../public/src/assets/js/custom.js"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="../public/src/plugins/src/table/datatable/datatables.js"></script>
+    <script src="../public/src/plugins/src/table/datatable/button-ext/dataTables.buttons.min.js"></script>
+    <script src="../public/src/plugins/src/table/datatable/button-ext/jszip.min.js"></script>
+    <script src="../public/src/plugins/src/table/datatable/button-ext/buttons.html5.min.js"></script>
+    <script src="../public/src/plugins/src/table/datatable/button-ext/buttons.print.min.js"></script>
+    <script src="../public/src/plugins/src/table/datatable/custom_miscellaneous.js"></script>
+    <!-- END PAGE LEVEL SCRIPTS -->
 </body>
 
 </html>

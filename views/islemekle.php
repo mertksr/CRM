@@ -303,6 +303,7 @@
                     total += parseFloat(prices[i]);
                 }
                 $("#cost").val(total + " TL");
+                $("#tamfiyat").val(total);
             });
 
         });

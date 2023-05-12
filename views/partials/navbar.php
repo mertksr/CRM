@@ -36,7 +36,7 @@
                 </a>
             </li>
 
-            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'musteriler' || basename($_SERVER['PHP_SELF'], '.php') == 'musteriekle'|| basename($_SERVER['PHP_SELF'], '.php') == 'musteridetay') {  echo "active"; } ?>">
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'musteriler' || basename($_SERVER['PHP_SELF'], '.php') == 'musteriekle'|| basename($_SERVER['PHP_SELF'], '.php') == 'musteriduzenle') {  echo "active"; } ?>">
                 <a href="musteriler.php" class="dropdown-toggle">                    
                     <div class="">                        
                         <span> Müşteriler</span>

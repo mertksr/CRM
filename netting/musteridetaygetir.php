@@ -32,18 +32,36 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
+    $islemno = $_POST["mMusteriNo"];
+    $islemsor = $db->prepare("SELECT * FROM islemler WHERE islemMusteriNo = :islemMusteriNo");
+    $islemsor->execute(array('islemMusteriNo' => $islemno));
+    $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
+    if(isset($islemcek['islemNo'])){
+    $islemturu = unserialize($islemcek['islemTuru']);
+    $kullanilanurun = unserialize($islemcek['islemKullanilanUrun']);
+    $islemurun = [];
+    $urunsor = $db->prepare("SELECT * FROM urunler");
+    $urunsor->execute();
+    $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC); 
+    foreach ($kullanilanurun as $urunid) {
+        foreach ($urunler as $urun) {
+            if ($urunid == $urun['urunid']) {
+                array_push($islemurun, $urun['urunAd']);
+            }
+        }
+    }
+}
     $output = '';  
-    $iletisimsor = $db->prepare("SELECT * from iletisim where iletisimMusteriNo = $musterino");
-    $iletisimsor->execute();
-    while ($iletisimcek = $iletisimsor->fetch(PDO::FETCH_ASSOC)) {
-        $iletisimbilgisi =  $iletisimcek["İletisimBilgisi"];
+
+
         $output .= '
 
    <div class="col-6">
    <p> ';
-                if ($iletisimcek['iletisimTuru'] == "Mobil" || $iletisimcek['iletisimTuru'] == "Yedek") {
-                    $output .= ' <a href="https://wa.me/'.$iletisimbilgisi.'"><i class="fa-solid fa-phone fa-2xl"></i></a> :'  .  $iletisimbilgisi;
+                if (!empty($mustericek['mTel1'])) {
+                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/'.$mustericek['mTel1'].'"><i class="fa-solid fa-phone fa-2xl"></i></a> :'  .  $mustericek['mTel1'] .'</div>';
+                }if (!empty($mustericek['mTel2'])) {
+                    $output .= '<div class="p-2" style="font-size:17px;"><a href="https://wa.me/'.$mustericek['mTel2'].'"><i class="fa-solid fa-phone fa-2xl"></i></a> :'  .  $mustericek['mTel2'] .'</div>';
                 }
 
               $output .= '  
@@ -52,13 +70,15 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
    <div class="col-6">
    <p> ';
   
-                if ($iletisimcek['iletisimWp'] == "1") {
-                    $output .= ' <a href="https://wa.me/'.$iletisimbilgisi.'"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :'  .  $iletisimbilgisi;
+                if (!empty($mustericek['mTel1'])) {
+                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/'.$mustericek['mTel1'].'"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :'  .  $mustericek['mTel1'] .'</div>';
+                } if (!empty($mustericek['mTel2'])) {
+                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/'.$mustericek['mTel2'].'"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :'  .  $mustericek['mTel2'] .'</div>';
                 }
                 $output .= '
    </p>
    </div> ';
-    } 
+    
     $output .= ' <br><br>
    <div class="row g-1">
    <input type="hidden" data-adsoyad="'.$mustericek['mAdSoyad'].'" id="madsoyad">
@@ -68,7 +88,7 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
    </div>
    <div class="form-group col-6">
    <label for="exampleFormControlInput1">Bölge </label>
-   <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mahallecek['NeighborhoodName'].'">
+   <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mustericek['mBolge'].'">
    </div>
    <div class="form-group col-6">
    <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
@@ -84,7 +104,10 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
    </div>
    <div class="form-group col-12">
    <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar??</label>
-            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="">
+   <textarea  readonly class="form-control contact-modal">
+';
+ if(!empty($islemurun)){$kullanilanurunler = implode(", ", $islemurun);}else{$kullanilanurunler = "Değişen Parça Yok";}
+ $output.= ' '. $kullanilanurunler .' </textarea>
         </div>
         </div>
     ';  
