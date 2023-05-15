@@ -13,7 +13,7 @@
     <script src="../public/layouts/horizontal-light-menu/loader.js"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link href="../public/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
@@ -29,6 +29,22 @@
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/dt-global_style.css">
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">
     <!-- END PAGE LEVEL STYLES -->
+    <style>
+        .modal-content {
+            background: whitesmoke;
+        }
+        
+        .btn-ozel {
+            background-color: #394867 !important;
+            color: white;
+
+        }
+        .info-input {
+            background-color: #EEEEEE !important;
+            color: #14274E !important;
+            cursor: default !important;
+        }
+    </style>
 </head>
 
 <body class="layout-boxed">
@@ -67,7 +83,7 @@
 
                     <div class="row">
 
-                        <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                <?php if(isset($_GET['no'])){ ?>        <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                         <?php
                                         $msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mno");
                                         $msor->execute(array(
@@ -76,12 +92,15 @@
                                        $mcek = $msor->fetch(PDO::FETCH_ASSOC);
 
                                        ?>
-                            <div class="statbox widget box box-shadow">
-                               
-                                    <h5><?= $mcek['mAdSoyad'] . ' / ' . $mcek['mBolge']; ?></h5>
-                                    <div  style="display:flex;justify-content:right;">  
-                                     <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5;" href="islemekle.php?no=<?= $_GET['no']; ?>">Servis Kaydı Ekle</a>
+                                       
+                            <div class="statbox widget box box-shadow"> <a href="musteriler.php" class="btn  special1" style="color:#EFF5F5;">Geri Dön</a><br><br>
+                                <div  style="display:flow-root;">  
+                           
+                                    <h4 style=" float:left;"><?= $mcek['mAdSoyad'] . ' / ' . $mcek['mBolge']; ?></h4>
+                                    
+                                     <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5; float:right;" href="islemekle.php?no=<?= $_GET['no']; ?>">Servis Kaydı Ekle</a>
                                     </div>
+                                    
                                 <div class="widget-content widget-content-area">
 
                                     <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">
@@ -92,7 +111,7 @@
                                                 <th>Yapan Kişi</th>
                                                 <th>İşlem Zamanı</th>
                                                 <th>İşlem Türü</th>
-                                                <th>Ücret</th>
+                                                <th>Tam Fiyat</th>
                                                 <th>Not</th>
                                                 <th>Detay</th>
 
@@ -103,6 +122,66 @@
                                         $islemsor->execute(array(
                                             'islemMusteriNo' => $_GET['no']
                                         ));
+                                        $say = 0;
+                                        while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
+                                            $say++;
+$islemturu = unserialize($islemcek['islemTuru']);
+$alınanucret = $islemcek['islemIndirimliFiyat'];
+$alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
+
+                                            <tr>
+                                                <td><?= $say; ?></td>
+                                                <td><?= $islemcek['islemYapanKisi']; ?></td>
+                                                <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
+                                                <td><?=  implode(", ", $islemturu);  ?></td>
+
+                                                <td><?= $alınanucretfrmt; ?> TL</td>
+
+                                                <td><?= $islemcek['islemNot']; ?> </td>
+
+                                                <td style="max-width:20px;">
+                                                    <div class="text-center">
+                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?=  $mcek['mAdSoyad']; ?>" id="<?php echo $islemcek["islemId"]; ?>" class="btn btn-ozel mr-2 detay">
+                                                        <i class="fa-solid fa-circle-info"></i>
+                                                        </button>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+<?php } else{ ?>
+                        <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+
+                                       
+                            <div class="statbox widget box box-shadow"> 
+                                <div style="display:flex;justify-content:space-between;">               
+                                <a href="musteriler.php" class="btn special1" style="color:#EFF5F5;float:left;max-height:37px;">Geri Dön</a><br><br>                                            
+                                    </div>
+                                    
+                                <div class="widget-content widget-content-area">
+
+                                    <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+
+                                                <th>No</th>
+                                                <th>Yapan Kişi</th>
+                                                <th>İşlem Zamanı</th>
+                                                <th>İşlem Türü</th>
+                                                <th>Tam Fiyat</th>
+                                                <th>Not</th>
+                                                <th>Detay</th>
+
+                                            </tr>
+                                        </thead>
+                                        <?php
+                                        $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
+                                        $islemsor->execute();
                                         $say = 0;
                                         while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
                                             $say++;
@@ -119,11 +198,14 @@ $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
                                                 <td><?= $alınanucretfrmt; ?> TL</td>
 
                                                 <td><?= $islemcek['islemNot']; ?> </td>
-                                                <td style="text-align:center;">
-                                                    <div class="btn-group">
-                                                        <a href="islemdetay.php?no=<?= $_GET['no']; ?>&islemno=<?= $islemcek['islemNo']?>" class="btn btn-dark btn-sm"><i class="fa-solid fa-circle-info"></i></a>
-
+           
+                                                <td style="max-width:20px;">
+                                                    <div class="text-center">
+                                                        <button type="button" name="detay" value="detay" data-adsoyad="İşlem Ekle" id="<?php echo $islemcek["islemId"]; ?>" class="btn btn-ozel mr-2 detay">
+                                                        <i class="fa-solid fa-circle-info"></i>
+                                                        </button>
                                                     </div>
+
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -132,13 +214,25 @@ $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
                             </div>
                         </div>
 
+ <?php }?>
+
                     </div>
 
 
                 </div>
 
             </div>
-
+            <div id="detayModal" class="modal fade contact-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                     <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php //echo $mustericek['mAdSoyad']; ?></h4> 
+                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row" id="musteridetaybody"></div>
+            </div>
+        </div>
+    </div>
             <!--  BEGIN FOOTER  -->
             <div class="footer-wrapper">
                 <div class="footer-section f-section-1">
@@ -154,6 +248,34 @@ $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
         </div>
         <!--  END CONTENT AREA  -->
     </div>
+    <script>
+
+$(document).ready(function() {
+
+
+$(document).on('click', '.detay', function() {
+    var adsoyad = $(this).attr("data-adsoyad");
+    var islemId = $(this).attr("id");
+    if (islemId != '') {
+        $.ajax({
+            url: "../netting/islemdetaygetir.php",
+            method: "POST",
+            data: {
+                islemId: islemId
+            },
+            success: function(data) {
+                $('#detaymodaladsoyad').html(data.adsoyad);
+                $('#musteridetaybody').html(data);
+                $('#detayModal').modal('show');
+            }
+        });
+    }
+});
+});
+
+    </script>
+
+
     <script src="../public/src/fontawesome/all.js"></script>
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->

@@ -261,8 +261,8 @@
                                         <div class="col-12">
                                             <button type="submit" name="islemekle" class="btn islemkaydet">Kaydet</button>
                                         </div>
-                                        <input type="hidden" value="" name="tamfiyat" id="tamfiyat">
-                                        <input type="hidden" value="" name="indirimlifiyat" id="indirimtutari">
+                                        <input type="hidden" value="" form="islemekleform" name="tamfiyat" id="tamfiyat">
+                                        <input type="hidden" value=""  form="islemekleform" name="indirimlifiyat" id="indirimtutari">
                                     </form>
                                 </div>
                             </div>
