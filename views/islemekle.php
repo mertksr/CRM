@@ -261,8 +261,8 @@
                                         <div class="col-12">
                                             <button type="submit" name="islemekle" class="btn islemkaydet">Kaydet</button>
                                         </div>
-                                        <input type="hidden" value="" form="islemekleform" name="tamfiyat" id="tamfiyat">
-                                        <input type="hidden" value=""  form="islemekleform" name="indirimlifiyat" id="indirimtutari">
+                                        <input type="hidden" form="islemekleform" name="tamfiyat" id="tamfiyat">
+                                        <input type="hidden"  form="islemekleform" name="indirimlifiyat" id="indirimtutari">
                                     </form>
                                 </div>
                             </div>
@@ -302,8 +302,9 @@
                 for (var i = 0; i < prices.length; i++) {
                     total += parseFloat(prices[i]);
                 }
-                $("#cost").val(total + " TL");
+                $("#cost").val(total);
                 $("#tamfiyat").val(total);
+                $("#indirimtutari").val("0");
             });
 
         });
@@ -316,18 +317,17 @@
                 // searchResultLimit: 5,
                 // renderChoiceLimit: 8
             });
-        });
+       
         $("#hizmetler").on("change", function() {
             var selectedValues = $("#hizmetler").val();
             var selectedString = selectedValues.join(",");
         });
-        $(document).ready(function() {
+       
             var multipleCancelButton = new Choices('#hizmetler', {
                 removeItemButton: true
             });
-        });
-
-        $(document).ready(function() {
+       
+ });
 
             $("#makediscount").click(function() {
                 var fiyat = $("#cost").val();
@@ -366,7 +366,7 @@
 
                 }
             });
-        });
+   
     </script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>

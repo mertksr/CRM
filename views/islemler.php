@@ -118,7 +118,7 @@
                                             </tr>
                                         </thead>
                                         <?php
-                                        $islemsor = $db->prepare("SELECT * from islemler WHERE islemMusteriNo = :islemMusteriNo");
+                                        $islemsor = $db->prepare("SELECT * from islemler WHERE islemMusteriNo = :islemMusteriNo ORDER BY islemTarihi DESC");
                                         $islemsor->execute(array(
                                             'islemMusteriNo' => $_GET['no']
                                         ));
@@ -126,7 +126,11 @@
                                         while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
                                             $say++;
 $islemturu = unserialize($islemcek['islemTuru']);
-$alınanucret = $islemcek['islemIndirimliFiyat'];
+if($islemcek['islemIndirimliFiyat']!= 0){
+    $alınanucret = $islemcek['islemIndirimliFiyat'];
+}else{
+    $alınanucret = $islemcek['islemUcret'];
+}
 $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
 
                                             <tr>
@@ -170,6 +174,8 @@ $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
                                             <tr>
 
                                                 <th>No</th>
+                                                <th>Müşteri</th>
+                                                <th>Bölge</th>
                                                 <th>Yapan Kişi</th>
                                                 <th>İşlem Zamanı</th>
                                                 <th>İşlem Türü</th>
@@ -186,11 +192,23 @@ $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
                                         while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
                                             $say++;
 $islemturu = unserialize($islemcek['islemTuru']);
-$alınanucret = $islemcek['islemUcret'] - $islemcek['islemIndirimliFiyat'];
-$alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
+if($islemcek['islemIndirimliFiyat']!= 0){
+    $alınanucret = $islemcek['islemIndirimliFiyat'];
+}else{
+    $alınanucret = $islemcek['islemUcret'];
+}
+$alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          
+$msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mMusteriNo");
+$msor->execute(array(
+    'mMusteriNo' => $islemcek['islemMusteriNo']
+));
+$mcek = $msor->fetch(PDO::FETCH_ASSOC)
+?>
 
                                             <tr>
                                                 <td><?= $say; ?></td>
+                                                <td><?= $mcek['mAdSoyad']; ?></td>
+                                                <td><?= $mcek['mBolge']; ?></td>
                                                 <td><?= $islemcek['islemYapanKisi']; ?></td>
                                                 <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
                                                 <td><?=  implode(", ", $islemturu);  ?></td>
@@ -226,10 +244,10 @@ $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                     <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;"><?php //echo $mustericek['mAdSoyad']; ?></h4> 
+                     <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">İşlem Detayları</h4> 
                     <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body row" id="musteridetaybody"></div>
+                <div class="modal-body row g-1" id="musteridetaybody"></div>
             </div>
         </div>
     </div>
@@ -253,6 +271,7 @@ $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
 $(document).ready(function() {
 
 
+
 $(document).on('click', '.detay', function() {
     var adsoyad = $(this).attr("data-adsoyad");
     var islemId = $(this).attr("id");
@@ -264,9 +283,10 @@ $(document).on('click', '.detay', function() {
                 islemId: islemId
             },
             success: function(data) {
-                $('#detaymodaladsoyad').html(data.adsoyad);
+
                 $('#musteridetaybody').html(data);
                 $('#detayModal').modal('show');
+
             }
         });
     }

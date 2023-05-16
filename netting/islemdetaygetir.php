@@ -28,17 +28,28 @@ if(isset($_POST["islemId"]))
                                         }
                                     }
                                 }
-                                
+                                if( $islemcek['islemIndirimliFiyat'] != 0){
+                               $indirimtutarı =  $islemcek['islemUcret'] - $islemcek['islemIndirimliFiyat'];}
+                               else{
+                                $indirimtutarı =  0;
+                               }
     $output = '';  
 
     
-    $output .= '                                         <div class="col-12 col-lg-6 col-md-6">
+    $output .= '  
+    
+
+    <div class="col-12 col-lg-6 col-md-6">
     <label for="inputAddress" class="form-label">Müşteri Adı Soyadı</label>
     <input type="text" readonly value="'. $mustericek['mAdSoyad'].'" class="form-control info-input " id="inputAddress">
 </div>
+<div class="col-12 col-lg-6 col-md-6">
+<label for="inputAddress" class="form-label">Bölge</label>
+<input type="text" readonly value="'. $mustericek['mBolge'].'" class="form-control info-input " id="inputAddress">
+</div>
 
 
-<div class="col-6">
+<div class="col-12">
     <label for="inputAddress2" class="form-label">Hizmet Türü</label>
     <input type="text" value="'.  implode(", ", $islemturu).'" readonly class="form-control info-input" name="islemnotlari" id="inputAddress2">
 </div>
@@ -56,7 +67,13 @@ if(isset($_POST["islemId"]))
     <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
     <div class="input-group">
-        <input type="text" class="form-control info-input" value="'. $islemcek['islemUcret'].'" id="cost" name="islemucreti" readonly style="color:#505463;">                                            </div>
+        <input type="text" class="form-control info-input" value="'. $islemcek['islemUcret'].' TL" id="cost" name="islemucreti" readonly style="color:#505463;">                                            </div>
+</div>
+<div class="col-6">
+    <label for="inputAddress" class="form-label">Yapılan İndirim</label>
+
+    <div class="input-group">
+        <input type="text" class="form-control info-input" value="'. $indirimtutarı .' TL" id="cost" name="islemucreti" readonly style="color:#505463;">                                            </div>
 </div>
 
 <div class="col-6">
@@ -70,12 +87,12 @@ if(isset($_POST["islemId"]))
     <input type="text" readonly class="form-control info-input" value="'.$islemcek['islemPeriyot'].'" name="islemnotlari" id="inputAddress2">
 </div>
 
-<div class="col-6">
+<div class="col-12">
     <label for="inputAddress2" class="form-label">Notlar</label>
     <input type="text" readonly class="form-control info-input" value="'. $islemcek['islemNot'].'" name="islemnotlari" id="inputAddress2">
 </div>
 
 ';  
     echo $output;
-    
+    $adsoyad = $mustericek['mAdSoyad'];
 }
