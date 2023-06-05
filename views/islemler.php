@@ -19,7 +19,8 @@
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
     <!-- BEGIN PAGE LEVEL STYLES -->
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/src/table/datatable/datatables.css">
 
@@ -33,7 +34,7 @@
         .modal-content {
             background: whitesmoke;
         }
-        
+
         .btn-ozel {
             background-color: #394867 !important;
             color: white;
@@ -44,6 +45,98 @@
             color: #14274E !important;
             cursor: default !important;
         }
+
+        .multi-select-container {
+            display: inline-block;
+            position: relative;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .ms-container {
+                width: 320px;
+            }
+        }
+
+        @media screen and (max-width: 900px) and (min-width: 600px) {
+            .ms-container {
+                width: 320px;
+            }
+        }
+
+
+        .multi-select-menu {
+            position: absolute;
+            left: 0;
+            top: 0.8em;
+            float: left;
+            min-width: 100%;
+            background: #fff;
+            margin: 1em 0;
+            padding: 0.4em 0;
+            border: 1px solid #aaa;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .multi-select-menu input {
+            margin-right: 0.3em;
+            vertical-align: 0.1em;
+        }
+
+        .multi-select-button {
+            display: inline-block;
+            font-size: 0.875em;
+            padding: 0.2em 0.6em;
+            max-width: 20em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: -0.5em;
+            background-color: #fff;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            cursor: default;
+        }
+
+        .multi-select-button:after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0.4em 0.4em 0 0.4em;
+            border-color: #999 transparent transparent transparent;
+            margin-left: 0.4em;
+            vertical-align: 0.1em;
+        }
+
+        .multi-select-container--open .multi-select-menu {
+            display: block;
+        }
+
+        .multi-select-container--open .multi-select-button:after {
+            border-width: 0 0.4em 0.4em 0.4em;
+            border-color: transparent transparent #999 transparent;
+        }
+
+        .choices[data-type*=select-multiple] .choices__inner,
+        .choices[data-type*=text] .choices__inner {
+            cursor: pointer;
+        }
+
+
+        .choices__inner,
+        .choices__input,
+        .choices__list {
+            background-color: white;
+        }
+
+        .choices__item {
+            color: #505463;
+        }
+
+
     </style>
 </head>
 
@@ -83,156 +176,159 @@
 
                     <div class="row">
 
-                <?php if(isset($_GET['no'])){ ?>        <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-                        <?php
-                                        $msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mno");
-                                        $msor->execute(array(
-                                            'mno' => $_GET['no']
-                                        ));                                   
-                                       $mcek = $msor->fetch(PDO::FETCH_ASSOC);
+                        <?php if (isset($_GET['no'])) { ?> <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                                <?php
+                                $msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mno");
+                                $msor->execute(array(
+                                    'mno' => $_GET['no']
+                                ));
+                                $mcek = $msor->fetch(PDO::FETCH_ASSOC);
 
-                                       ?>
-                                       
-                            <div class="statbox widget box box-shadow"> <a href="musteriler.php" class="btn  special1" style="color:#EFF5F5;">Geri Dön</a><br><br>
-                                <div  style="display:flow-root;">  
-                           
-                                    <h4 style=" float:left;"><?= $mcek['mAdSoyad'] . ' / ' . $mcek['mBolge']; ?></h4>
-                                    
-                                     <a class="btn btn-lg special1 mb-3" style="color:#EFF5F5; float:right;" href="islemekle.php?no=<?= $_GET['no']; ?>">Servis Kaydı Ekle</a>
+                                ?>
+
+                                <div class="statbox widget box box-shadow"> <a href="musteriler.php" class="btn btn-dark">Geri Dön</a><br><br>
+                                    <div>
+
+                                        <h4 style="float:left;"><?= $mcek['mAdSoyad'] . ' / ' . $mcek['mBolge']; ?></h4>
+
+
+
+                                        <button type="button" class="btn special1 mb-2" style="color:#EFF5F5;margin:0 0 10px 10px;" name="islemeklemodalbtn" id="islemeklemodalbtn" data-bs-toggle="modal" data-bs-target="#islemeklemodal" class="btn btn-warning">İşlem Ekle</button>
+
                                     </div>
-                                    
-                                <div class="widget-content widget-content-area">
 
-                                    <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">
-                                        <thead>
-                                            <tr>
+                                    <div class="widget-content widget-content-area">
 
-                                                <th>No</th>
-                                                <th>Yapan Kişi</th>
-                                                <th>İşlem Zamanı</th>
-                                                <th>İşlem Türü</th>
-                                                <th>Tam Fiyat</th>
-                                                <th>Not</th>
-                                                <th>Detay</th>
+                                        <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
 
-                                            </tr>
-                                        </thead>
-                                        <?php
-                                        $islemsor = $db->prepare("SELECT * from islemler WHERE islemMusteriNo = :islemMusteriNo ORDER BY islemTarihi DESC");
-                                        $islemsor->execute(array(
-                                            'islemMusteriNo' => $_GET['no']
-                                        ));
-                                        $say = 0;
-                                        while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
-                                            $say++;
-$islemturu = unserialize($islemcek['islemTuru']);
-if($islemcek['islemIndirimliFiyat']!= 0){
-    $alınanucret = $islemcek['islemIndirimliFiyat'];
-}else{
-    $alınanucret = $islemcek['islemUcret'];
-}
-$alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
+                                                    <th>No</th>
+                                                    <th>Yapan Kişi</th>
+                                                    <th>İşlem Zamanı</th>
+                                                    <th>İşlem Türü</th>
+                                                    <th>Tam Fiyat</th>
+                                                    <th>Not</th>
+                                                    <th>Detay</th>
 
-                                            <tr>
-                                                <td><?= $say; ?></td>
-                                                <td><?= $islemcek['islemYapanKisi']; ?></td>
-                                                <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
-                                                <td><?=  implode(", ", $islemturu);  ?></td>
+                                                </tr>
+                                            </thead>
+                                            <?php
+                                            $islemsor = $db->prepare("SELECT * from islemler WHERE islemMusteriNo = :islemMusteriNo ORDER BY islemTarihi DESC");
+                                            $islemsor->execute(array(
+                                                'islemMusteriNo' => $_GET['no']
+                                            ));
+                                            $say = 0;
+                                            while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
+                                                $say++;
+                                                $islemturu = unserialize($islemcek['islemTuru']);
+                                                if ($islemcek['islemIndirimliFiyat'] != 0) {
+                                                    $alınanucret = $islemcek['islemIndirimliFiyat'];
+                                                } else {
+                                                    $alınanucret = $islemcek['islemUcret'];
+                                                }
+                                                $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
 
-                                                <td><?= $alınanucretfrmt; ?> TL</td>
+                                                <tr>
+                                                    <td><?= $say; ?></td>
+                                                    <td><?= $islemcek['islemYapanKisi']; ?></td>
+                                                    <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
+                                                    <td><?= implode(", ", $islemturu);  ?></td>
 
-                                                <td><?= $islemcek['islemNot']; ?> </td>
+                                                    <td><?= $alınanucretfrmt; ?> TL</td>
 
-                                                <td style="max-width:20px;">
-                                                    <div class="text-center">
-                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?=  $mcek['mAdSoyad']; ?>" id="<?php echo $islemcek["islemId"]; ?>" class="btn btn-ozel mr-2 detay">
-                                                        <i class="fa-solid fa-circle-info"></i>
-                                                        </button>
-                                                    </div>
+                                                    <td><?= $islemcek['islemNot']; ?> </td>
 
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                    </table>
+                                                    <td style="max-width:20px;">
+                                                        <div class="text-center">
+                                                            <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $islemcek["islemId"]; ?>" class="btn btn-ozel mr-2 detay">
+                                                                <i class="fa-solid fa-circle-info"></i>
+                                                            </button>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-<?php } else{ ?>
-                        <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                        <?php } else { ?>
+                            <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
 
-                                       
-                            <div class="statbox widget box box-shadow"> 
-                                <div style="display:flex;justify-content:space-between;">               
-                                <a href="musteriler.php" class="btn special1" style="color:#EFF5F5;float:left;max-height:37px;">Geri Dön</a><br><br>                                            
+
+                                <div class="statbox widget box box-shadow">
+                                    <div style="display:flex;justify-content:space-between;">
+                                        <a href="musteriler.php" class="btn special1" style="color:#EFF5F5;float:left;max-height:37px;">Geri Dön</a><br><br>
                                     </div>
-                                    
-                                <div class="widget-content widget-content-area">
 
-                                    <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">
-                                        <thead>
-                                            <tr>
+                                    <div class="widget-content widget-content-area">
 
-                                                <th>No</th>
-                                                <th>Müşteri</th>
-                                                <th>Bölge</th>
-                                                <th>Yapan Kişi</th>
-                                                <th>İşlem Zamanı</th>
-                                                <th>İşlem Türü</th>
-                                                <th>Tam Fiyat</th>
-                                                <th>Not</th>
-                                                <th>Detay</th>
+                                        <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
 
-                                            </tr>
-                                        </thead>
-                                        <?php
-                                        $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
-                                        $islemsor->execute();
-                                        $say = 0;
-                                        while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
-                                            $say++;
-$islemturu = unserialize($islemcek['islemTuru']);
-if($islemcek['islemIndirimliFiyat']!= 0){
-    $alınanucret = $islemcek['islemIndirimliFiyat'];
-}else{
-    $alınanucret = $islemcek['islemUcret'];
-}
-$alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          
-$msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mMusteriNo");
-$msor->execute(array(
-    'mMusteriNo' => $islemcek['islemMusteriNo']
-));
-$mcek = $msor->fetch(PDO::FETCH_ASSOC)
-?>
+                                                    <th>No</th>
+                                                    <th>Müşteri</th>
+                                                    <th>Bölge</th>
+                                                    <th>Yapan Kişi</th>
+                                                    <th>İşlem Zamanı</th>
+                                                    <th>İşlem Türü</th>
+                                                    <th>Tam Fiyat</th>
+                                                    <th>Not</th>
+                                                    <th>Detay</th>
 
-                                            <tr>
-                                                <td><?= $say; ?></td>
-                                                <td><?= $mcek['mAdSoyad']; ?></td>
-                                                <td><?= $mcek['mBolge']; ?></td>
-                                                <td><?= $islemcek['islemYapanKisi']; ?></td>
-                                                <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
-                                                <td><?=  implode(", ", $islemturu);  ?></td>
+                                                </tr>
+                                            </thead>
+                                            <?php
+                                            $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
+                                            $islemsor->execute();
+                                            $say = 0;
+                                            while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
+                                                $say++;
+                                                $islemturu = unserialize($islemcek['islemTuru']);
+                                                if ($islemcek['islemIndirimliFiyat'] != 0) {
+                                                    $alınanucret = $islemcek['islemIndirimliFiyat'];
+                                                } else {
+                                                    $alınanucret = $islemcek['islemUcret'];
+                                                }
+                                                $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');
+                                                $msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mMusteriNo");
+                                                $msor->execute(array(
+                                                    'mMusteriNo' => $islemcek['islemMusteriNo']
+                                                ));
+                                                $mcek = $msor->fetch(PDO::FETCH_ASSOC)
+                                            ?>
 
-                                                <td><?= $alınanucretfrmt; ?> TL</td>
+                                                <tr>
+                                                    <td style="width:10px;"><?= $say; ?></td>
+                                                    <td><?= $mcek['mAdSoyad']; ?></td>
+                                                    <td><?= $mcek['mBolge']; ?></td>
+                                                    <td><?= $islemcek['islemYapanKisi']; ?></td>
+                                                    <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
+                                                    <td><?= implode(", ", $islemturu);  ?></td>
 
-                                                <td><?= $islemcek['islemNot']; ?> </td>
-           
-                                                <td style="max-width:20px;">
-                                                    <div class="text-center">
-                                                        <button type="button" name="detay" value="detay" data-adsoyad="İşlem Ekle" id="<?php echo $islemcek["islemId"]; ?>" class="btn btn-ozel mr-2 detay">
-                                                        <i class="fa-solid fa-circle-info"></i>
-                                                        </button>
-                                                    </div>
+                                                    <td><?= $alınanucretfrmt; ?> TL</td>
 
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                    </table>
+                                                    <td><?= $islemcek['islemNot']; ?> </td>
+
+                                                    <td style="max-width:20px;">
+                                                        <div class="text-center">
+                                                            <button type="button" name="detay" value="detay" data-adsoyad="İşlem Ekle" id="<?php echo $islemcek["islemId"]; ?>" class="btn btn-ozel mr-2 detay">
+                                                                <i class="fa-solid fa-circle-info"></i>
+                                                            </button>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
- <?php }?>
+                        <?php } ?>
 
                     </div>
 
@@ -241,16 +337,120 @@ $mcek = $msor->fetch(PDO::FETCH_ASSOC)
 
             </div>
             <div id="detayModal" class="modal fade contact-modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                     <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">İşlem Detayları</h4> 
-                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">İşlem Detayları</h4>
+                            <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row g-1" id="musteridetaybody"></div>
+                    </div>
                 </div>
-                <div class="modal-body row g-1" id="musteridetaybody"></div>
             </div>
-        </div>
-    </div>
+
+            <div id="islemeklemodal" class="modal fade">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" style="color:#E21818; margin:auto;text-transform:uppercase;">İşlem Ekle</h4>
+                            <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="POST" id="islemekleform" action="../netting/islemislem.php" enctype="multipart/form-data">
+                            <div class="modal-body row g-1" id="musterieklebody">
+
+
+                                <div class="col-12">
+                                    <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
+                                    <select id="hizmetler" name="hizmetler[]" placeholder="Ürün Seçiniz" multiple>
+                                        <?php
+
+                                        $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
+                                        $hizmetsor->execute();
+                                        while ($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)) {
+                                        ?>
+                                            <option value="<?= $hizmetcek['HizmetTuru'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
+
+                                        <?php  } ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12">
+                                    <label for="defaultInputState" class="form-label ">Kullanılan
+                                        Ürünler</label>
+                                    <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
+                                        <?php
+
+                                        $urunsor = $db->prepare("SELECT * FROM urunler");
+                                        $urunsor->execute();
+                                        while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+                                        ?>
+                                            <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
+                                        <?php  } ?>
+
+                                    </select>
+                                </div>
+
+
+                                <div class="col-12 col-lg-12 col-md-12">
+                                    <label for="inputAddress" class="form-label">İşlem Ücreti</label>
+
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="islemtutari" name="islemucreti" readonly style="color:#505463;">
+                                        <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
+                                    <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
+                                        <option value="">Seç</option>
+                                        <option name="Mehmet">Mehmet</option>
+                                        <option name="Bedirhan">Bedirhan</option>
+                                    </select>
+                                </div>
+
+                                <!-- <div class="col-6">
+                                    <label for="defaultInputState" class="form-label ">Periyot</label>
+                                    <select form="islemekleform" id="defaultInputState" name="periyot" class="form-select select">
+                                    <option value="6" <?php // if($mcek['mPeriyot']=="6"){echo 'selected';} ?>>6</option>
+                        <option value="12"<?php //if($mcek['mPeriyot']=="12"){echo 'selected';} ?>>12</option>
+                        <option value="3"<?php // if($mcek['mPeriyot']=="3"){echo 'selected';} ?>>3</option>
+                        <option value="1"<?php // if($mcek['mPeriyot']=="1"){echo 'selected';} ?>>1</option>
+                        <option value="2"<?php // if($mcek['mPeriyot']=="2"){echo 'selected';} ?>>2</option>
+                        <option value="4"<?php  // if($mcek['mPeriyot']=="4"){echo 'selected';} ?>>4</option>
+                        <option value="5"<?php  // if($mcek['mPeriyot']=="5"){echo 'selected';} ?>>5</option>
+                        <option value="7"<?php  // if($mcek['mPeriyot']=="7"){echo 'selected';} ?>>7</option>
+                        <option value="8"<?php // if($mcek['mPeriyot']=="8"){echo 'selected';} ?>>8</option>
+                        <option value="9"<?php // if($mcek['mPeriyot']=="9"){echo 'selected';} ?>>9</option>
+                        <option value="10"<?php // if($mcek['mPeriyot']=="10"){echo 'selected';} ?>>10</option>
+                        <option value="11"<?php // if($mcek['mPeriyot']=="11"){echo 'selected';} ?>>11</option>
+                                    </select>
+                                </div> -->
+
+                                <div class="col-12">
+                                    <label for="inputAddress2" class="form-label">Notlar</label>
+                                    <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="inputAddress2" class="form-label">Fotoğraf Ekle</label>
+                                    <input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
+
+                                    <input class="form-control file-upload-input" type="file" name="resimler[]" multiple accept="image/*">
+                                </div>
+                                
+                                <input type="hidden" form="islemekleform" name="periyot" value="<?= $mcek['mPeriyot']; ?>">
+                                <input type="hidden" form="islemekleform" name="tamfiyat" id="tamfiyat">
+                                <input type="hidden" form="islemekleform" name="indirimlifiyat" id="indirimtutari">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" name="islemekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
             <!--  BEGIN FOOTER  -->
             <div class="footer-wrapper">
                 <div class="footer-section f-section-1">
@@ -267,36 +467,119 @@ $mcek = $msor->fetch(PDO::FETCH_ASSOC)
         <!--  END CONTENT AREA  -->
     </div>
     <script>
+        $(document).ready(function() {
 
-$(document).ready(function() {
+            $("#choices-multiple-remove-button").on("change", function() {
+                var selectedValues = $("#choices-multiple-remove-button").val();
+                var selectedString = selectedValues.join(",");
+                
+                $.ajax({
+                    url: "../netting/urunlericagir.php",
+                    method: "POST",
+                    data: {
+                        products: selectedString
+                    }
+                }).done(function(response) {
+                    // AJAX isteği tamamlandığında, fiyatları alın
+                    var prices = JSON.parse(response);
+                    // Toplam fiyatı hesaplayın
+                    var total = 0;
+                    for (var i = 0; i < prices.length; i++) {
+                        total += parseFloat(prices[i]);
+                    }
+  
+                    
+                    $("#tamfiyat").val(total);
+                    $("#indirimtutari").val("0");
+                    $("#islemtutari").val($("#tamfiyat").val());
+                });
+
+            });
 
 
 
-$(document).on('click', '.detay', function() {
-    var adsoyad = $(this).attr("data-adsoyad");
-    var islemId = $(this).attr("id");
-    if (islemId != '') {
-        $.ajax({
-            url: "../netting/islemdetaygetir.php",
-            method: "POST",
-            data: {
-                islemId: islemId
-            },
-            success: function(data) {
+            var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+                removeItemButton: true
+                // searchResultLimit: 5,
+                // renderChoiceLimit: 8
+            });
 
-                $('#musteridetaybody').html(data);
-                $('#detayModal').modal('show');
+            $("#hizmetler").on("change", function() {
+                var selectedValues = $("#hizmetler").val();
+                var selectedString = selectedValues.join(",");
+            });
 
-            }
+            var multipleCancelButton = new Choices('#hizmetler', {
+                removeItemButton: true
+            });
+
+
+
+            $("#makediscount").click(function() {
+                var fiyat = $("#islemtutari").val();
+                if (fiyat == "0" || fiyat == "" || fiyat == null) {
+                    alert("Ürün seçmeden indirim yapamazsınız!");
+                    return false;
+                } else {
+                    // $("#makediscount").off("click"); 
+                    $("#makediscount").removeClass('btn-outline-primary');
+                    $("#makediscount").addClass('btn-outline-danger');
+
+                    $.ajax({
+                        url: "../netting/ayarcek.php",
+                        type: "POST",
+                        dataType: "JSON",
+                        success: function(data) {
+                            var fiyat = parseFloat($("#islemtutari").val());
+                            var basamak = fiyat.toString().length;
+                            var indirim_tutari = fiyat * 0.1;
+                            var yeni_fiyat = fiyat - indirim_tutari;
+                            var roundedPrice;
+                            if (basamak == 4 || basamak == 5) {
+                                roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                                if (yeni_fiyat - roundedPrice >= 50) {
+                                    roundedPrice += 100;
+                                }
+                            } else if (basamak == 3 || basamak == 2) {
+                                roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                            }
+
+                            $("#islemtutari").val(roundedPrice);
+                            $("#indirimtutari").val(roundedPrice);
+                        }
+
+                    });
+
+                }
+            });
+
+            $(document).on('click', '.detay', function() {
+                var adsoyad = $(this).attr("data-adsoyad");
+                var islemId = $(this).attr("id");
+                
+                if (islemId != '') {
+                    $.ajax({
+                        url: "../netting/islemdetaygetir.php",
+                        method: "POST",
+                        data: {
+                            islemId: islemId
+                        },
+                        success: function(data) {
+
+                            $('#musteridetaybody').html(data);
+                            $('#detayModal').modal('show');
+
+                        }
+                    });
+                }
+            });
+            
         });
-    }
-});
-});
-
     </script>
 
-
+    <script src="../public/src/plugins/src/multiselect/jquery.multi-select.js"></script>
     <script src="../public/src/fontawesome/all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/plugins/src/global/vendors.min.js"></script>

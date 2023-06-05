@@ -19,6 +19,9 @@
     <!-- END GLOBAL MANDATORY STYLES -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- BEGIN PAGE LEVEL STYLES -->
@@ -159,8 +162,8 @@
                                             if (isset($islemcek['islemTarihi'])) {
                                                 setlocale(LC_TIME, "tr_TR"); // Türkçe yerel ayarlarını kullan
                                                 $tarih = date('d.m.Y', strtotime($islemcek['islemTarihi']));
-                                                $sonrakibakim = date('Y-m-d', strtotime('+' . $islemcek['islemPeriyot'] . ' months'));
-                                                $sonrakibakim =  strftime("%B %Y", strtotime("$sonrakibakim"));
+                                                $sonrakibakim = $mustericek['mSonrakiBakim'];
+                                                $sonrakibakim =  strftime("%B %Y", strtotime($sonrakibakim));
                                                 $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
                                             } else {
                                                 $tarih = "BAKIM BİLGİSİ YOK";
@@ -283,28 +286,62 @@
                                                     </div>
 
                                                 </td>
+                                                
+
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-
-                                                        <a class="btn btn-ozel mr-2 musteriduzenlebtn " href="satislar.php?no=<?= $mustericek['mMusteriNo']; ?>">
-                                                            <i class="fas fa-sack-dollar"></i>
+                                                        <a  class="btn btn-ozel mr-2" style="color:#EFF5F5;" href="satislar.php?no=<?= $mustericek['mMusteriNo']; ?>">
+                                                        <i class="fas fa-sack-dollar"></i>
                                                         </a>
                                                     </div>
+                                                    <!-- Modal -->
 
-                                                </td>
 
                                                 <td style="text-align:center;">
                                                     <div class="btn-group ">
                                                         <a class="btn btn-dark btn-sm btn-ozel" href='musteriduzenle.php?no=<?= $mustericek['mMusteriNo']; ?>'>Düzenle</a>
-                                                         
-                                                        <a class="btn btn-sm btn-ozel btn-outline" href='musteriduzenle.php?no=<?= $mustericek['mMusteriNo']; ?>'>Ertele</a>
-
-                  
+                                                                                                    
+                                                    <a class="btn btn-sm btn-ozel btn-outline" data-bs-toggle="modal" data-bs-target="#ertele<?php echo $modalId; ?>">
+                                                    Ertele
+                                                    </a>
                                                     </div>
                                                 </td>
                                             </tr>
 
+                                            <div class="modal fade" id="ertele<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
+                                                        </div>
+                                                        <div class="modal-body row">
+
+                                                            <div class="row g-1">
+                                                                <h5 style="color:red;">SADECE BİRİNİ SEÇİN</h5>
+                                                                <form action="../netting/musteriislem.php" method="POST" id="erteleform">
+
+                                                                    <div class="form-group col-6">
+                                                                        <label for="exampleFormControlInput1">Kaç Ay </label>
+                                                                        <input type="text" name="erteleay" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                                    </div>
+                                                                    <div class="form-group col-6">
+                                                                        <label for="exampleFormControlInput1">Hangi Tarih</label>
+                                                                        <input type="date" name="erteletarih" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                                    </div>
+                                                                    <input type="hidden" name="sonrakibakimtarihi" value="<?= $mustericek['mSonrakiBakim']; ?>">
+
+                                                                    <input type="hidden" name="musterino" value="<?= $mustericek['mMusteriNo']; ?>">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-success" name="bakimertele" type="submit">Ertele</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <?php } ?>
                                     </tbody>
                                 </table>
@@ -489,6 +526,25 @@
             });
         });
 
+        $("form[id^='formSatis']").submit(function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize(); // Form verilerini toplar ve string halinde döndürür
+            $.ajax({
+                type: "POST",
+                url: "../netting/satisekle.php", // Verilerin kaydedileceği PHP dosyasının URL'si
+                data: formData,
+                success: function(response) {
+                    // AJAX isteği başarılıysa burada yapılacak işlemler
+                    alert("Veriler başarıyla kaydedildi.");
+                    $("form[id^='formSatis'] input[type='text'], form[id^='formSatis'] select").val('');
+
+                },
+                error: function() {
+                    // AJAX isteği başarısız olduğunda burada yapılacak işlemler
+                    alert("Veriler kaydedilirken bir hata oluştu.");
+                }
+            });
+        });
 
         var locationInput = document.getElementById("konum");
 

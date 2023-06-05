@@ -40,4 +40,26 @@ if (isset($_POST['musteriekle'])) {
         }
         
     }
-
+    if (isset($_POST['bakimertele'])) {
+        $erteleay = $_POST['erteleay'];
+        $erteletarih = $_POST['erteletarih'];
+        $musterino = $_POST['musterino'];
+        $sonrakibakim = $_POST['sonrakibakimtarihi'];
+            if (!empty($erteleay) && is_numeric($erteleay)) {
+                $yeni_tarih = date('Y-m-d', strtotime($sonrakibakim . '+' . $erteleay . 'months'));
+            } else if (!empty($erteletarih)) {
+                $yeni_tarih = date('Y-m-d', strtotime($erteletarih));
+            }
+            $query = $db->prepare("UPDATE musteriler SET mSonrakiBakim=:tarih WHERE mMusteriNo=:mno");
+            $query->bindParam(':tarih', $yeni_tarih);
+            $query->bindParam(':mno', $musterino);
+            $insert = $query->execute();
+        
+            if ($insert) {
+                header("Location:../views/musteriler.php?no=$musterino&yt=basarili");
+                exit();
+            } else {
+                header("Location:../views/musteriler.php?no=$musterino&yt=basarisiz");
+                exit();
+            }
+        }

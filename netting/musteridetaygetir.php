@@ -100,13 +100,13 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
    </div>
    <div class="form-group col-6">
    <label for="exampleFormControlInput1">Bakım Periyodu</label>
-   <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $islemcek['islemPeriyot'] . ' Ay">
+   <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mustericek['mPeriyot'] . ' Ay">
    </div>
    <div class="form-group col-12">
    <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar??</label>
    <textarea  readonly class="form-control contact-modal">
 ';
- if(!empty($islemurun)){$kullanilanurunler = implode(", ", $islemurun);}else{$kullanilanurunler = "Değişen Parça Yok";}
+ if(!empty($islemurun)){$kullanilanurunler = implode(", ", $islemurun);}else{$kullanilanurunler = "Bakım Bilgisi Yok";}
  $output.= ' '. $kullanilanurunler .' </textarea>
         </div>
         </div>

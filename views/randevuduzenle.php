@@ -196,11 +196,6 @@
                                         </div>
 
                                         <div class="col-6">
-                                            <label for="inputAddress" class="form-label">Görüşme Tarihi</label>
-                                            <input type="date" name="gorusmetarihi" value="<?= date('Y-m-d', strtotime($rcek['rGorusmeTarihi']));?>" class="form-control" id="inputAddress">
-                                        </div>
-
-                                        <div class="col-6">
                                             <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
                                             <select form="randevuekleform" id="defaultInputState" name="hizmetturu" class="form-select">
                                                 <option selected="">Seç</option>
@@ -217,19 +212,6 @@
                                             <input type="date" name="randevutarihi" value="<?= date('Y-m-d', strtotime($rcek['rTarih']));?>" class="form-control" id="inputAddress">
                                         </div>
                                         <div class="col-6">
-                                            <label for="defaultInputState" class="form-label ">Temsilci</label>
-                                            <select form="randevuekleform" id="defaultInputState" name="temsilci" class="form-select">
-                                                <option>Seç</option>
-                                                <option name="Mehmet" <?php echo ($rcek['rTemsilci'] == "Mehmet") ? "selected" : ""; ?>>Mehmet</option>
-                                                <option name="Cihan" <?php echo ($rcek['rTemsilci'] == "Cihan") ? "selected" : ""; ?>>Cihan</option>
-                                                <option name="Bedirhan" <?php echo ($rcek['rTemsilci'] == "Bedirhan") ? "selected" : ""; ?>>Bedirhan</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="inputAddress" class="form-label">Teklif</label>
-                                            <input type="text"  value="<?= $rcek['rTeklif'];?>" name="teklif" class="form-control" id="inputAddress">
-                                        </div>
-                                        <div class="col-12">
                                             <label for="inputAddress" class="form-label">Notlar</label>
                                             <input type="text"  value="<?= $rcek['rNot'];?>" name="notlar" class="form-control" id="inputAddress">
                                         </div>

@@ -82,7 +82,23 @@ if (isset($_POST['randevukapat'])) {
         exit();
     }
 }
+if (isset($_POST['randevuata'])) {
+    print_r($_POST);
+    $randevuid = $_POST['randevuid'];
+    $personel = $_POST['randevupersonel'];
+    $query = $db->prepare("UPDATE randevular SET rPersonel=:personel WHERE rNo=:id");
+    $query->bindParam(':personel', $personel);
+    $query->bindParam(':id', $randevuid);
 
+    $update = $query->execute();
+    if ($update) {
+        header("Location: ../views/randevular.php?yt=basarili");
+        exit();
+    } else {
+        header("Location: ../views/randevular.php?yt=basarisiz");
+        exit();
+    }
+ }
 
 $randevuid = $_POST['randevuid'];
 $randevusor = $db->prepare("SELECT * FROM randevular WHERE rNo =:id");
@@ -91,9 +107,10 @@ $randevusor->execute(array(
 ));
 $randevucek = $randevusor->fetch(PDO::FETCH_ASSOC);
 $musterino = $randevucek['rMID'];
+if (isset($_POST['randevuertele'])) {
 $erteleay = $_POST['erteleay'];
 $erteletarih = $_POST['erteletarih'];
-if (isset($_POST['randevuertele'])) {
+
     if (!empty($erteleay) && is_numeric($erteleay)) {
         $tarih = $randevucek['rTarih'];
         $yeni_tarih = date('Y-m-d', strtotime($tarih . '+' . $erteleay . 'months'));
