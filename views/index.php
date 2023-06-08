@@ -1,3 +1,5 @@
+<?php
+include '../netting/connect.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,8 +65,10 @@
                                     <div class="page-header">
 
                                         <div class="page-title">
-                                            <h3>Analytics Dashboard</h3>
+                                            <h3>Merhaba, <?= $_SESSION['kullanici'] ?></h3>
                                         </div>
+                                        <br>
+                                        <a href="../netting/kullaniciislem.php?s=out" class="btn btn-dark">Çıkış Yap</a>
 
                                         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                             <ol class="breadcrumb">
@@ -95,6 +99,7 @@
                                                 <a class="dropdown-item" href="javascript:void(0);">View</a>
                                                 <a class="dropdown-item" href="javascript:void(0);">Download</a>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </div>

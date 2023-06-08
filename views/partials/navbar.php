@@ -1,3 +1,9 @@
+<?php 
+    require_once '../netting/connect.php';
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../index.php?erisim=izinsiz");
+}
+?>
 <!--  BEGIN SIDEBAR  -->
 <div class="sidebar-wrapper sidebar-theme">
 
