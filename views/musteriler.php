@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
     <script src="../public/src/fontawesome/all.js"></script>
     <script src="../public/src/jquery/jquery-3.6.4.min.js"></script>
+    
     <style>
         .list-unstyled {
             background-color: #16213E;
@@ -150,27 +151,34 @@
                                             $modalId = "modal" . $mustericek["mMusteriNo"];
 
 
-                                            $query = "SELECT * FROM islemler WHERE islemMusteriNo = :customer_id ORDER BY islemTarihi DESC LIMIT 1";
+                                            $query = "SELECT * FROM islemler WHERE islemMusteriNo = :customer_id AND islemTuru LIKE '%Bakım%' ORDER BY islemTarihi DESC LIMIT 1";
                                             $islemsor = $db->prepare($query);
                                             $islemsor->bindParam(':customer_id', $mustericek['mMusteriNo']);
 
 
                                             $islemsor->execute();
                                             $count = $islemsor->rowCount();
-
                                             $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
-                                            if (isset($islemcek['islemTarihi'])) {
+                                            // $islemturu = unserialize($islemcek['islemTuru']);
+                                            // if (in_array('Periyodik Bakım', $array)) {
+                                            //     echo "Periyodik Bakım bulundu!";
+                                            // }
+                                            if ($count == 1) {
                                                 setlocale(LC_TIME, "tr_TR"); // Türkçe yerel ayarlarını kullan
                                                 $tarih = date('d.m.Y', strtotime($islemcek['islemTarihi']));
-                                                $sonrakibakim = $mustericek['mSonrakiBakim'];
-                                                $sonrakibakim =  strftime("%B %Y", strtotime($sonrakibakim));
+                                                $sonrakibakim = date('d.m.Y', strtotime('+' . $mustericek['mPeriyot'] . ' months', strtotime($islemcek['islemTarihi'])));
+                                                $sonrakibakim = strftime("%B %Y", strtotime($sonrakibakim));
                                                 $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
                                             } else {
                                                 $tarih = "BAKIM BİLGİSİ YOK";
-                                                $sonrakibakim = "BAKIM BİLGİSİ YOK";
+                                                $sonrakibakim = date('d.m.Y', strtotime($mustericek['mSonrakiBakim']));
+                                                $sonrakibakim = strftime("%B %Y", strtotime($sonrakibakim));
+                                                $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
                                             }
+                                            
 
 
+                                            
 
 
                                         ?>
@@ -208,7 +216,7 @@
                                                         </button>
                                                     </div>
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="randevu<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal fade randevumodal" id="randevu<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -232,13 +240,13 @@
                                                                                     $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
                                                                                     $hizmetsor->execute();
                                                                                     while ($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)) {
-                                                                                        if ($hizmetcek['hNo'] == 1 || $hizmetcek['hNo'] == 2) {
+                                                                                      
 
 
                                                                                     ?>
                                                                                             <option value="<?= $hizmetcek['HizmetTuru'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
 
-                                                                                    <?php }
+                                                                                    <?php 
                                                                                     } ?>
 
                                                                                 </select>
@@ -249,10 +257,16 @@
                                                                                 <select id="defaultInputState" form="formRandevu-<?= $say; ?>" name="teknisyen" class="form-select">
                                                                                     <option selected="">Seç</option>
                                                                                     <option value="Bedirhan">Bedirhan</option>
+                                                                                    <option value="Kadir">Kadir</option>
                                                                                     <option value="Mehmet">Mehmet</option>
                                                                                 </select>
                                                                             </div>
-                                                                            <div class="form-group col-12">
+                                                                            <div class="col-4">
+                                                                                <label for="defaultInputState" class="form-label ">Randevu Tarih</label>
+                                                                                <input type="date" form="formRandevu-<?= $say; ?>" name="randevutarihi" style="text-transform:uppercase;" class="form-control" value="<?= date("Y-m-d", strtotime("+1 day")); ?>">
+
+                                                                            </div>
+                                                                            <div class="form-group col-8">
                                                                                 <label for="exampleFormControlInput1">Notlar</label>
                                                                                 <input type="text" form="formRandevu-<?= $say; ?>" name="notlar" style="text-transform:uppercase;" class="form-control">
 
@@ -440,6 +454,21 @@
                             <input type="text" class="form-control" name="notlar" id="notlar">
                         </div>
                         <div class=" col-12">
+                            <label for=" defaultInputState" class="form-label ">Cihaz</label>
+                            <select id="defaultInputState" name="cihaz" class="form-select select">
+                                <option value="">Seçim yapın</option>
+
+                           <?php 
+                                $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 || urunCinsi = 2 || urunCinsi = 3 ORDER BY urunAd ASC");
+                                $cihazsor->execute();
+                                while ($cihazcek = $cihazsor->fetch(PDO::FETCH_ASSOC)) {
+                                ?>
+                                    <option value="<?= $cihazcek['urunAd']; ?>"><?= $cihazcek['urunAd']; ?></option>
+                                <?php  } ?>
+
+                            </select>
+                        </div>
+                        <div class=" col-12">
                             <label for=" defaultInputState" class="form-label ">Bakım Periyodu</label>
                             <select id="defaultInputState" name="periyot" class="form-select select">
                                 <option value="6">6</option>
@@ -517,7 +546,6 @@
                     // AJAX isteği başarılıysa burada yapılacak işlemler
                     alert("Veriler başarıyla kaydedildi.");
                     $("form[id^='formRandevu'] input[type='text'], form[id^='formRandevu'] select").val('');
-
                 },
                 error: function() {
                     // AJAX isteği başarısız olduğunda burada yapılacak işlemler

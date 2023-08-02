@@ -27,6 +27,7 @@
 
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/dt-global_style.css">
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">
+    <script src="../public/src/jquery/jquery-3.6.4.min.js"></script>
     <style>
         table.dataTable thead>tr>th.sorting_asc,
         table.dataTable thead>tr>th.sorting_desc,
@@ -111,13 +112,15 @@
 
                                 <div class="widget-content widget-content-area">
 
-                                    <table id="islemler" class="table dt-table-hover" style="width:100%">
+                                    <table id="randevular" class="table dt-table-hover" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Müşteri Ad Soyad</th>
-                                                <th>Hizmet Türü</th>
-                                                <th>Randevu Tarihi</th>
+                                                <th><input type="text" class="form-control" id="specialsearch" placeholder="Ad Soyad"></th>
+                                                <th><input type="text" class="form-control" id="specialsearch" placeholder="Bölge"></th>
+                                                <th><input type="text" class="form-control" id="specialsearch" placeholder="Teknisyen"></th>
+                                                <th><input type="text" class="form-control" id="specialsearch" placeholder="Hizmet Türü"></th>
+                                                <th><input type="text" class="form-control" id="specialsearch" placeholder="Randevu Tarihi"></th>
                                                 <th>Notlar</th>
                                                 <th style="max-width:20px;text-align:left;">Durum</th>
                                                 <th style="max-width:20px;text-align:center;">Detaylar</th>
@@ -141,7 +144,7 @@
                                             $musterisor->execute();
                                             $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
                                             $islemno = $mustericek["mMusteriNo"];
-                                            $islemsor = $db->prepare("SELECT * FROM islemler WHERE islemMusteriNo = :islemMusteriNo ORDER BY islemTarihi DESC LIMIT 1");
+                                            $islemsor = $db->prepare("SELECT * FROM islemler WHERE islemMusteriNo = :islemMusteriNo AND islemTuru LIKE '%Bakım%' ORDER BY islemTarihi DESC LIMIT 1");
                                             $islemsor->execute(array('islemMusteriNo' => $islemno));
                                             $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
                                         ?>
@@ -149,6 +152,8 @@
                                             <tr>
                                                 <td><?= $say; ?></td>
                                                 <td><?= $mustericek['mAdSoyad'] ?></td>
+                                                <td><?= $mustericek['mBolge'] ?></td>
+                                                <td><?= $randevucek['rTeknisyen']; ?></td>
                                                 <td><?= $randevucek['rHizmetTuru']; ?></td>
                                                 <td><?= date("d.m.Y", strtotime($randevucek['rTarih'])); ?></td>
                                                 <td><?= $randevucek['rNot']; ?></td>

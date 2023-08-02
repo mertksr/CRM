@@ -9,9 +9,11 @@ if (isset($_POST['musteriduzenle'])) {
     $adres = $_POST['adres'];
     $konum = $_POST['konum'];
     $periyot = $_POST['periyot'];
+    $cihaz = $_POST['cihaz'];
+
     $notlar = $_POST['notlar'];
     
-    $query = $db->prepare("UPDATE musteriler SET mAdSoyad=:adsoyad,mTel1=:tel1,mTel2=:tel2,mBolge=:bolge,mAdres=:adres,mKonum=:konum,mPeriyot=:periyot,mNot=:notlar WHERE mMusteriNo=:musterino");
+    $query = $db->prepare("UPDATE musteriler SET mAdSoyad=:adsoyad,mTel1=:tel1,mTel2=:tel2,mBolge=:bolge,mAdres=:adres,mKonum=:konum,mPeriyot=:periyot,mNot=:notlar,mCihaz=:cihaz WHERE mMusteriNo=:musterino");
     $query->bindParam(':adsoyad', $adsoyad);
     $query->bindParam(':tel1', $tel1);
     $query->bindParam(':tel2', $tel2);
@@ -19,6 +21,7 @@ if (isset($_POST['musteriduzenle'])) {
     $query->bindParam(':adres', $adres);
     $query->bindParam(':konum', $konum);
     $query->bindParam(':periyot', $periyot);
+    $query->bindParam(':cihaz', $cihaz);
     $query->bindParam(':notlar', $notlar);
     $query->bindParam(':musterino', $musterino);
     

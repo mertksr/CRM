@@ -399,7 +399,7 @@
                                         <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12">
                                     <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
                                     <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
                                         <option value="">Seç</option>

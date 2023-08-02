@@ -232,6 +232,21 @@
                           Aç</button>
                       </div>
                     </div>
+                    <div class=" col-12">
+                            <label for=" defaultInputState" class="form-label ">Cihaz</label>
+                            <select id="defaultInputState" name="cihaz" class="form-select select">
+                                <option value="">Seçim yapın</option>
+
+                           <?php 
+                                $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 || urunCinsi = 2 || urunCinsi = 3 ORDER BY urunAd ASC");
+                                $cihazsor->execute();
+                                while ($cihazcek = $cihazsor->fetch(PDO::FETCH_ASSOC)) {
+                                ?>
+                                    <option <?php if($cihazcek['urunAd']==$mustericek['mCihaz']){echo 'selected';} ?> value="<?= $cihazcek['urunAd']; ?>"><?= $cihazcek['urunAd']; ?></option>
+                                <?php  } ?>
+
+                            </select>
+                        </div>
                     <div class=" col-3">
                                             <label for=" defaultInputState" class="form-label ">Bakım Periyodu</label>
                       <select  id="defaultInputState" name="periyot" class="form-select select">

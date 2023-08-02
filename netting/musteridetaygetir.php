@@ -88,26 +88,44 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
    </div>
    <div class="form-group col-6">
    <label for="exampleFormControlInput1">Bölge </label>
+   </div>
+   <div class="input-group col-6">
+
    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mustericek['mBolge'].'">
-   </div>
-   <div class="form-group col-6">
-   <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
-   <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. date('d.m.Y', strtotime($mustericek['mSonIslem'])).'">
-   </div>
-   <div class="form-group col-6">
-   <label for="exampleFormControlInput1">Notlar</label>
-   <input type="text" readonly style="text-transform:uppercase;" class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mustericek['mNot'].'">
+
+  '; 
+  if(!empty($mustericek['mKonum'])){$output.= ' <a style="padding-top:11px;" class="btn btn-outline-success" href="https://maps.google.com/?q='. $mustericek['mKonum'] .'" target="_Blank">Haritada
+       Aç</a>';} else{ $output.= ' <a style="padding-top:11px;" class="btn btn-outline-danger" >Konum Yok</a>';}
+        $output.= '</div>
+   <div class="form-group col-12">
+   <label for="exampleFormControlInput1">Cihaz </label>
+   <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mustericek['mCihaz'].'">
    </div>
    <div class="form-group col-6">
    <label for="exampleFormControlInput1">Bakım Periyodu</label>
    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mustericek['mPeriyot'] . ' Ay">
    </div>
+   <div class="form-group col-6">
+   <label for="exampleFormControlInput1">Son Bakım Tarihi</label>
+   <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="';
+    if(!empty($islemcek['islemTarihi'])){
+          $output.=' '.date('d.m.Y', strtotime($islemcek['islemTarihi'])).' ';
+        }else{
+             $output.= 'Bakım Bilgisi Yok ';
+            }
+   
+   $output.= '">
+   </div>
    <div class="form-group col-12">
-   <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar??</label>
+   <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar</label>
    <textarea  readonly class="form-control contact-modal">
 ';
  if(!empty($islemurun)){$kullanilanurunler = implode(", ", $islemurun);}else{$kullanilanurunler = "Bakım Bilgisi Yok";}
  $output.= ' '. $kullanilanurunler .' </textarea>
+        </div>
+        <div class="form-group col-12">
+        <label for="exampleFormControlInput1">Notlar</label>
+        <input type="text" readonly style="text-transform:uppercase;" class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mustericek['mNot'].'">
         </div>
         </div>
     ';  

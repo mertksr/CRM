@@ -8,13 +8,13 @@ $teknisyen = $_POST["teknisyen"];
 $notlar = $_POST["notlar"];
 $durum = "1";
 $yarın = strtotime("+1 day");
-$tarih= date("Y-m-d", $yarın);
+$tarih= $_POST["randevutarihi"];
 // SQL sorgusunu hazırla ve veritabanına ekle
 $sql = "INSERT INTO randevular (rMID, rHizmetTuru, rTeknisyen, rDurum, rNot,rTarih) VALUES ('$musterino', '$hizmetturu', '$teknisyen', '$durum', '$notlar','$tarih')";
 
 if ($db->query($sql) === TRUE) {
   echo "Veriler başarıyla kaydedildi.";
 } else {
-  echo "Kayıt sırasında bir hata oluştu: " . $db->error;
+  echo "Kayıt sırasında bir hata oluştu: " . $db-> $error;
 }
 ?>

@@ -24,6 +24,8 @@ if (isset($_POST['giris'])) {
         $_SESSION['kullanici'] = $linput1;
         $_SESSION['kid'] = $cek['kId'];
         $_SESSION['kyetki'] = $cek['kYetki'];
+        $_SESSION['kyetki'] = $cek['kYetki'];
+        $_SESSION['personel'] = $cek['kPersonel'];
         if($_SESSION['kyetki']==1){
         header("Location:../views/index.php?f=y"); }
         if($_SESSION['kyetki']==2){
