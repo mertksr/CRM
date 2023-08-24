@@ -486,8 +486,8 @@
                                                                                     <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
                                                                                     <div class="input-group">
-                                                                                        <input type="text" class="form-control" id="islemtutari" name="islemucreti" readonly style="color:#505463;">
-                                                                                        <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
+                                                                                        <input type="text" class="form-control" id="cost<?= $randevucek['rNo']; ?>" name="islemucreti" readonly style="color:#505463;">
+                                                                                        <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-12">
@@ -675,35 +675,37 @@
     <script src="../public/src/plugins/src/multiselect/jquery.multi-select.js"></script>
 
     <script>
-
-        $("[id^='choices-multiple-remove-button']").on("change", function() {
-            var randevuid = $("[id^='choices-multiple-remove-button']").attr("data-id");
-            var kullanilanurunler = "choices-multiple-remove-button" + randevuid;
-            console.log(kullanilanurunler);
-            var selectedValues = $("#"+kullanilanurunler).val();
-            var selectedString = selectedValues.join(",");
-            $.ajax({
-                url: "../netting/urunlericagir.php",
-                method: "POST",
-                data: {
-                    products: selectedString
-                }
-            }).done(function(response) {
-                // AJAX isteği tamamlandığında, fiyatları alın
-                var prices = JSON.parse(response);
-                // Toplam fiyatı hesaplayın
-                var total = 0;
-                console.log(selectedString);
-                for (var i = 0; i < prices.length; i++) {
-                    total += parseFloat(prices[i]);
-                }
-                console.log(selectedValues);
-                $("#cost").val(total);
-                $("#tamfiyat").val(total);
-                $("#indirimtutari").val("0");
-            });
-
+$(document).ready(function() {
+    $("[id^='choices-multiple-remove-button']").on("change", function() {
+        var selectedValues = $(this).val(); // Seçili verileri al
+        var selectedString = selectedValues.join(",");
+        
+        var that = this; // this'i bir değişkende saklayın
+        
+        $.ajax({
+            url: "../netting/urunlericagir.php",
+            method: "POST",
+            data: {
+                products: selectedString
+            }
+        }).done(function(response) {
+            // AJAX isteği tamamlandığında, fiyatları alın
+            var prices = JSON.parse(response);
+            // Toplam fiyatı hesaplayın
+            var total = 0;
+            for (var i = 0; i < prices.length; i++) {
+                total += parseFloat(prices[i]);
+            }
+           
+            // Toplam fiyatı ve diğer değerleri güncelleyin
+            var randevuid = $(that).attr("data-id");
+            var indiriminput = "cost" + randevuid;
+            $("#" + indiriminput).val(total);
+            $("#tamfiyat").val(total);
+            $("#indirimtutari").val("0");
         });
+    });
+});
 
 
         $(document).ready(function() {
@@ -725,8 +727,10 @@
 
         });
 
-        $("#makediscount").click(function() {
-            var fiyat = $("#cost").val();
+        $("[id^='makediscount']").click(function() {
+            var randevuid= $(this).attr("data-randevuid");
+            var costid = "cost"+randevuid;
+            var fiyat = $("#"+costid).val();
             if (fiyat == "0" || fiyat == "" || fiyat == null) {
                 alert("Ürün seçmeden indirim yapamazsınız!");
                 return false;
@@ -740,7 +744,7 @@
                     type: "POST",
                     dataType: "JSON",
                     success: function(data) {
-                        var fiyat = parseFloat($("#cost").val());
+                        var fiyat = parseFloat($("#"+costid).val());
                         var basamak = fiyat.toString().length;
                         var indirim_tutari = fiyat * 0.1;
                         var yeni_fiyat = fiyat - indirim_tutari;
@@ -754,7 +758,7 @@
                             roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
                         }
 
-                        $("#cost").val(roundedPrice);
+                        $("#"+costid).val(roundedPrice);
                         $("#indirimtutari").val(roundedPrice);
                     }
 
