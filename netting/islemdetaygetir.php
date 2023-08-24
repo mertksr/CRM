@@ -62,17 +62,28 @@ if (isset($_POST["islemId"])) {
 </div>
 
 
-<div class="col-6">
+<div class="col-4">
     <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
     <div class="input-group">
         <input type="text" class="form-control info-input" value="' . $islemcek['islemUcret'] . ' TL" id="cost" name="islemucreti" readonly style="color:#505463;">                                            </div>
 </div>
-<div class="col-6">
-    <label for="inputAddress" class="form-label">Yapılan İndirim</label>
+
+<div class="col-4">
+    <label for="inputAddress" class="form-label">İndirim</label>
 
     <div class="input-group">
-        <input type="text" class="form-control info-input" value="' . $indirimtutarı . ' TL" id="cost" name="islemucreti" readonly style="color:#505463;">                                            </div>
+        <input type="text" class="form-control info-input" value="-' . $indirimtutarı . ' TL" id="cost" name="islemucreti" readonly>                                            </div>
+</div>
+<div class="col-4">
+    <label for="inputAddress" class="form-label">Tutar</label>
+';
+$ucret = intval($islemcek['islemUcret']);
+$indirim=intval($indirimtutarı); 
+$tutar = $ucret - $indirim;
+$output.='
+    <div class="input-group">
+        <input type="text" class="form-control info-input" value="' .$tutar. ' TL" id="cost" name="islemucreti" readonly>                                            </div>
 </div>
 
 <div class="col-6">

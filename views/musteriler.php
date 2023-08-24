@@ -166,14 +166,12 @@
                                             if ($count == 1) {
                                                 setlocale(LC_TIME, "tr_TR"); // Türkçe yerel ayarlarını kullan
                                                 $tarih = date('d.m.Y', strtotime($islemcek['islemTarihi']));
-                                                $sonrakibakim = date('d.m.Y', strtotime('+' . $mustericek['mPeriyot'] . ' months', strtotime($islemcek['islemTarihi'])));
+                                                $sonrakibakim = date('d.m.Y', strtotime($mustericek['mSonrakiBakim']));
                                                 $sonrakibakim = strftime("%B %Y", strtotime($sonrakibakim));
                                                 $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
                                             } else {
                                                 $tarih = "BAKIM BİLGİSİ YOK";
-                                                $sonrakibakim = date('d.m.Y', strtotime($mustericek['mSonrakiBakim']));
-                                                $sonrakibakim = strftime("%B %Y", strtotime($sonrakibakim));
-                                                $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
+                                                $sonrakibakim = "BAKIM BİLGİSİ YOK";
                                             }
                                             
 

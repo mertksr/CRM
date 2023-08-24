@@ -10,7 +10,7 @@
                     </a>
                 </li>
                 <li class="nav-item theme-text">
-                    <a href="index.html" class="nav-link"> MK </a>
+                    <a href="index.html" class="nav-link"> Merhaba, <span style="text-transform:capitalize;"><?= $_SESSION['kullanici'] ?> </span></a>
                 </li>
             </ul>
 <!--  Search area **

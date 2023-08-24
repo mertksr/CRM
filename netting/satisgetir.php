@@ -1,15 +1,17 @@
 <?php
-if(isset($_POST["mMusteriNo"]))  
+if(isset($_POST["sno"]))  
 {  
 include 'connect.php';
-$musterino =  $_POST["mMusteriNo"];
-$musterisor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = $musterino");
+$sno =  $_POST["sno"];
+
+$satissor = $db->prepare("SELECT * from satislar WHERE sNo = $sno");
+$satissor->execute();
+$satiscek = $satissor->fetch(PDO::FETCH_ASSOC);
+
+$musterisor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = $satiscek[sMID]");
 $musterisor->execute();
 $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
 
-$satissor = $db->prepare("SELECT * from satislar WHERE sMID = $musterino");
-$satissor->execute();
-$satiscek = $satissor->fetch(PDO::FETCH_ASSOC);
 
 $urunsor = $db->prepare("SELECT * FROM urunler");
 $urunsor->execute();
@@ -58,25 +60,35 @@ foreach ($kullanilanurun as $urunid) {
         </div>
         <div class="form-group col-2">
         <label for="exampleFormControlInput1">Garanti</label>
-        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sGarantiSuresi'] .' Yıl">
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $satiscek['sGarantiSuresi'] .' ">
         </div>
         <div class="form-group col-5">
         <label for="exampleFormControlInput1">Garanti Bitiş</label>
-        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. date("d.m.Y",strtotime($satiscek['sGarantiBitis'])).'">
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'.date("d.m.Y", strtotime($satiscek['sGarantiBitis'])).'">
         </div>
-        <div class="form-group col-6">
-        <label for="exampleFormControlInput1">Referans</label>
-        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sReferans'] .'">
-        </div>
-        <div class="form-group col-3">
+
+        '; 
+        $ucret = intval($satiscek['sTutar']);
+$indirim=intval($satiscek['sIndirimliTutar']); 
+$tutar = $ucret - $indirim;
+        $output .= '
+        <div class="form-group col-4">
         <label for="exampleFormControlInput1">Tutar</label>
         <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sTutar'] .'">
         </div>
-        <div class="form-group col-3">
-        <label for="exampleFormControlInput1">İndirimli Tutar</label>
-        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sIndirimliTutar'] .'">
+        <div class="form-group col-4">
+        <label for="exampleFormControlInput1">İndirim</label>
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="-'. $satiscek['sIndirimliTutar'] .'">
         </div>
-        <div class="form-group col-12">
+        <div class="form-group col-4">
+        <label for="exampleFormControlInput1">Ücret</label>
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'.$tutar .'">
+        </div>
+        <div class="form-group col-lg-5">
+        <label for="exampleFormControlInput1">Referans</label>
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sReferans'] .'">
+        </div>
+        <div class="form-group col-7">
         <label for="exampleFormControlInput1">Satış Notları</label>
         <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sNot'] .'">
         </div>

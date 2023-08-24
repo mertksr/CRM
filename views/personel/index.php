@@ -27,7 +27,8 @@
     <link rel="stylesheet" type="text/css" href="../../public/src/plugins/css/light/table/datatable/custom_dt_miscellaneous.css">
 
     <link rel="stylesheet" type="text/css" href="../../public/src/plugins/css/dark/table/datatable/dt-global_style.css">
-    <link rel="stylesheet" type="text/css" href="../../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">
+    <link rel="stylesheet" type="text/css" href="../../public/src/plugins/css/dark/table/datatable/custom_dt_miscellaneous.css">,
+
     <style>
         table.dataTable thead>tr>th.sorting_asc,
         table.dataTable thead>tr>th.sorting_desc,
@@ -103,18 +104,20 @@
             <div class="layout-px-spacing">
 
                 <div class="middle-content container-xxl p-0 mt-4">
+                    
                     <div class="statbox widget box box-shadow">
-                        <button type="button" class="btn special1 mr-2" style="color:#EFF5F5;" name="musterieklemodalbtn" id="musterieklemodalbtn" data-bs-toggle="modal" data-bs-target="#musterieklemodal" class="btn btn-warning">Yeni Müşteri</button>
-
+                    <h4>Bugünün Randevuları</h4>
+                    <button type="button" class="btn special1 mr-2" style="color:#EFF5F5;" name="musterieklemodalbtn" id="musterieklemodalbtn" data-bs-toggle="modal" data-bs-target="#musterieklemodal" class="btn btn-warning">Yeni Müşteri</button>
+<br><br>
                         <div class="row">
-                            <h4>Bugünün Randevuları</h4>
-                           <p> <?=   $_SESSION['personel']; ?></p>
+                          
 
                             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
 
                                 <div class="statbox widget box box-shadow">
 
                                     <div class="widget-content widget-content-area">
+                                        
                                         <table id="islemler" class="table dt-table-hover" style="width:100%">
                                             <thead>
                                                 <tr>
@@ -202,7 +205,7 @@
                                                                                     }
                                                                                     ?> : <?php echo $iletisimcek['İletisimBilgisi'];
 
-                                                                                        ?>
+                                                                                            ?>
 
                                                                                 </p>
                                                                             </div>
@@ -404,88 +407,104 @@
 
                 </div>
                 <div id="musterieklemodal" class="modal fade">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">Müşteri Ekle</h4>
-                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="post" id="musteriekleform" type="POST" action="../netting/musteriislem.php">
-                    <div class="modal-body row g-1" id="musteridetaybody">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">Müşteri Ekle</h4>
+                                <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form method="post" id="musteriekleform" type="POST" action="../../netting/musteriislem.php">
+                                <div class="modal-body row g-1" id="musteridetaybody">
 
 
-                        <div class="form-group col-12">
-                            <label for="exampleFormControlInput1" class="mb-1">Ad Soyad</label>
-                            <input type="text" class="form-control" name="adsoyad" id="adsoyad">
-                        </div>
+                                    <div class="form-group col-12">
+                                        <label for="exampleFormControlInput1" class="mb-1">Ad Soyad</label>
+                                        <input type="text" class="form-control" name="adsoyad" id="adsoyad">
+                                    </div>
 
-                        <div class="form-group col-6">
-                            <label for="exampleFormControlInput1" class="mb-1">Tel1</label>
-                            <input type="text" class="form-control" name="tel1" id="tel1">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="exampleFormControlInput1" class="mb-1">Tel2</label>
-                            <input type="text" class="form-control" name="tel2" id="tel2">
-                        </div>
-                        <div class="col-12 mb-3">
-                            <label for="defaultInputState" class="form-label mb-1">Bölge</label>
-                            <select id="bolge" name="bolge" class="form-select">
-                                <option>Seçim yapın</option>
-                                <?php
+                                    <div class="form-group col-6">
+                                        <label for="exampleFormControlInput1" class="mb-1">Tel1</label>
+                                        <input type="text" class="form-control" name="tel1" id="tel1">
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="exampleFormControlInput1" class="mb-1">Tel2</label>
+                                        <input type="text" class="form-control" name="tel2" id="tel2">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="defaultInputState" class="form-label mb-1">Bölge</label>
+                                        <select id="bolge" name="bolge" class="form-select">
+                                            <option>Seçim yapın</option>
+                                            <?php
 
-                                $bolgesor = $db->prepare("SELECT * FROM neighborhood WHERE DistrictID = 335 ORDER BY NeighborhoodName ASC");
-                                $bolgesor->execute();
-                                while ($bolgecek = $bolgesor->fetch(PDO::FETCH_ASSOC)) {
+                                            $bolgesor = $db->prepare("SELECT * FROM neighborhood WHERE DistrictID = 335 ORDER BY NeighborhoodName ASC");
+                                            $bolgesor->execute();
+                                            while ($bolgecek = $bolgesor->fetch(PDO::FETCH_ASSOC)) {
+                                            ?>
+                                                <option value="<?= $bolgecek['NeighborhoodName']; ?>"><?= $bolgecek['NeighborhoodName']; ?></option>
+                                            <?php  } ?>
+
+                                        </select>
+                                    </div>
+                                    <div class="input-group col-12">
+
+                                        <input type="text" form="musteriekleform" class="form-control" name="konum" id="konum" readonly placeholder="Konum Bul">
+                                        <button class="btn btn-outline-primary" type="button" onclick="getLocation()">Konum
+                                            Bul</button>
+                                        <button class="btn btn-outline-success" type="button" onclick="goLocation()" id="goLocationBtn">Haritada
+                                            Aç</button>
+                                    </div>
+
+                                    <div class="form-group col-12">
+                                        <label for="exampleFormControlInput1" class="mb-1">Adres</label>
+                                        <input type="text" class="form-control" form="musteriekleform" name="adres" id="adres">
+                                    </div>
+                                    <div class=" col-12">
+                            <label for=" defaultInputState" class="form-label ">Cihaz</label>
+                            <select id="defaultInputState" name="cihaz" form="musteriekleform" class="form-select select">
+                                <option value="">Seçim yapın</option>
+
+                           <?php 
+                                $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 || urunCinsi = 2 || urunCinsi = 3 ORDER BY urunAd ASC");
+                                $cihazsor->execute();
+                                while ($cihazcek = $cihazsor->fetch(PDO::FETCH_ASSOC)) {
                                 ?>
-                                    <option value="<?= $bolgecek['NeighborhoodName']; ?>"><?= $bolgecek['NeighborhoodName']; ?></option>
+                                    <option value="<?= $cihazcek['urunAd']; ?>"><?= $cihazcek['urunAd']; ?></option>
                                 <?php  } ?>
 
                             </select>
                         </div>
-                        <div class="input-group col-6">
-
-                            <input type="text" form="musteriekleform" class="form-control" name="konum" id="konum" readonly placeholder="Konum Bul">
-                            <button class="btn btn-outline-primary" type="button" onclick="getLocation()">Konum
-                                Bul</button>
-                            <button class="btn btn-outline-success" type="button" onclick="goLocation()" id="goLocationBtn">Haritada
-                                Aç</button>
-                        </div>
-
-                        <div class="form-group col-12">
-                            <label for="exampleFormControlInput1" class="mb-1">Adres</label>
-                            <input type="text" class="form-control" name="adres" id="adres">
-                        </div>
-                        <div class="form-group col-12">
-                            <label for="exampleFormControlInput1" class="mb-1">Notlar</label>
-                            <input type="text" class="form-control" name="notlar" id="notlar">
-                        </div>
                         <div class=" col-12">
-                            <label for=" defaultInputState" class="form-label ">Bakım Periyodu</label>
-                            <select id="defaultInputState" name="periyot" class="form-select select">
-                                <option value="6">6</option>
-                                <option value="12">12</option>
-                                <option value="3">3</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                            </select>
+                                        <label for=" defaultInputState" class="form-label ">Bakım Periyodu</label>
+                                        <select id="defaultInputState" form="musteriekleform" name="periyot" class="form-select select">
+                                            <option value="6">6</option>
+                                            <option value="12">12</option>
+                                            <option value="3">3</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label for="exampleFormControlInput1" class="mb-1">Notlar</label>
+                                        <input type="text" form="musteriekleform" class="form-control" name="notlar" id="notlar">
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" name="personelmusteriekle" class="btn btn-success" style="color:#EFF5F5;">Kaydet</button>
+                                </div>
+
+
+                            </form>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" name="personelmusteriekle" class="btn btn-success" style="color:#EFF5F5;">Kaydet</button>
-                    </div>
-
-
-                </form>
-            </div>
-        </div>
-    </div>
+                </div>
                 <!--  BEGIN FOOTER  -->
 
                 <!--  END CONTENT AREA  -->
@@ -528,6 +547,7 @@
                         $("#indirimtutari").val("0");
                     });
                 });
+
 
                 $(".makediscount").click(function() {
                     var rno = $(this).data("rno");
@@ -589,7 +609,34 @@
 
 
             });
+            var locationInput = document.getElementById("konum");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(showPosition);
+    } else {
+        locationInput.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    locationInput.value = position.coords.latitude + "," + position.coords.longitude;
+}
+
+const goLocationBtn = document.getElementById("goLocationBtn");
+
+function goLocation() {
+    if (locationInput.value == "") {
+        alert("Önce Konumunuzu Bulmalısınız")
+    } else {
+        window.open('https://maps.google.com/?q=' + locationInput.value, '_blank');
+        // goLocationBtn.target= '_blank';
+        // window.location.href = "https://maps.google.com/?q=" + locationInput.value;
+    }
+
+}
         </script>
+        <script src="../../public/src/jquery/jquery-3.6.4.min.js"></script>
 
         <script src="../../public/src/fontawesome/all.js"></script>
 

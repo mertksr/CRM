@@ -256,7 +256,7 @@
                                                 
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $mcek["mMusteriNo"]; ?>" class="btn btn-ozel mr-2 detay">
+                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel mr-2 detay">
                                                             <i class="fa-solid fa-address-book"></i>
                                                         </button>
                                                     </div>
@@ -330,7 +330,7 @@
                                                 
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $mcek["mMusteriNo"]; ?>" class="btn btn-ozel mr-2 detay">
+                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel mr-2 detay">
                                                             <i class="fa-solid fa-address-book"></i>
                                                         </button>
                                                     </div>
@@ -464,13 +464,13 @@
         $(document).ready(function() {
 
             $(document).on('click', '.detay', function() {
-                var mMusteriNo = $(this).attr("id");
-                if (mMusteriNo != '') {
+                var sno = $(this).attr("id");
+                if (sno != '') {
                     $.ajax({
                         url: "../netting/satisgetir.php",
                         method: "POST",
                         data: {
-                            mMusteriNo: mMusteriNo
+                            sno: sno
                         },
                         success: function(data) {
                             $('#musteridetaybody').html(data);

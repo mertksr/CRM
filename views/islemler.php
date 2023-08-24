@@ -408,24 +408,6 @@
                                     </select>
                                 </div>
 
-                                <!-- <div class="col-6">
-                                    <label for="defaultInputState" class="form-label ">Periyot</label>
-                                    <select form="islemekleform" id="defaultInputState" name="periyot" class="form-select select">
-                                    <option value="6" <?php // if($mcek['mPeriyot']=="6"){echo 'selected';} ?>>6</option>
-                        <option value="12"<?php //if($mcek['mPeriyot']=="12"){echo 'selected';} ?>>12</option>
-                        <option value="3"<?php // if($mcek['mPeriyot']=="3"){echo 'selected';} ?>>3</option>
-                        <option value="1"<?php // if($mcek['mPeriyot']=="1"){echo 'selected';} ?>>1</option>
-                        <option value="2"<?php // if($mcek['mPeriyot']=="2"){echo 'selected';} ?>>2</option>
-                        <option value="4"<?php  // if($mcek['mPeriyot']=="4"){echo 'selected';} ?>>4</option>
-                        <option value="5"<?php  // if($mcek['mPeriyot']=="5"){echo 'selected';} ?>>5</option>
-                        <option value="7"<?php  // if($mcek['mPeriyot']=="7"){echo 'selected';} ?>>7</option>
-                        <option value="8"<?php // if($mcek['mPeriyot']=="8"){echo 'selected';} ?>>8</option>
-                        <option value="9"<?php // if($mcek['mPeriyot']=="9"){echo 'selected';} ?>>9</option>
-                        <option value="10"<?php // if($mcek['mPeriyot']=="10"){echo 'selected';} ?>>10</option>
-                        <option value="11"<?php // if($mcek['mPeriyot']=="11"){echo 'selected';} ?>>11</option>
-                                    </select>
-                                </div> -->
-
                                 <div class="col-12">
                                     <label for="inputAddress2" class="form-label">Notlar</label>
                                     <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">

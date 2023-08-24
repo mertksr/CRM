@@ -189,12 +189,12 @@
 
                                     <div class="widget-content widget-content-area">
 
-                                        <table id="islemler" class="table dt-table-hover display nowrap" style="width:100%">
+                                        <table id="islemler" class="table dt-table-hover display nowrap" >
                                             <thead>
                                                 <tr>
 
                                                     <th>No</th>
-                                                    <th>Yapan Kişi</th>
+                                                    <th>Müşteri</th>
                                                     <th>İşlem Zamanı</th>
                                                     <th>İşlem Türü</th>
                                                     <th>Tam Fiyat</th>
@@ -204,11 +204,15 @@
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $islemsor = $db->prepare("SELECT * from islemler WHERE islemyapanKisi = :islemMusteriNo ORDER BY islemTarihi DESC");
+                                            $bugununBaslangici = strtotime('today');
+                                            $bugununBitisi = strtotime('tomorrow') - 1;
+                                            $islemsor = $db->prepare("SELECT * from islemler WHERE islemyapanKisi = :islemMusteriNo AND islemTarihi BETWEEN DATE(NOW()) AND DATE(NOW() + INTERVAL 1 DAY) ORDER BY islemTarihi DESC");
                                             $islemsor->execute(array(
                                                 'islemMusteriNo' => $_SESSION['kullanici']
+
                                             ));
                                             $say = 0;
+
                                             while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
                                                 $say++;
                                                 $islemturu = unserialize($islemcek['islemTuru']);
@@ -217,11 +221,15 @@
                                                 } else {
                                                     $alınanucret = $islemcek['islemUcret'];
                                                 }
-                                                $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
+                                                $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');     
+                                                $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
+                                                $musterisor->execute(array($islemcek['islemMusteriNo']));
+                                                $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
+                                                ?>
 
                                                 <tr>
                                                     <td><?= $say; ?></td>
-                                                    <td><?= $islemcek['islemYapanKisi']; ?></td>
+                                                    <td><?= $mustericek['mAdSoyad']?></td>
                                                     <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
                                                     <td><?= implode(", ", $islemturu);  ?></td>
 

@@ -54,7 +54,7 @@ if (empty($_SESSION['kullanici']) && $_SESSION['kyetki'] != 2) {
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'islemler' || basename($_SERVER['PHP_SELF'], '.php') == 'islemekle') {  echo "active"; } ?>">
                 <a href="islemler.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span>Yapılan İşlemler</span>
+                        <span>Bugün Yaptığım İşlemler</span>
                     </div>
                        
                     <div>
@@ -66,7 +66,21 @@ if (empty($_SESSION['kullanici']) && $_SESSION['kyetki'] != 2) {
                     </div>
                 </a>
             </li>
-
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'kasa') {  echo "active"; } ?>">
+                <a href="kasa.php" class="dropdown-toggle">                    
+                    <div class="">                        
+                        <span>Kasa</span>
+                    </div>
+                       
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-chevron-right">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </a>
+            </li>
         </ul>
 
     </nav>
