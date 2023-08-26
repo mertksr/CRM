@@ -387,7 +387,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </td>
+                                                </td>       
+                                                
+                                                
+
+                                            
+
+
 
                                                 <td style="text-align:center;">
                                                     <a class="btn btn-ozel mr-2" <?php if ($randevucek['rDurum'] == "0") {
@@ -425,7 +431,6 @@
                                                             <h4 style="color:red;text-align:center;">Kayıt Türü</h4>
                                                             <div class="row g-1">
 
-                                                                <form action="../netting/randevuislem.php" method="POST">
 
 
                                                                     <div class="form-check col-6">
@@ -441,18 +446,18 @@
                                                                             Satış Ekle
                                                                         </label>
                                                                     </div>
+                                                                    <form method="POST" id="islemekleform<?= $randevucek['rNo'];?>" action="../netting/randevuislem.php" enctype="multipart/form-data">
 
                                                                     <div class="row g-1 boxx" id="satisekleform">
                                                                         <h5 style="color:red;">B1</h5>
 
 
-                                                                        <form method="POST" id="islemekleform" action="../netting/islemislem.php" enctype="multipart/form-data">
                                                                             <div class="modal-body row g-1" id="musterieklebody">
 
 
                                                                                 <div class="col-12">
                                                                                     <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
-                                                                                    <select id="hizmetler" name="hizmetler[]" placeholder="Ürün Seçiniz" multiple>
+                                                                                    <select id="hizmetler-<?= $randevucek['rNo'];?>" name="hizmetler[]" data-id="<?= $randevucek['rNo'];  ?>" placeholder="Ürün Seçiniz" multiple>
                                                                                         <?php
 
                                                                                         $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
@@ -468,7 +473,7 @@
                                                                                 <div class="col-lg-12 col-md-12">
                                                                                     <label for="defaultInputState" class="form-label ">Kullanılan
                                                                                         Ürünler</label>
-                                                                                    <select id="choices-multiple-remove-button-<?= $randevucek['rNo'];?>" data-id="<?= $randevucek['rNo'];?>"" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
+                                                                                    <select id="choices-multiple-remove-button-<?= $randevucek['rNo'];?>" data-id="<?= $randevucek['rNo'];?>" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
                                                                                         <?php
 
                                                                                         $urunsor = $db->prepare("SELECT * FROM urunler");
@@ -492,64 +497,36 @@
                                                                                 </div>
                                                                                 <div class="col-12">
                                                                                     <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
-                                                                                    <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
+                                                                                    <select id="defaultInputState" name="islemyapan" class="form-select">
                                                                                         <option value="">Seç</option>
                                                                                         <option name="Mehmet">Mehmet</option>
                                                                                         <option name="Bedirhan">Bedirhan</option>
                                                                                     </select>
                                                                                 </div>
-
-                                                                                <!-- <div class="col-6">
-                                    <label for="defaultInputState" class="form-label ">Periyot</label>
-                                    <select form="islemekleform" id="defaultInputState" name="periyot" class="form-select select">
-                                    <option value="6" <?php // if($mcek['mPeriyot']=="6"){echo 'selected';} 
-                                                        ?>>6</option>
-                        <option value="12"<?php //if($mcek['mPeriyot']=="12"){echo 'selected';} 
-                                            ?>>12</option>
-                        <option value="3"<?php // if($mcek['mPeriyot']=="3"){echo 'selected';} 
-                                            ?>>3</option>
-                        <option value="1"<?php // if($mcek['mPeriyot']=="1"){echo 'selected';} 
-                                            ?>>1</option>
-                        <option value="2"<?php // if($mcek['mPeriyot']=="2"){echo 'selected';} 
-                                            ?>>2</option>
-                        <option value="4"<?php  // if($mcek['mPeriyot']=="4"){echo 'selected';} 
-                                            ?>>4</option>
-                        <option value="5"<?php  // if($mcek['mPeriyot']=="5"){echo 'selected';} 
-                                            ?>>5</option>
-                        <option value="7"<?php  // if($mcek['mPeriyot']=="7"){echo 'selected';} 
-                                            ?>>7</option>
-                        <option value="8"<?php // if($mcek['mPeriyot']=="8"){echo 'selected';} 
-                                            ?>>8</option>
-                        <option value="9"<?php // if($mcek['mPeriyot']=="9"){echo 'selected';} 
-                                            ?>>9</option>
-                        <option value="10"<?php // if($mcek['mPeriyot']=="10"){echo 'selected';} 
-                                            ?>>10</option>
-                        <option value="11"<?php // if($mcek['mPeriyot']=="11"){echo 'selected';} 
-                                            ?>>11</option>
-                                    </select>
-                                </div> -->
-
                                                                                 <div class="col-12">
                                                                                     <label for="inputAddress2" class="form-label">Notlar</label>
                                                                                     <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
                                                                                 </div>
 
-                                                                                <div class="col-12">
+                                                                                <!-- <div class="col-12">
                                                                                     <label for="inputAddress2" class="form-label">Fotoğraf Ekle</label>
                                                                                     <input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
 
                                                                                     <input class="form-control file-upload-input" type="file" name="resimler[]" multiple accept="image/*">
-                                                                                </div>
+                                                                                </div> -->
 
-                                                                                <input type="hidden" form="islemekleform" name="periyot" value="<?= $mcek['mPeriyot']; ?>">
-                                                                                <input type="hidden" form="islemekleform" name="tamfiyat" id="tamfiyat">
-                                                                                <input type="hidden" form="islemekleform" name="indirimlifiyat" id="indirimtutari">
+                                                                                <input type="hidden"  name="periyot" value="<?= $mustericek['mPeriyot']; ?>">
+                                                                                <input type="hidden"  name="tamfiyat" id="tamfiyat">
+                                                                                <input type="hidden"  name="indirimlifiyat" id="indirimtutari">
+                                                                                <input type="hidden"  name="randevuid" value="<?= $randevucek['rNo']; ?>">
+
                                                                             </div>
                                                                             <div class="modal-footer">
-                                                                                <button type="submit" name="islemekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
+                                                                                <button type="submit" name="islemekle"  class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
                                                                             </div>
 
-
+                                                                            <input type="hidden" form="islemekleform<?= $randevucek['rNo'];?>"  name="hizmetler" id="hizmetlerinput<?= $randevucek['rNo'];?>" value="">
+                                                <input type="hidden" form="islemekleform<?= $randevucek['rNo'];?>"  name="urunler" id="urunlerinput<?= $randevucek['rNo'];?>" value="">
                                                                         </form>
 
 
@@ -567,10 +544,12 @@
 
                                                         </div>
 
-                                                        </form>
+                                                      
                                                     </div>
+
                                                 </div>
                                             </div>
+
 
                                             <div class="modal fade" id="ertele<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
@@ -641,6 +620,8 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+
                                         <?php } ?>
                                     </table>
                                 </div>
@@ -676,12 +657,13 @@
 
     <script>
 $(document).ready(function() {
+    
     $("[id^='choices-multiple-remove-button']").on("change", function() {
+
         var selectedValues = $(this).val(); // Seçili verileri al
         var selectedString = selectedValues.join(",");
-        
+
         var that = this; // this'i bir değişkende saklayın
-        
         $.ajax({
             url: "../netting/urunlericagir.php",
             method: "POST",
@@ -696,19 +678,21 @@ $(document).ready(function() {
             for (var i = 0; i < prices.length; i++) {
                 total += parseFloat(prices[i]);
             }
-           
+ 
+
             // Toplam fiyatı ve diğer değerleri güncelleyin
             var randevuid = $(that).attr("data-id");
             var indiriminput = "cost" + randevuid;
+            var urunlerinput = "urunlerinput" + randevuid;
+
+
+            $("#" + urunlerinput).val(selectedString);
             $("#" + indiriminput).val(total);
             $("#tamfiyat").val(total);
             $("#indirimtutari").val("0");
         });
     });
-});
 
-
-        $(document).ready(function() {
 
             var multipleCancelButton = new Choices("[id^='choices-multiple-remove-button']", {
                 removeItemButton: true
@@ -716,12 +700,16 @@ $(document).ready(function() {
                 // renderChoiceLimit: 8
             });
 
-            $("#hizmetler").on("change", function() {
-                var selectedValues = $("#hizmetler").val();
+            $("[id^='hizmetler']").on("change", function() {
+                var selectedValues = $(this).val();
                 var selectedString = selectedValues.join(",");
+                var randevuid = $(this).attr("data-id");
+
+                var hizmetlerinput = "hizmetlerinput" + randevuid;
+            $("#" + hizmetlerinput).val(selectedString);
             });
 
-            var multipleCancelButton = new Choices('#hizmetler', {
+            var multipleCancelButton = new Choices("[id^='hizmetler']", {
                 removeItemButton: true
             });
 
