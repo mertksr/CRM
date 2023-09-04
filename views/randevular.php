@@ -225,7 +225,7 @@
                                             </tr>
                                         </thead>
                                         <?php
-                                        $randevusor = $db->prepare("SELECT * from randevular ORDER BY rDurum DESC");
+                                        $randevusor = $db->prepare("SELECT * from randevular ORDER BY rDurum ASC");
                                         $randevusor->execute();
                                         $say = 0;
                                         while ($randevucek = $randevusor->fetch(PDO::FETCH_ASSOC)) {
@@ -245,15 +245,15 @@
                                             $urunsor->execute();
                                             $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
 
-                                            $islemurun = [];
-                                            $kullanilanurun = unserialize($islemcek['islemKullanilanUrun']);
-                                            foreach ($kullanilanurun as $urunid) {
-                                                foreach ($urunler as $urun) {
-                                                    if ($urunid == $urun['urunid']) {
-                                                        array_push($islemurun, $urun['urunAd']);
-                                                    }
-                                                }
-                                            }
+                                            // $islemurun = [];
+                                            // $kullanilanurun = unserialize($islemcek['islemKullanilanUrun']);
+                                            // foreach ($kullanilanurun as $urunid) {
+                                            //     foreach ($urunler as $urun) {
+                                            //         if ($urunid == $urun['urunid']) {
+                                            //             array_push($islemurun, $urun['urunAd']);
+                                            //         }
+                                            //     }
+                                            // }
 
                                         ?>
 
@@ -267,7 +267,7 @@
                                                 <td><?= $randevucek['rNot']; ?></td>
 
                                                 <td style="padding:0;text-align:center;max-width:100px;"><?php
-                                                                                                            if ($randevucek['rDurum'] == 0) {
+                                                                                                            if ($randevucek['rDurum'] == 2 || $randevucek['rDurum'] == 3) {
                                                                                                                 echo "<span class='badge badge-success me-4'>Yapıldı</span>";
                                                                                                             } elseif ($randevucek['rDurum'] == 1) {
                                                                                                                 echo "<span class='badge badge-danger me-4'>Bekliyor</span>";
@@ -313,7 +313,7 @@
                                                                         </div>
                                                                     <?php }   ?>
 
-                                                                    <div class="row g-1">
+                                                                    <div class="row g-0">
 
 
                                                                         <div class="form-group col-6">
@@ -329,22 +329,17 @@
                                                                             <label for="exampleFormControlInput1">Adres</label>
                                                                             <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $mustericek['mAdres'] ?></textarea>
                                                                         </div>
-                                                                        <hr>
-                                                                        <div class="form-group col-6">
+                                                                        <div class="form-group col-4">
                                                                             <label for="exampleFormControlInput1">Randevu Tarihi </label>
                                                                             <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= date("d.m.Y", strtotime($randevucek['rTarih'])); ?>">
                                                                         </div>
-                                                                        <div class="form-group col-6">
-                                                                            <label for="exampleFormControlInput1">Teknisyen</label>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Son İşlem Yapan</label>
                                                                             <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $randevucek['rTeknisyen']; ?>">
                                                                         </div>
-                                                                        <div class="form-group col-12">
+                                                                        <div class="form-group col-4">
                                                                             <label for="exampleFormControlInput1">Hizmet Türü</label>
                                                                             <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= implode(", ", $islemturu);  ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Kullanılan Ürünler</label>
-                                                                            <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= implode(", ", $islemurun); ?></textarea>
                                                                         </div>
 
                                                                         <div class="form-group col-12">
@@ -377,6 +372,72 @@
 ?> </textarea>
                                                                         </div>
 
+                                                                        <?php if ($randevucek['rDurum'] == "2") {
+
+                                                                            $randevuislemno = $randevucek['rNo'];
+                                                                            $randevuislemsor = $db->prepare("SELECT * FROM islemler WHERE islemRandevu = :randevu");
+                                                                            $randevuislemsor->bindParam(':randevu', $randevuislemno);
+                                                                            $randevuislemsor->execute();
+                                                                            $randevuislemcek = $randevuislemsor->fetch(PDO::FETCH_ASSOC);
+                                                                            $islemturu = unserialize($randevuislemcek['islemTuru']);
+
+
+                                                                           
+                                                                                $randevukullanilanurun = unserialize($randevuislemcek['islemKullanilanUrun']);
+
+                                                                                $yapilanislemurun = [];
+                                                                                $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                                $urunsor->execute();
+                                                                                $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
+
+                                                                                foreach ($randevukullanilanurun as $urunid) {
+                                                                                    foreach ($urunler as $urun) {
+                                                                                        if ($urunid == $urun['urunid']) {
+                                                                                            array_push($yapilanislemurun, $urun['urunAd']);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                              ?>
+                                                                            <div class="form-group col-6">
+                                                                                <label for="exampleFormControlInput1">Servis Tarihi </label>
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo date("d.m.Y", strtotime($randevuislemcek['islemTarihi'])); ?>">
+                                                                            </div>
+                                                                            <div class="form-group col-6">
+                                                                                <label for="exampleFormControlInput1">Servis Türü</label>
+                                                                                <textarea type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"><?= implode(", ", $islemturu); ?></textarea>
+                                                                            </div>
+                                                                            <div class="form-group col-12">
+                                                                                <label for="exampleFormControlInput1">Kullanılan Ürünler</label>
+                                                                                <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= implode(", ", $yapilanislemurun); ?></textarea>
+                                                                            </div>
+                                                                            <div class="form-group col-4">
+                                                                                <label for="exampleFormControlInput1">Tutar</label>
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevuislemcek['islemUcret']; ?>TL">
+                                                                            </div>
+                                                                            <div class="form-group col-4">
+                                                                                <label for="exampleFormControlInput1">Yapılan İndirim </label>
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="-<?= $randevuislemcek['islemUcret'] - $randevuislemcek['islemIndirimliFiyat']; ?>TL">
+                                                                            </div>
+                                                                            <div class="form-group col-4">
+                                                                                <label for="exampleFormControlInput1">Ücret </label>
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?=$randevuislemcek['islemIndirimliFiyat']; ?>TL">
+                                                                            </div>
+                                                                            <div class="form-group col-12">
+                                                                                <label for="exampleFormControlInput1">Servis Notları</label>
+                                                                                <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $randevuislemcek['islemNot'] ?></textarea>
+                                                                            </div>
+                                                                        <?php } elseif ($randevucek['rDurum'] == "3") {
+                                                                            $randevusatisno = $randevucek['rMID'];
+                                                                            $randevusatissor = $db->prepare("SELECT * FROM satislar WHERE sRandevu = :randevu");
+                                                                            $randevusatissor->bindParam(':randevu', $randevusatisno);
+                                                                            $randevusatissor->execute();
+                                                                            $randevusatiscek = $randevusatissor->fetch(PDO::FETCH_ASSOC);
+                                                                        ?>
+                                                                            <div class="form-group col-6">
+                                                                                <label for="exampleFormControlInput1">Satış Tarihi </label>
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo date("d.m.Y", strtotime($randevuislemcek['sTarih'])); ?>">
+                                                                            </div>
+                                                                        <?php } ?>
                                                                     </div>
 
 
@@ -387,11 +448,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </td>       
-                                                
-                                                
+                                                </td>
 
-                                            
+
+
+
 
 
 
@@ -433,222 +494,292 @@
 
 
 
-                                                                    <div class="form-check col-6">
-                                                                        <input class="btn-check" type="radio" value="Gerçek Kişi" name="kayitturu" id="flexRadioDefault1" checked>
-                                                                        <label style="width:100%;" class="btn btn-primary" for="flexRadioDefault1">
-                                                                            Servis Ekle
-                                                                        </label>
-                                                                    </div>
+                                                                <div class="form-check col-6">
+                                                                    <input class="btn-check" type="radio" value="Gerçek Kişi" name="kayitturu" id="flexRadioDefault1" checked>
+                                                                    <label style="width:100%;" class="btn btn-primary" for="flexRadioDefault1">
+                                                                        Servis Ekle
+                                                                    </label>
+                                                                </div>
 
-                                                                    <div class="form-check form-check-danger col-6">
-                                                                        <input class="btn-check" type="radio" value="Tüzel Kişi" name="kayitturu" id="flexRadioDefault2">
-                                                                        <label style="width:100%;" class="btn btn-success" for="flexRadioDefault2">
-                                                                            Satış Ekle
-                                                                        </label>
-                                                                    </div>
-                                                                    <form method="POST" id="islemekleform<?= $randevucek['rNo'];?>" action="../netting/randevuislem.php" enctype="multipart/form-data">
+                                                                <div class="form-check form-check-danger col-6">
+                                                                    <input class="btn-check" type="radio" value="Tüzel Kişi" name="kayitturu" id="flexRadioDefault2">
+                                                                    <label style="width:100%;" class="btn btn-success" for="flexRadioDefault2">
+                                                                        Satış Ekle
+                                                                    </label>
+                                                                </div>
+                                                                <form method="POST" id="islemekleform<?= $randevucek['rNo']; ?>" action="../netting/randevuislem.php" enctype="multipart/form-data">
 
                                                                     <div class="row g-1 boxx" id="satisekleform">
-                                                                        <h5 style="color:red;">B1</h5>
+
+                                                                        <div class="modal-body row g-1" id="musterieklebody">
 
 
-                                                                            <div class="modal-body row g-1" id="musterieklebody">
+                                                                            <div class="col-12">
+                                                                                <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
+                                                                                <select id="hizmetler-<?= $randevucek['rNo']; ?>" name="hizmetler[]" data-id="<?= $randevucek['rNo'];  ?>" placeholder="Ürün Seçiniz" multiple>
+                                                                                    <?php
+
+                                                                                    $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
+                                                                                    $hizmetsor->execute();
+                                                                                    while ($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)) {
+                                                                                    ?>
+                                                                                        <option value="<?= $hizmetcek['HizmetTuru'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
+
+                                                                                    <?php  } ?>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div class="col-lg-12 col-md-12">
+                                                                                <label for="defaultInputState" class="form-label ">Kullanılan
+                                                                                    Ürünler</label>
+                                                                                <select id="choices-multiple-remove-button-<?= $randevucek['rNo']; ?>" data-id="<?= $randevucek['rNo']; ?>" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
+                                                                                    <?php
+
+                                                                                    $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                                    $urunsor->execute();
+                                                                                    while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+                                                                                    ?>
+                                                                                        <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
+                                                                                    <?php  } ?>
+
+                                                                                </select>
+                                                                            </div>
 
 
-                                                                                <div class="col-12">
-                                                                                    <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
-                                                                                    <select id="hizmetler-<?= $randevucek['rNo'];?>" name="hizmetler[]" data-id="<?= $randevucek['rNo'];  ?>" placeholder="Ürün Seçiniz" multiple>
-                                                                                        <?php
+                                                                            <div class="col-12 col-lg-12 col-md-12">
+                                                                                <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
-                                                                                        $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
-                                                                                        $hizmetsor->execute();
-                                                                                        while ($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)) {
-                                                                                        ?>
-                                                                                            <option value="<?= $hizmetcek['HizmetTuru'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
-
-                                                                                        <?php  } ?>
-                                                                                    </select>
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" id="cost<?= $randevucek['rNo']; ?>" name="islemucreti" readonly style="color:#505463;">
+                                                                                    <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount<?= $randevucek['rNo']; ?>">İndirim Uygula</button>
                                                                                 </div>
+                                                                            </div>
+                                                                            <div class="col-12">
+                                                                                <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
+                                                                                <select id="defaultInputState" name="islemyapan" class="form-select">
+                                                                                    <option value="">Seç</option>
+                                                                                    <option name="Mehmet">Mehmet</option>
+                                                                                    <option name="Bedirhan">Bedirhan</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="col-12">
+                                                                                <label for="inputAddress2" class="form-label">Notlar</label>
+                                                                                <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
+                                                                            </div>
 
-                                                                                <div class="col-lg-12 col-md-12">
-                                                                                    <label for="defaultInputState" class="form-label ">Kullanılan
-                                                                                        Ürünler</label>
-                                                                                    <select id="choices-multiple-remove-button-<?= $randevucek['rNo'];?>" data-id="<?= $randevucek['rNo'];?>" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
-                                                                                        <?php
-
-                                                                                        $urunsor = $db->prepare("SELECT * FROM urunler");
-                                                                                        $urunsor->execute();
-                                                                                        while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
-                                                                                        ?>
-                                                                                            <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
-                                                                                        <?php  } ?>
-
-                                                                                    </select>
-                                                                                </div>
-
-
-                                                                                <div class="col-12 col-lg-12 col-md-12">
-                                                                                    <label for="inputAddress" class="form-label">İşlem Ücreti</label>
-
-                                                                                    <div class="input-group">
-                                                                                        <input type="text" class="form-control" id="cost<?= $randevucek['rNo']; ?>" name="islemucreti" readonly style="color:#505463;">
-                                                                                        <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-12">
-                                                                                    <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
-                                                                                    <select id="defaultInputState" name="islemyapan" class="form-select">
-                                                                                        <option value="">Seç</option>
-                                                                                        <option name="Mehmet">Mehmet</option>
-                                                                                        <option name="Bedirhan">Bedirhan</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <div class="col-12">
-                                                                                    <label for="inputAddress2" class="form-label">Notlar</label>
-                                                                                    <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
-                                                                                </div>
-
-                                                                                <!-- <div class="col-12">
+                                                                            <!-- <div class="col-12">
                                                                                     <label for="inputAddress2" class="form-label">Fotoğraf Ekle</label>
-                                                                                    <input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
+                                                                                    <input type="hidden" name="musterino" value=" /* $_GET['no'] */">
 
                                                                                     <input class="form-control file-upload-input" type="file" name="resimler[]" multiple accept="image/*">
                                                                                 </div> -->
 
-                                                                                <input type="hidden"  name="periyot" value="<?= $mustericek['mPeriyot']; ?>">
-                                                                                <input type="hidden"  name="tamfiyat" id="tamfiyat">
-                                                                                <input type="hidden"  name="indirimlifiyat" id="indirimtutari">
-                                                                                <input type="hidden"  name="randevuid" value="<?= $randevucek['rNo']; ?>">
+                                                                            <input type="hidden" name="periyot" value="<?= $mustericek['mPeriyot']; ?>">
+                                                                            <input type="hidden" name="tamfiyat" id="itamfiyat<?= $randevucek['rNo']; ?>">
+                                                                            <input type="hidden" name="indirimlifiyat" id="iindirimtutari<?= $randevucek['rNo']; ?>">
+                                                                            <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
+                                                                            <input type="hidden" name="musterino" value="<?= $mustericek['mMusteriNo']; ?>">
 
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit" name="islemekle" class="btn btn-primary " style="color:#EFF5F5;">Kaydet</button>
+                                                                        </div>
+
+                                                                        <input type="hidden" form="islemekleform<?= $randevucek['rNo']; ?>" name="hizmetler" id="hizmetlerinput<?= $randevucek['rNo']; ?>" value="">
+                                                                        <input type="hidden" form="islemekleform<?= $randevucek['rNo']; ?>" name="urunler" id="urunlerinput<?= $randevucek['rNo']; ?>" value="">
+                                                                        <input type="hidden" form="satisekleform<?= $randevucek['rNo']; ?>" name="satisurunler" id="satisurunlerinput<?= $randevucek['rNo']; ?>" value="">
+
+                                                                </form>
+
+
+                                                            </div>
+                                                            <div class="row g-1 boxx2" id="satisekleform">
+                                                                <form method="POST" id="satisekleform<?= $randevucek['rNo']; ?>" action="../netting/randevuislem.php" enctype="multipart/form-data">
+                                                                    <div class="modal-body row g-1" id="musterieklebody">
+
+
+                                                                        <div class="col-lg-12 col-md-12">
+                                                                            <label for="defaultInputState" class="form-label ">Satılan
+                                                                                Ürünler</label>
+                                                                            <select id="choices-multiple-remove-button" class="satilanurunler-<?= $randevucek['rNo']; ?>" data-id="<?= $randevucek['rNo']; ?>" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
+                                                                                <?php
+
+                                                                                $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                                $urunsor->execute();
+                                                                                while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+                                                                                ?>
+                                                                                    <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
+                                                                                <?php  } ?>
+
+                                                                            </select>
+                                                                        </div>
+
+
+                                                                        <div class="col-12 col-lg-12 col-md-12">
+                                                                            <label for="inputAddress" class="form-label">Ücret</label>
+
+                                                                            <div class="input-group">
+                                                                                <input type="text" class="form-control" id="satistutari<?= $randevucek['rNo']; ?>" name="satistutari" readonly style="color:#505463;">
+                                                                                <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="satismakediscount">İndirim Uygula</button>
                                                                             </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="submit" name="islemekle"  class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
-                                                                            </div>
+                                                                        </div>
 
-                                                                            <input type="hidden" form="islemekleform<?= $randevucek['rNo'];?>"  name="hizmetler" id="hizmetlerinput<?= $randevucek['rNo'];?>" value="">
-                                                <input type="hidden" form="islemekleform<?= $randevucek['rNo'];?>"  name="urunler" id="urunlerinput<?= $randevucek['rNo'];?>" value="">
-                                                                        </form>
+                                                                        <div class="col-6">
+                                                                            <label for="defaultInputState" class="form-label ">Garanti Süresi</label>
+                                                                            <select id="defaultInputState" name="garanti" class="form-select">
+                                                                                <option selected="">Seç</option>
+                                                                                <option value="1">1</option>
+                                                                                <option value="2">2</option>
+                                                                                <option value="3">3</option>
+                                                                                <option value="Yok">Yok</option>
 
+                                                                            </select>
+                                                                        </div>
 
-                                                                    </div>
-                                                                    <div class="row g-1 boxx2" id="satisekleform">
-                                                                        <h5 style="color:red;">B2</h5>
+                                                                        <div class="col-6">
+                                                                            <label for="defaultInputState" class="form-label ">Referans</label>
+                                                                            <select id="defaultInputState" name="referans" class="form-select">
+                                                                                <option selected="">Seç</option>
+                                                                                <option value="Bedirhan">Bedirhan</option>
+                                                                                <option value="Mehmet">Mehmet</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group col-12">
+                                                                            <label for="exampleFormControlInput1">Notlar</label>
+                                                                            <input type="text" name="notlar" style="text-transform:uppercase;" class="form-control">
 
-
-
+                                                                        </div>
+                                                                        <input type="hidden" name="musterino" value="<?= $mustericek['mMusteriNo']; ?>">
                                                                         <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
+
+
                                                                     </div>
 
-                                                                    <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
+                                                                    <input type="hidden" name="stamfiyat" id="tamfiyat">
+                                                                    <input type="hidden" name="sindirimlifiyat" id="sindirimtutari">
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit" name="satisekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
+                                                                    </div>
+
+
+                                                                </form>
+
+
+
+                                                                <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
                                                             </div>
 
+                                                            <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
                                                         </div>
 
-                                                      
                                                     </div>
 
+
                                                 </div>
+
                                             </div>
-
-
-                                            <div class="modal fade" id="ertele<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                                                        </div>
-                                                        <div class="modal-body row">
-
-                                                            <div class="row g-1">
-                                                                <h5 style="color:red;">SADECE BİRİNİ SEÇİN</h5>
-                                                                <form action="../netting/randevuislem.php" method="POST" id="erteleform">
-
-                                                                    <div class="form-group col-6">
-                                                                        <label for="exampleFormControlInput1">Kaç Ay </label>
-                                                                        <input type="text" name="erteleay" class="form-control contact-modal" id="exampleFormControlInput1">
-                                                                    </div>
-                                                                    <div class="form-group col-6">
-                                                                        <label for="exampleFormControlInput1">Hangi Tarih</label>
-                                                                        <input type="date" name="erteletarih" class="form-control contact-modal" id="exampleFormControlInput1">
-                                                                    </div>
-
-                                                                    <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button class="btn btn-success" name="randevuertele" type="submit">Ertele</button>
-                                                        </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal fade" id="ata<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                                                        </div>
-                                                        <div class="modal-body row">
-
-                                                            <div class="row g-1">
-                                                                <h5 style="color:red;">Randevuya Atamak İstediğinizi Personeli Seçin</h5>
-                                                                <form action="../netting/randevuislem.php" method="POST" id="ataform">
-
-                                                                    <div class="col-12">
-                                                                        <label for="defaultInputState" class="form-label ">Personel</label>
-                                                                        <select id="defaultInputState" name="randevupersonel" class="form-select">
-                                                                            <option selected="">Seçilmemiş</option>
-                                                                            <option name="Bedirhan" <?php if ($randevucek['rPersonel'] == "Bedirhan") {
-                                                                                                        echo "selected";
-                                                                                                    } ?>>Bedirhan</option>
-                                                                            <option name="Mehmet" <?php if ($randevucek['rPersonel'] == "Mehmet") {
-                                                                                                        echo "selected";
-                                                                                                    } ?>>Mehmet</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button class="btn btn-success" name="randevuata" type="submit">Kaydet</button>
-                                                        </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-
-                                        <?php } ?>
-                                    </table>
                                 </div>
+
+
+                                <div class="modal fade" id="ertele<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                            </div>
+                                            <div class="modal-body row">
+
+                                                <div class="row g-1">
+                                                    <h5 style="color:red;">SADECE BİRİNİ SEÇİN</h5>
+                                                    <form action="../netting/randevuislem.php" method="POST" id="erteleform">
+
+                                                        <div class="form-group col-6">
+                                                            <label for="exampleFormControlInput1">Kaç Ay </label>
+                                                            <input type="text" name="erteleay" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                        </div>
+                                                        <div class="form-group col-6">
+                                                            <label for="exampleFormControlInput1">Hangi Tarih</label>
+                                                            <input type="date" name="erteletarih" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                        </div>
+
+                                                        <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-success" name="randevuertele" type="submit">Ertele</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="ata<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                            </div>
+                                            <div class="modal-body row">
+
+                                                <div class="row g-1">
+                                                    <h5 style="color:red;">Randevuya Atamak İstediğinizi Personeli Seçin</h5>
+                                                    <form action="../netting/randevuislem.php" method="POST" id="ataform">
+
+                                                        <div class="col-12">
+                                                            <label for="defaultInputState" class="form-label ">Personel</label>
+                                                            <select id="defaultInputState" name="randevupersonel" class="form-select">
+                                                                <option selected="">Seçilmemiş</option>
+                                                                <option name="Bedirhan" <?php if ($randevucek['rPersonel'] == "Bedirhan") {
+                                                                                            echo "selected";
+                                                                                        } ?>>Bedirhan</option>
+                                                                <option name="Mehmet" <?php if ($randevucek['rPersonel'] == "Mehmet") {
+                                                                                            echo "selected";
+                                                                                        } ?>>Mehmet</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-success" name="randevuata" type="submit">Kaydet</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            <?php } ?>
+                            </table>
                             </div>
                         </div>
-
                     </div>
 
-
                 </div>
+
 
             </div>
 
-            <!--  BEGIN FOOTER  -->
-            <div class="footer-wrapper">
-                <div class="footer-section f-section-1">
-                    <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
-                </div>
-                <div class="footer-section f-section-2">
-                    <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg></p>
-                </div>
+        </div>
+
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
             </div>
-            <!--  END CONTENT AREA  -->
+            <div class="footer-section f-section-2">
+                <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg></p>
+            </div>
         </div>
         <!--  END CONTENT AREA  -->
+    </div>
+    <!--  END CONTENT AREA  -->
     </div>
     <!-- END MAIN CONTAINER -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -656,43 +787,78 @@
     <script src="../public/src/plugins/src/multiselect/jquery.multi-select.js"></script>
 
     <script>
-$(document).ready(function() {
-    
-    $("[id^='choices-multiple-remove-button']").on("change", function() {
+        $(document).ready(function() {
 
-        var selectedValues = $(this).val(); // Seçili verileri al
-        var selectedString = selectedValues.join(",");
+            $("[id^='choices-multiple-remove-button']").on("change", function() {
 
-        var that = this; // this'i bir değişkende saklayın
-        $.ajax({
-            url: "../netting/urunlericagir.php",
-            method: "POST",
-            data: {
-                products: selectedString
-            }
-        }).done(function(response) {
-            // AJAX isteği tamamlandığında, fiyatları alın
-            var prices = JSON.parse(response);
-            // Toplam fiyatı hesaplayın
-            var total = 0;
-            for (var i = 0; i < prices.length; i++) {
-                total += parseFloat(prices[i]);
-            }
- 
+                var selectedValues = $(this).val(); // Seçili verileri al
+                var selectedString = selectedValues.join(",");
 
-            // Toplam fiyatı ve diğer değerleri güncelleyin
-            var randevuid = $(that).attr("data-id");
-            var indiriminput = "cost" + randevuid;
-            var urunlerinput = "urunlerinput" + randevuid;
+                var that = this; // this'i bir değişkende saklayın
+                $.ajax({
+                    url: "../netting/urunlericagir.php",
+                    method: "POST",
+                    data: {
+                        products: selectedString
+                    }
+                }).done(function(response) {
+                    // AJAX isteği tamamlandığında, fiyatları alın
+                    var prices = JSON.parse(response);
+                    // Toplam fiyatı hesaplayın
+                    var total = 0;
+                    for (var i = 0; i < prices.length; i++) {
+                        total += parseFloat(prices[i]);
+                    }
 
 
-            $("#" + urunlerinput).val(selectedString);
-            $("#" + indiriminput).val(total);
-            $("#tamfiyat").val(total);
-            $("#indirimtutari").val("0");
-        });
-    });
+                    // Toplam fiyatı ve diğer değerleri güncelleyin
+                    var randevuid = $(that).attr("data-id");
+                    var indiriminput = "cost" + randevuid;
+                    var urunlerinput = "urunlerinput" + randevuid;
+                    var itamfiyat = "itamfiyat" + randevuid;
+                    var iindirimtutari = "iindirimtutari" + randevuid;
 
+                    $("#" + urunlerinput).val(selectedString);
+                    $("#" + indiriminput).val(total);
+                    $("#" + itamfiyat).val(total);
+                    $("#" + iindirimtutari).val("0");
+
+                });
+            });
+
+            $("[class^='satilanurunler']").on("change", function() {
+                var selectedValues = $(this).val(); // Seçili verileri al
+                var selectedString = selectedValues.join(",");
+
+                var that = this; // this'i bir değişkende saklayın
+                $.ajax({
+                    url: "../netting/urunlericagir.php",
+                    method: "POST",
+                    data: {
+                        products: selectedString
+                    }
+                }).done(function(response) {
+                    // AJAX isteği tamamlandığında, fiyatları alın
+                    var prices = JSON.parse(response);
+                    // Toplam fiyatı hesaplayın
+                    var total = 0;
+                    for (var i = 0; i < prices.length; i++) {
+                        total += parseFloat(prices[i]);
+                    }
+
+
+                    // Toplam fiyatı ve diğer değerleri güncelleyin
+                    var randevuid = $(that).attr("data-id");
+                    var indiriminput = "satistutari" + randevuid;
+                    var satisurunlerinput = "satisurunlerinput" + randevuid;
+                    var stamfiyat = "stamfiyat" + randevuid;
+
+
+                    $("#" + satisurunlerinput).val(selectedString);
+                    $("#" + indiriminput).val(total);
+                    $("#" + stamfiyat).val(total);
+                });
+            });
 
             var multipleCancelButton = new Choices("[id^='choices-multiple-remove-button']", {
                 removeItemButton: true
@@ -706,7 +872,7 @@ $(document).ready(function() {
                 var randevuid = $(this).attr("data-id");
 
                 var hizmetlerinput = "hizmetlerinput" + randevuid;
-            $("#" + hizmetlerinput).val(selectedString);
+                $("#" + hizmetlerinput).val(selectedString);
             });
 
             var multipleCancelButton = new Choices("[id^='hizmetler']", {
@@ -716,9 +882,9 @@ $(document).ready(function() {
         });
 
         $("[id^='makediscount']").click(function() {
-            var randevuid= $(this).attr("data-randevuid");
-            var costid = "cost"+randevuid;
-            var fiyat = $("#"+costid).val();
+            var randevuid = $(this).attr("data-randevuid");
+            var costid = "cost" + randevuid;
+            var fiyat = $("#" + costid).val();
             if (fiyat == "0" || fiyat == "" || fiyat == null) {
                 alert("Ürün seçmeden indirim yapamazsınız!");
                 return false;
@@ -732,7 +898,7 @@ $(document).ready(function() {
                     type: "POST",
                     dataType: "JSON",
                     success: function(data) {
-                        var fiyat = parseFloat($("#"+costid).val());
+                        var fiyat = parseFloat($("#" + costid).val());
                         var basamak = fiyat.toString().length;
                         var indirim_tutari = fiyat * 0.1;
                         var yeni_fiyat = fiyat - indirim_tutari;
@@ -746,15 +912,58 @@ $(document).ready(function() {
                             roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
                         }
 
-                        $("#"+costid).val(roundedPrice);
-                        $("#indirimtutari").val(roundedPrice);
+                        $("#" + costid).val(roundedPrice);
+
+                        var iindirimtutari = "iindirimtutari" + randevuid;
+                        $("#" + iindirimtutari).val(roundedPrice);
+
                     }
 
                 });
 
             }
         });
+        $("[id^='satismakediscount']").click(function() {
+            var randevuid = $(this).attr("data-randevuid");
+            var scostid = "satistutari" + randevuid;
+            var fiyat = $("#" + costid).val();
+            if (fiyat == "0" || fiyat == "" || fiyat == null) {
+                alert("Ürün seçmeden indirim yapamazsınız!");
+                return false;
+            } else {
+                // $("#makediscount").off("click"); 
+                $("#satismakediscount").removeClass('btn-outline-primary');
+                $("#satismakediscount").addClass('btn-outline-danger');
 
+                $.ajax({
+                    url: "../netting/ayarcek.php",
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function(data) {
+                        var fiyat = parseFloat($("#" + scostid).val());
+                        var basamak = fiyat.toString().length;
+                        var indirim_tutari = fiyat * 0.1;
+                        var yeni_fiyat = fiyat - indirim_tutari;
+                        var roundedPrice;
+                        if (basamak == 4 || basamak == 5) {
+                            roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                            if (yeni_fiyat - roundedPrice >= 50) {
+                                roundedPrice += 100;
+                            }
+                        } else if (basamak == 3 || basamak == 2) {
+                            roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                        }
+
+                        $("#" + scostid).val(roundedPrice);
+                        //$("#sindirimtutari").val(roundedPrice);
+                        var sindirimtutari = "sindirimtutari" + randevuid;
+                        $("#" + sindirimtutari).val(roundedPrice);
+                    }
+
+                });
+
+            }
+        });
         $(document).ready(function() {
 
             const box = $(".boxx");

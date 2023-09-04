@@ -30,7 +30,6 @@ if (isset($_POST['randevuduzenle'])) {
 
 if (isset($_POST['randevuekle'])) {
 
-
     $musterino = $_POST['musterino'];
     $query = $db->prepare("INSERT INTO randevular SET
       	rMID = :musteriid,
@@ -53,8 +52,6 @@ if (isset($_POST['randevuekle'])) {
     ));
 
 
-
-
     if ($insert) {
         $last_id = $db->lastInsertId();
         header("Location:../views/mrandevular.php?no=$musterino&yt=basarili");
@@ -66,8 +63,61 @@ if (isset($_POST['randevuekle'])) {
     }
 }
 
+if (isset($_POST['satisekle'])) {
+    $randevuid = $_POST['randevuid'];
+
+
+    $musterino = $_POST['musterino'];
+    $urunler = $_POST['satisurunler'];
+    $urunler = explode(",", $urunler);
+    $urunler_str = serialize($urunler);
+    $query = $db->prepare("INSERT INTO satislar SET
+     
+    	sMID = :musterino,
+        sUrun = :kullanilanurunler,
+        sGarantiSuresi = :garanti,
+        sGarantiBitis = :gbitis,
+        sTutar = :ucret,
+        sIndirimliTutar = :indirimlifiyat,
+sReferans = :referans,
+        sNot = :notlar,
+        sRandevu = :randevu
+                ");
+
+    $insert = $query->execute(array(
+
+        "musterino" => $_POST['musterino'],
+        "kullanilanurunler" => $urunler_str,
+        "garanti" => $_POST['garanti'],
+        "gbitis" => date('Y-m-d', strtotime(' + ' . $_POST['garanti'] . ' years')),
+        "ucret" =>  $_POST['tamfiyat'],
+        "indirimlifiyat" => $_POST['indirimlifiyat'],
+        "referans" => $_POST['referans'],
+        "notlar" => $_POST['notlar'],
+        "randevu" => $_POST['randevuid']
+    ));
+
+
+
+    if ($insert) {
+        $durum = "3";
+        $query = $db->prepare("UPDATE randevular SET rDurum=:durum WHERE rNo=:id");
+        $query->bindParam(':durum', $durum);
+        $query->bindParam(':id', $randevuid);
+        $update = $query->execute();
+        $last_id = $db->lastInsertId();
+        header("Location:../views/randevular.php?no=$musterino&yt=basarili");
+        exit();
+    } else {
+
+        header("Location:../views/randevular.php?no=$musterino&yt=basarisiz");
+        exit();
+    }
+}
 
 if (isset($_POST['islemekle'])) {
+
+    $randevuid = $_POST['randevuid'];
 
          $num_of_digits = 6;
     $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
@@ -80,10 +130,14 @@ if (isset($_POST['islemekle'])) {
     } else {
         
         $hizmetler = $_POST['hizmetler'];
+        $hizmetler = explode(",", $hizmetler);
         $hizmetler_str = serialize($hizmetler);
-        $yapilanislem = $_POST['kullanilanurunler'];
+        
+        $yapilanislem = $_POST['urunler'];
+        $yapilanislem = explode(",", $yapilanislem);
          $yapilanislem_str = serialize($yapilanislem);
-       //
+
+       
     $query = $db->prepare("INSERT INTO islemler SET
       	islemNo = :islemno,
     	islemMusteriNo = :musterino,
@@ -112,18 +166,20 @@ if (isset($_POST['islemekle'])) {
     
 
         $musterino = $_POST['musterino'];
+        $bakim = "Bakım";
+        
+        if (in_array($bakim, $hizmetler)) {
+            // 'Bakım' seçildiyse işlemleri yap
+            $islemtarihi = date("Y-m-d");
+            $periyot = $_POST['periyot'];
+            $query = $db->prepare("UPDATE musteriler SET mSonrakiBakim = :sonrakibakimtarihi WHERE mMusteriNo = :musterino");
+        
+            $insert = $query->execute(array(
+                "sonrakibakimtarihi" => date("Y-m-d", strtotime($islemtarihi . ' + ' . $periyot . ' month')),
+                "musterino" => $musterino
+            ));
+        }
 
-if(in_array("Periyodik Bakım", $_POST['hizmetler'])){
-    $islemtarihi = date("Y-m-d");
-    $periyot= $_POST['periyot'];
-    $query = $db->prepare("UPDATE musteriler SET mSonrakiBakim = :sonrakibakimtarihi WHERE mMusteriNo = :musterino");
-
-$insert = $query->execute(array(
-  "sonrakibakimtarihi" => date("Y-m-d", strtotime($islemtarihi . ' + '.$periyot.' month')),
-  "musterino" =>$musterino
-
-));
-}
 
 
     //     $izin_verilen_uzantilar = array("jpg", "jpeg", "png", "gif");
@@ -163,36 +219,42 @@ $insert = $query->execute(array(
     //          ':dosya_adi' => $dosya_adi,
     //          ':islemid' => $number
     //      ));
-    }
     
-    // }if ($insert) {
-    //     $last_id = $db->lastInsertId();
-    //       header("Location:../views/randevular.php?no=$musterino&yt=basarili");
-    //       exit();
+    
+    }
+    if ($insert) {
+        $durum = "2";
+        $query = $db->prepare("UPDATE randevular SET rDurum=:durum WHERE rNo=:id");
+        $query->bindParam(':durum', $durum);
+        $query->bindParam(':id', $randevuid);
+        $update = $query->execute();
+        $last_id = $db->lastInsertId();
+          header("Location:../views/randevular.php?no=$musterino&yt=basarili");
+          exit();
 
-    // } else {
-
-    //      header("Location:../views/randevular.php?no=$musterino&yt=basarisiz");
-    //      exit();
-    // }
-}
-
-
-if (isset($_POST['randevukapat'])) {
-    $randevuid = $_POST['randevuid'];
-    $query = $db->prepare("UPDATE randevular SET rDurum=:durum WHERE rNo=:id");
-    $query->bindParam(':durum', $durum);
-    $query->bindParam(':id', $randevuid);
-    $durum = "0";
-    $update = $query->execute();
-    if ($update) {
-        header("Location: ../views/randevular.php?no=$musterino&yt=basarili");
-        exit();
     } else {
-        header("Location: ../views/randevular.php?no=$musterino&yt=basarisiz");
-        exit();
+
+         header("Location:../views/randevular.php?no=$musterino&yt=basarisiz");
+         exit();
     }
 }
+
+
+// if (isset($_POST['randevukapat'])) {
+//     $randevuid = $_POST['randevuid'];
+//     $query = $db->prepare("UPDATE randevular SET rDurum=:durum WHERE rNo=:id");
+//     $query->bindParam(':durum', $durum);
+//     $query->bindParam(':id', $randevuid);
+//     $durum = "0";
+//     $update = $query->execute();
+//     if ($update) {
+//         header("Location: ../views/randevular.php?no=$musterino&yt=basarili");
+//         exit();
+//     } else {
+//         header("Location: ../views/randevular.php?no=$musterino&yt=basarisiz");
+//         exit();
+//     }
+// }
 if (isset($_POST['randevuata'])) {
     print_r($_POST);
     $randevuid = $_POST['randevuid'];

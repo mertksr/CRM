@@ -294,7 +294,7 @@
                                             </tr>
                                         </thead>
                                         <?php
-                                        $satissor = $db->prepare("SELECT * from satislar");
+                                        $satissor = $db->prepare("SELECT * from satislar ORDER BY sTarih DESC");
                                         $satissor->execute();
                                         $say = 0;
                                         while ($satiscek = $satissor->fetch(PDO::FETCH_ASSOC)) {
