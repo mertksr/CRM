@@ -193,13 +193,13 @@
                                             <thead>
                                                 <tr>
 
-                                                    <th>No</th>
-                                                    <th>Müşteri</th>
-                                                    <th>İşlem Zamanı</th>
-                                                    <th>İşlem Türü</th>
-                                                    <th>Tam Fiyat</th>
-                                                    <th>Not</th>
-                                                    <th>Detay</th>
+                                                    <th style="text-align:center;">No</th>
+                                                    <th style="text-align:center;">Müşteri</th>
+                                                    <th style="text-align:center;">İşlem Zamanı</th>
+                                                    <th style="text-align:center;">İşlem Türü</th>
+                                                    <th style="text-align:center;">Tam Fiyat</th>
+                                                    <th style="text-align:center;">Not</th>
+                                                    <th style="text-align:center;">Detay</th>
 
                                                 </tr>
                                             </thead>
@@ -228,16 +228,16 @@
                                                 ?>
 
                                                 <tr>
-                                                    <td><?= $say; ?></td>
-                                                    <td><?= $mustericek['mAdSoyad']?></td>
-                                                    <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
-                                                    <td><?= implode(", ", $islemturu);  ?></td>
+                                                    <td style="text-align:center;"><?= $say; ?></td>
+                                                    <td style="text-align:center;"><?= $mustericek['mAdSoyad']?></td>
+                                                    <td style="text-align:center;"><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
+                                                    <td style="text-align:center;"><?= implode(", ", $islemturu);  ?></td>
 
-                                                    <td><?= $alınanucretfrmt; ?> TL</td>
+                                                    <td style="text-align:center;"><?= $alınanucretfrmt; ?> TL</td>
 
-                                                    <td><?= $islemcek['islemNot']; ?> </td>
+                                                    <td style="text-align:center;"><?= $islemcek['islemNot']; ?> </td>
 
-                                                    <td style="max-width:20px;">
+                                                    <td style="max-width:20px;text-align:center;">
                                                         <div class="text-center">
                                                             <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $islemcek["islemId"]; ?>" class="btn btn-ozel mr-2 detay">
                                                                 <i class="fa-solid fa-circle-info"></i>

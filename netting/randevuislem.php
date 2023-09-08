@@ -119,26 +119,26 @@ if (isset($_POST['islemekle'])) {
 
     $randevuid = $_POST['randevuid'];
 
-         $num_of_digits = 6;
+    $num_of_digits = 6;
     $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
     $sql = "SELECT * FROM islemler WHERE islemNo = '$number'";
     $result = $db->query($sql);
-        
-             // Sonuç var mı yok mu kontrol et
+
+    // Sonuç var mı yok mu kontrol et
     if ($result->rowCount() > 0) {
         $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
     } else {
-        
+
         $hizmetler = $_POST['hizmetler'];
         $hizmetler = explode(",", $hizmetler);
         $hizmetler_str = serialize($hizmetler);
-        
+
         $yapilanislem = $_POST['urunler'];
         $yapilanislem = explode(",", $yapilanislem);
-         $yapilanislem_str = serialize($yapilanislem);
+        $yapilanislem_str = serialize($yapilanislem);
 
-       
-    $query = $db->prepare("INSERT INTO islemler SET
+
+        $query = $db->prepare("INSERT INTO islemler SET
       	islemNo = :islemno,
     	islemMusteriNo = :musterino,
         islemYapanKisi = :yapankisi,
@@ -151,76 +151,59 @@ if (isset($_POST['islemekle'])) {
 
                 ");
 
-    $insert = $query->execute(array(
-        "islemno" =>$number,
-        "musterino" =>$_POST['musterino'],
-        "yapankisi" =>  $_SESSION['kullanici'],
-        "ucret" =>  $_POST['tamfiyat'],
-        "indirimlifiyat" => $_POST['indirimlifiyat'],
-        "hizmetturu" => $hizmetler_str,
-        "kullanilanurunler" => $yapilanislem_str,
-        "islemnot" => $_POST['islemnotlari'],
-        "islemrandevu" => $_POST['randevuid']
+        $insert = $query->execute(array(
+            "islemno" => $number,
+            "musterino" => $_POST['musterino'],
+            "yapankisi" =>  $_SESSION['kullanici'],
+            "ucret" =>  $_POST['tamfiyat'],
+            "indirimlifiyat" => $_POST['indirimlifiyat'],
+            "hizmetturu" => $hizmetler_str,
+            "kullanilanurunler" => $yapilanislem_str,
+            "islemnot" => $_POST['islemnotlari'],
+            "islemrandevu" => $_POST['randevuid']
 
-    ));
-    
+        ));
+if($insert){
+    $query = $db->prepare("INSERT INTO servismuhasebe SET
+    sIslemNo = :islemno,
+    sMusteriNo = :musterino,
+    sTutar = :tutar,
+    sIndirim = :indirim,
+    sTahsilat = :tahsilat,
+    sVeresiye = :veresiye,
+    sTahsilatTipi = :tahsilattipi,
+    sTarih = :tarih
+
+          ");
+
+  $insert = $query->execute(array(
+      "islemno" => $number,
+      "musterino" => $_POST['musterino'],
+      "tutar" =>  $_POST['tamfiyat'],
+      "indirim" => $_POST['indirimlifiyat'],
+      "tahsilat" => $_POST['tahsilat'],
+      "veresiye" => $_POST['veresiye'],
+      "tahsilattipi" => $_POST['tahsilattipi'],
+      "tarih" => date("Y-m-d")
+
+  ));
+
+}
 
         $musterino = $_POST['musterino'];
         $bakim = "Bakım";
-        
+
         if (in_array($bakim, $hizmetler)) {
             // 'Bakım' seçildiyse işlemleri yap
             $islemtarihi = date("Y-m-d");
             $periyot = $_POST['periyot'];
             $query = $db->prepare("UPDATE musteriler SET mSonrakiBakim = :sonrakibakimtarihi WHERE mMusteriNo = :musterino");
-        
+
             $insert = $query->execute(array(
                 "sonrakibakimtarihi" => date("Y-m-d", strtotime($islemtarihi . ' + ' . $periyot . ' month')),
                 "musterino" => $musterino
             ));
         }
-
-
-
-    //     $izin_verilen_uzantilar = array("jpg", "jpeg", "png", "gif");
-    //     $dosya_sayisi = count($_FILES["resimler"]["name"]);
-    //     $dosya_adlari = array(); // resim dosya adlarını depolamak için bir dizi oluşturun
-    
-    //     for($i=0; $i < $dosya_sayisi; $i++) {
-    //         $basamak= 10;
-    //         $num = str_pad(mt_rand(1, pow(10, $basamak) - 1), $basamak, '0', STR_PAD_LEFT);
-    //         $dosya_adi = $num . $_FILES["resimler"]["name"][$i];
-    //         $gecici_dosya = $_FILES["resimler"]["tmp_name"][$i];
-    //         $hata = $_FILES["resimler"]["error"][$i];
-    
-    //         if($hata > 0 && $hata != 4) {
-    //             die("Resimler yüklenirken bir hata oluştu.");
-    //         }
-    //         else if($hata != 4) {
-    //             $dosya_uzantisi = pathinfo($dosya_adi, PATHINFO_EXTENSION);
-    
-    //             if(in_array($dosya_uzantisi, $izin_verilen_uzantilar)) {
-    //                 move_uploaded_file($gecici_dosya, "../public/uploads/" . $dosya_adi);
-    //                 echo $dosya_adi . " isimli dosya yüklendi.<br>";
-    //                 $dosya_adlari[] = $dosya_adi; // dosya adını dizide depolayın
-    //             }
-    //             else {
-    //                 die("Yalnızca JPG, JPEG, PNG ve GIF formatındaki dosyalar yüklenebilir.");
-    //             }
-    //         }
-    //     }
-    
-    //     veritabanına kaydetme işlemini gerçekleştirin
-    //  veritabanına bağlanmak için gerekli dosyayı çağırın
-    //  $stmt = $db->prepare("INSERT INTO dosyalar (dosyaAdi , dosyaIslemID) VALUES (:dosya_adi, :islemid)");
-
-    //  foreach($dosya_adlari as $dosya_adi) {
-    //      $stmt->execute(array(
-    //          ':dosya_adi' => $dosya_adi,
-    //          ':islemid' => $number
-    //      ));
-    
-    
     }
     if ($insert) {
         $durum = "2";
@@ -229,13 +212,12 @@ if (isset($_POST['islemekle'])) {
         $query->bindParam(':id', $randevuid);
         $update = $query->execute();
         $last_id = $db->lastInsertId();
-          header("Location:../views/randevular.php?no=$musterino&yt=basarili");
-          exit();
-
+        header("Location:../views/randevular.php?no=$musterino&yt=basarili");
+        exit();
     } else {
 
-         header("Location:../views/randevular.php?no=$musterino&yt=basarisiz");
-         exit();
+        header("Location:../views/randevular.php?no=$musterino&yt=basarisiz");
+        exit();
     }
 }
 
@@ -259,7 +241,7 @@ if (isset($_POST['randevuata'])) {
     print_r($_POST);
     $randevuid = $_POST['randevuid'];
     $personel = $_POST['randevupersonel'];
-    $query = $db->prepare("UPDATE randevular SET rPersonel=:personel WHERE rNo=:id");
+    $query = $db->prepare("UPDATE randevular SET rTeknisyen=:personel WHERE rNo=:id");
     $query->bindParam(':personel', $personel);
     $query->bindParam(':id', $randevuid);
 
@@ -271,7 +253,7 @@ if (isset($_POST['randevuata'])) {
         header("Location: ../views/randevular.php?yt=basarisiz");
         exit();
     }
- }
+}
 
 $randevuid = $_POST['randevuid'];
 $randevusor = $db->prepare("SELECT * FROM randevular WHERE rNo =:id");
@@ -281,8 +263,8 @@ $randevusor->execute(array(
 $randevucek = $randevusor->fetch(PDO::FETCH_ASSOC);
 $musterino = $randevucek['rMID'];
 if (isset($_POST['randevuertele'])) {
-$erteleay = $_POST['erteleay'];
-$erteletarih = $_POST['erteletarih'];
+    $erteleay = $_POST['erteleay'];
+    $erteletarih = $_POST['erteletarih'];
 
     if (!empty($erteleay) && is_numeric($erteleay)) {
         $tarih = $randevucek['rTarih'];
@@ -303,3 +285,133 @@ $erteletarih = $_POST['erteletarih'];
         exit();
     }
 }
+
+if (isset($_POST['islemeklepersonel'])) {
+    $randevuid = $_POST['randevuid'];
+    $num_of_digits = 6;
+    $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
+    $sql = "SELECT * FROM islemler WHERE islemNo = '$number'";
+    $result = $db->query($sql);
+
+    // Sonuç var mı yok mu kontrol et
+    if ($result->rowCount() > 0) {
+        $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
+    } else {
+        $hizmetler = $_POST['hizmetler'];
+        $hizmetler = explode(",", $hizmetler);
+        $hizmetler_str = serialize($hizmetler);
+
+        $yapilanislem = $_POST['urunler'];
+        $yapilanislem = explode(",", $yapilanislem);
+        $yapilanislem_str = serialize($yapilanislem);
+        //
+        $query = $db->prepare("INSERT INTO islemler SET
+      	islemNo = :islemno,
+    	islemMusteriNo = :musterino,
+        islemYapanKisi = :yapankisi,
+        islemUcret = :ucret,
+        islemIndirimliFiyat = :indirimlifiyat,
+        islemTuru = :hizmetturu,
+        islemKullanilanUrun = :kullanilanurunler,
+        islemNot = :islemnot,
+        islemRandevu = :islemrandevu
+                ");
+
+        $insert = $query->execute(array(
+            "islemno" => $number,
+            "musterino" => $_POST['musterino'],
+            "yapankisi" =>  $_SESSION['kullanici'],
+            "ucret" =>  $_POST['tamfiyat'],
+            "indirimlifiyat" => $_POST['indirimlifiyat'],
+            "hizmetturu" => $hizmetler_str,
+            "kullanilanurunler" => $yapilanislem_str,
+            "islemnot" => $_POST['islemnotlari'],
+            "islemrandevu" => $_POST['randevuid']
+        ));
+
+
+        $musterino = $_POST['musterino'];
+
+        if (in_array("Bakım", $hizmetler)) {
+            $islemtarihi = date("Y-m-d");
+            $periyot = $_POST['periyot'];
+            $query = $db->prepare("UPDATE musteriler SET mSonrakiBakim = :sonrakibakimtarihi WHERE mMusteriNo = :musterino");
+
+            $insert = $query->execute(array(
+                "sonrakibakimtarihi" => date("Y-m-d", strtotime($islemtarihi . ' + ' . $periyot . ' month')),
+                "musterino" => $musterino
+
+            ));
+        }
+
+    }
+    if ($insert) {
+        $durum = "2";
+        $query = $db->prepare("UPDATE randevular SET rDurum=:durum WHERE rNo=:id");
+        $query->bindParam(':durum', $durum);
+        $query->bindParam(':id', $randevuid);
+        $update = $query->execute();
+        $last_id = $db->lastInsertId();
+        header("Location:../views/personel/index.php?no=$musterino&yt=basarili");
+        exit();
+    } else {
+
+        header("Location:../views/personel/index.php?no=$musterino&yt=basarisiz");
+        exit();
+    }
+}
+
+
+if (isset($_POST['satiseklepersonel'])) {
+    $randevuid = $_POST['randevuid'];
+
+
+    $musterino = $_POST['musterino'];
+    $urunler = $_POST['satisurunler'];
+    $urunler = explode(",", $urunler);
+    $urunler_str = serialize($urunler);
+    $query = $db->prepare("INSERT INTO satislar SET
+     
+    	sMID = :musterino,
+        sUrun = :kullanilanurunler,
+        sGarantiSuresi = :garanti,
+        sGarantiBitis = :gbitis,
+        sTutar = :ucret,
+        sIndirimliTutar = :indirimlifiyat,
+        sReferans = :referans,
+        sNot = :notlar,
+        sRandevu = :randevu
+                ");
+
+    $insert = $query->execute(array(
+
+        "musterino" => $_POST['musterino'],
+        "kullanilanurunler" => $urunler_str,
+        "garanti" => $_POST['garanti'],
+        "gbitis" => date('Y-m-d', strtotime(' + ' . $_POST['garanti'] . ' years')),
+        "ucret" =>  $_POST['stamfiyat'],
+        "indirimlifiyat" => $_POST['sindirimlifiyat'],
+        "referans" => $_POST['referans'],
+        "notlar" => $_POST['notlar'],
+        "randevu" => $_POST['randevuid']
+    ));
+
+
+
+    if ($insert) {
+        $durum = "3";
+        $query = $db->prepare("UPDATE randevular SET rDurum=:durum WHERE rNo=:id");
+        $query->bindParam(':durum', $durum);
+        $query->bindParam(':id', $randevuid);
+        $update = $query->execute();
+        $last_id = $db->lastInsertId();
+        header("Location:../views/personel/index.php?no=$musterino&yt=basarili");
+        exit();
+    } else {
+
+        header("Location:../views/personel/index.php?no=$musterino&yt=basarisiz");
+        exit();
+    }
+}
+
+?>

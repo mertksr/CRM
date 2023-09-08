@@ -184,9 +184,13 @@
                                 ));
                                 $mcek = $msor->fetch(PDO::FETCH_ASSOC);
 
-                                ?>
+                              
 
-                                <div class="statbox widget box box-shadow"> <a href="musteriler.php" class="btn btn-dark">Geri Dön</a><br><br>
+                                ?>
+<h4 style='color:red'>Bütün işlemler gösteriliyor </h4>
+
+                              
+                                <!-- <div class="statbox widget box box-shadow"> <a href="musteriler.php" class="btn btn-dark">Geri Dön</a><br><br> -->
                                     <div>
 
                                         <h4 style="float:left;"><?= $mcek['mAdSoyad'] . ' / ' . $mcek['mBolge']; ?></h4>
@@ -214,7 +218,8 @@
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $islemsor = $db->prepare("SELECT * from islemler WHERE islemMusteriNo = :islemMusteriNo ORDER BY islemTarihi DESC");
+                                                                                        $islemsor = $db->prepare("SELECT * from islemler WHERE islemMusteriNo = :islemMusteriNo ORDER BY islemTarihi DESC");
+
                                             $islemsor->execute(array(
                                                 'islemMusteriNo' => $_GET['no']
                                             ));
@@ -254,14 +259,41 @@
                                 </div>
                             </div>
 
-                        <?php } else { ?>
+                        <?php } else { 
+                            /*********  Randevu zamanı değişkenini değiştiren kod altta olunca çalışmadığı için burası yukarıda ********/
+                            $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
+                            $randevuzamani = "<h4 style='color:red'>Bugün yapılan işlemler gösteriliyor </h4>";
+                                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                    if (isset($_POST['buton'])) {
+                                        if ($_POST['buton'] == 'butunservis') {
+                                            $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
+                                            $randevuzamani = "<h4 style='color:red'></h4>";
+                                        } elseif ($_POST['buton'] == 'bugununservisi') {
+                                            $bugun = date("Y-m-d");
+                                            $islemsor = $db->prepare("SELECT * from islemler WHERE DATE(islemTarihi) ='$bugun'ORDER BY islemTarihi DESC");
+    
+                                            $randevuzamani = "<h4 style='color:red'>Bugün yapılan işlemler gösteriliyor </h4>";
+                                        }
+                                    }
+                                }
+                                /***********************************/
+                                ?>
+                                <?php
+                                echo $randevuzamani; ?>
+                                <form method='POST'>
+                                    <button class="btn btn-primary" type="submit" name="buton" value="bugununservisi">Bugün Yapılan İşlemler</button>
+                                    <button class="btn btn-primary" type="submit" name="buton" value="butunservis">Bütün İşlemler</button>
+
+
+                                </form>
+                                <br><br>
                             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
 
 
                                 <div class="statbox widget box box-shadow">
-                                    <div style="display:flex;justify-content:space-between;">
+                                    <!-- <div style="display:flex;justify-content:space-between;">
                                         <a href="musteriler.php" class="btn special1" style="color:#EFF5F5;float:left;max-height:37px;">Geri Dön</a><br><br>
-                                    </div>
+                                    </div> -->
 
                                     <div class="widget-content widget-content-area">
 
@@ -282,7 +314,6 @@
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
                                             $islemsor->execute();
                                             $say = 0;
                                             while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
