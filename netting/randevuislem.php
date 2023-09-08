@@ -163,8 +163,23 @@ if (isset($_POST['islemekle'])) {
             "islemrandevu" => $_POST['randevuid']
 
         ));
-if($insert){
-    $query = $db->prepare("INSERT INTO servismuhasebe SET
+        if (!empty($_POST['veresiye'])) {
+            $query = $db->prepare("INSERT INTO veresiye SET
+            vİslemNo = :islemno,
+            vMusteriNo = :musterino,
+            vTutar = :veresiye
+        
+                  ");
+
+            $insert = $query->execute(array(
+                "islemno" => $number,
+                "musterino" => $_POST['musterino'],
+                "veresiye" => $_POST['veresiye']
+
+            ));
+        }
+        if ($insert) {
+            $query = $db->prepare("INSERT INTO servismuhasebe SET
     sIslemNo = :islemno,
     sMusteriNo = :musterino,
     sTutar = :tutar,
@@ -176,19 +191,18 @@ if($insert){
 
           ");
 
-  $insert = $query->execute(array(
-      "islemno" => $number,
-      "musterino" => $_POST['musterino'],
-      "tutar" =>  $_POST['tamfiyat'],
-      "indirim" => $_POST['indirimlifiyat'],
-      "tahsilat" => $_POST['tahsilat'],
-      "veresiye" => $_POST['veresiye'],
-      "tahsilattipi" => $_POST['tahsilattipi'],
-      "tarih" => date("Y-m-d")
+            $insert = $query->execute(array(
+                "islemno" => $number,
+                "musterino" => $_POST['musterino'],
+                "tutar" =>  $_POST['tamfiyat'],
+                "indirim" => $_POST['indirimlifiyat'],
+                "tahsilat" => $_POST['tahsilat'],
+                "veresiye" => $_POST['veresiye'],
+                "tahsilattipi" => $_POST['tahsilattipi'],
+                "tarih" => date("Y-m-d")
 
-  ));
-
-}
+            ));
+        }
 
         $musterino = $_POST['musterino'];
         $bakim = "Bakım";
@@ -329,7 +343,46 @@ if (isset($_POST['islemeklepersonel'])) {
             "islemrandevu" => $_POST['randevuid']
         ));
 
+        if (!empty($_POST['veresiye'])) {
+            $query = $db->prepare("INSERT INTO veresiye SET
+            vİslemNo = :islemno,
+            vMusteriNo = :musterino,
+            vTutar = :veresiye
+        
+                  ");
 
+            $insert = $query->execute(array(
+                "islemno" => $number,
+                "musterino" => $_POST['musterino'],
+                "veresiye" => $_POST['veresiye']
+
+            ));
+        }
+        if ($insert) {
+            $query = $db->prepare("INSERT INTO servismuhasebe SET
+                 sIslemNo = :islemno,
+                 sMusteriNo = :musterino,
+                 sTutar = :tutar,
+                 sIndirim = :indirim,
+                 sTahsilat = :tahsilat,
+                 sVeresiye = :veresiye,
+                 sTahsilatTipi = :tahsilattipi,
+                 sTarih = :tarih
+
+          ");
+
+            $insert = $query->execute(array(
+                "islemno" => $number,
+                "musterino" => $_POST['musterino'],
+                "tutar" =>  $_POST['tamfiyat'],
+                "indirim" => $_POST['indirimlifiyat'],
+                "tahsilat" => $_POST['tahsilat'],
+                "veresiye" => $_POST['veresiye'],
+                "tahsilattipi" => $_POST['tahsilattipi'],
+                "tarih" => date("Y-m-d")
+
+            ));
+        }
         $musterino = $_POST['musterino'];
 
         if (in_array("Bakım", $hizmetler)) {
@@ -343,7 +396,6 @@ if (isset($_POST['islemeklepersonel'])) {
 
             ));
         }
-
     }
     if ($insert) {
         $durum = "2";
@@ -413,5 +465,3 @@ if (isset($_POST['satiseklepersonel'])) {
         exit();
     }
 }
-
-?>

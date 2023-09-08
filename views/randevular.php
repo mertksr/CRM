@@ -632,24 +632,24 @@
                                                                             </div>
                                                                             <div class="col-6">
                                                                                 <label for="inputAddress2" class="form-label">Tahsilat</label>
-                                                                                <input type="text" class="form-control" name="tahsilat"  oninput="veresiyeHesapla(<?= $randevucek['rNo']; ?>)" id="tahsilat<?= $randevucek['rNo']; ?>">
+                                                                                <input type="text" class="form-control" name="tahsilat" oninput="veresiyeHesapla(<?= $randevucek['rNo']; ?>)" id="tahsilat<?= $randevucek['rNo']; ?>">
                                                                             </div>
                                                                             <div class="col-6">
                                                                                 <label for="inputAddress2" class="form-label">Veresiye</label>
                                                                                 <input type="text" class="form-control" name="veresiye" readonly style="color:crimson;" id="veresiye<?= $randevucek['rNo']; ?>">
                                                                             </div>
-                                                                            
-                                                                        <div class="col-12">
-                                                                            <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
-                                                                            <select id="defaultInputState" name="tahsilattipi" class="form-select">
-                                                                                <option selected="">Seç</option>
-                                                                                <option value="nakit">Nakit</option>
-                                                                                <option value="kredikarti">Kredi Kartı Pos</option>
-                                                                                <option value="eft">EFT</option>
-                                                                                <option value="mailorder">Mail Order</option>
 
-                                                                            </select>
-                                                                        </div>
+                                                                            <div class="col-12">
+                                                                                <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
+                                                                                <select id="defaultInputState" name="tahsilattipi" class="form-select">
+                                                                                    <option selected="">Seç</option>
+                                                                                    <option value="nakit">Nakit</option>
+                                                                                    <option value="kredikarti">Kredi Kartı Pos</option>
+                                                                                    <option value="eft">EFT</option>
+                                                                                    <option value="mailorder">Mail Order</option>
+
+                                                                                </select>
+                                                                            </div>
                                                                             <div class="col-12">
                                                                                 <label for="inputAddress2" class="form-label">Notlar</label>
                                                                                 <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
@@ -905,14 +905,14 @@
                     // Toplam fiyatı ve diğer değerleri güncelleyin
                     var randevuid = $(that).attr("data-id");
                     var indiriminput = "cost" + randevuid;
-                    var tahsilat = "tahsilat" + randevuid;
                     var urunlerinput = "urunlerinput" + randevuid;
                     var itamfiyat = "itamfiyat" + randevuid;
                     var iindirimtutari = "iindirimtutari" + randevuid;
-
+                    var tahsilat = "tahsilat" + randevuid;
+                    $("#" + tahsilat).val(total);
                     $("#" + urunlerinput).val(selectedString);
                     $("#" + indiriminput).val(total);
-                    $("#" + tahsilat).val(total);
+
 
                     $("#" + itamfiyat).val(total);
                     $("#" + iindirimtutari).val("0");
@@ -1061,13 +1061,14 @@
 
             }
         });
+
         function veresiyeHesapla(randevuid) {
             // Tahsilat miktarını al
             var costid = "cost" + randevuid;
-var costval = document.getElementById(costid).value;
+            var costval = document.getElementById(costid).value;
 
             var tahsilatMiktarı = parseFloat(document.getElementById('tahsilat' + randevuid).value);
-            
+
             // Eğer tahsilat miktarı bir sayı değilse veya boşsa, borcu sıfırla
             if (isNaN(tahsilatMiktarı) || tahsilatMiktarı === "") {
                 document.getElementById('veresiye' + randevuid).value = 0;
