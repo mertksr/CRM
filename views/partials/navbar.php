@@ -124,7 +124,7 @@ if (empty($_SESSION['kullanici'])) {
                 </a>
             </li>
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'veresiye') {  echo "active"; } ?>">
-                <a href="urunler.php" class="dropdown-toggle">                    
+                <a href="veresiye.php" class="dropdown-toggle">                    
                     <div class="">                        
                         <span>Veresiye</span>
                     </div>

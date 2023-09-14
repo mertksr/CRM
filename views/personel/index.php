@@ -594,17 +594,6 @@
                                                                                     <input type="text" class="form-control" name="veresiye" readonly style="color:crimson;" id="veresiye<?= $randevucek['rNo']; ?>">
                                                                                 </div>
 
-                                                                                <div class="col-12">
-                                                                                    <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
-                                                                                    <select id="defaultInputState" name="tahsilattipi" class="form-select">
-                                                                                        <option selected="">Seç</option>
-                                                                                        <option value="nakit">Nakit</option>
-                                                                                        <option value="kredikarti">Kredi Kartı Pos</option>
-                                                                                        <option value="eft">EFT</option>
-                                                                                        <option value="mailorder">Mail Order</option>
-
-                                                                                    </select>
-                                                                                </div>
           
                                                                                 <div class="col-12">
                                                                                     <label for="inputAddress2" class="form-label">Notlar</label>

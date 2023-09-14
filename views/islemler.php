@@ -210,7 +210,7 @@
                                                 <th>Yapan Kişi</th>
                                                 <th>İşlem Zamanı</th>
                                                 <th>İşlem Türü</th>
-                                                <th>Tam Fiyat</th>
+                                                <th>İşlem Ücreti</th>
                                                 <th>Not</th>
                                                 <th>Detay</th>
 
@@ -266,7 +266,7 @@
                                 if (isset($_POST['buton'])) {
                                     if ($_POST['buton'] == 'butunservis') {
                                         $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
-                                        $randevuzamani = "<h4 style='color:red'></h4>";
+                                        $randevuzamani = "<h4 style='color:red'>Bütün işlemler gösteriliyor</h4>";
                                     } elseif ($_POST['buton'] == 'bugununservisi') {
                                         $bugun = date("Y-m-d");
                                         $islemsor = $db->prepare("SELECT * from islemler WHERE DATE(islemTarihi) ='$bugun'ORDER BY islemTarihi DESC");
@@ -306,7 +306,7 @@
                                             <th>Yapan Kişi</th>
                                             <th>İşlem Zamanı</th>
                                             <th>İşlem Türü</th>
-                                            <th>Tam Fiyat</th>
+                                            <th>İşlem Ücreti</th>
                                             <th>Not</th>
                                             <th>Detay</th>
 
@@ -438,17 +438,7 @@
                                 <input type="text" class="form-control" name="veresiye" readonly style="color:crimson;" id="veresiye">
                             </div>
 
-                            <div class="col-12">
-                                <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
-                                <select id="defaultInputState" name="tahsilattipi" class="form-select">
-                                    <option selected="">Seç</option>
-                                    <option value="nakit">Nakit</option>
-                                    <option value="kredikarti">Kredi Kartı Pos</option>
-                                    <option value="eft">EFT</option>
-                                    <option value="mailorder">Mail Order</option>
 
-                                </select>
-                            </div>
                             <div class="col-12">
                                 <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
                                 <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
@@ -463,6 +453,7 @@
                                 <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
                             </div>
 
+                            <input type="hidden" form="islemekleform" name="musterino" value="<?= $mcek['mMusteriNo']; ?>">
 
                             <input type="hidden" form="islemekleform" name="periyot" value="<?= $mcek['mPeriyot']; ?>">
                             <input type="hidden" form="islemekleform" name="tamfiyat" id="tamfiyat">

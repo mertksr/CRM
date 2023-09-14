@@ -72,7 +72,76 @@
                 <div class="middle-content container-xxl p-0 mt-4">
 
                     <div class="row">
+                        <?php
+                        $servisToplam = 0;
+                        $satisToplam = 0;
+                        $indirimToplam = 0;
+                        $tutarToplam = 0;
+                        $veresiyeToplam = 0;
+                        $kadirToplam = 0;
+                        $bedirhanToplam = 0;
+                        $mehmetToplam = 0;
 
+                        $bugun = date('Y-m-d');
+                        $servismuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih AND sTuru LIKE '%Bakım%'");
+                        $servismuhasebesor->execute(array('tarih' => $bugun));
+                        while ($servismuhasebecek = $servismuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $ucret = $servismuhasebecek['sTutar'];
+                            $servisToplam += $ucret;
+                        }
+                        $satismuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih AND sTuru LIKE '%Cihaz Satışı%'");
+                        $satismuhasebesor->execute(array('tarih' => $bugun));
+                        while ($satismuhasebecek = $satismuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $ucret = $satismuhasebecek['sTutar'];
+                            $satisToplam += $ucret;
+                        }
+                        $indirimmuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih");
+                        $indirimmuhasebesor->execute(array('tarih' => $bugun));
+                        while ($indirimmuhasebecek = $indirimmuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $ucret = $indirimmuhasebecek['sIndirim'];
+                            $indirimToplam += $ucret;
+                        }
+                        $indirimmuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih");
+                        $indirimmuhasebesor->execute(array('tarih' => $bugun));
+                        while ($indirimmuhasebecek = $indirimmuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $ucret = $indirimmuhasebecek['sTutar'];
+                            $tutarToplam += $ucret;
+                        }
+                        $veresiyemuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih");
+                        $veresiyemuhasebesor->execute(array('tarih' => $bugun));
+                        while ($veresiyemuhasebecek = $veresiyemuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $ucret = $veresiyemuhasebecek['sVeresiye'];
+                            $veresiyeToplam += $ucret;
+                        }
+                        $kadirmuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih AND sPersonel = :personel");
+                        $kadirmuhasebesor->execute(array('tarih' => $bugun, 'personel' => 'kadir'));
+                    
+                        while ($kadirmuhasebecek = $kadirmuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $ucret = $kadirmuhasebecek['sTutar'];
+                            $kadirToplam += $ucret;
+                        }
+                        $bedirhanmuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih AND sPersonel = :personel");
+                        $bedirhanmuhasebesor->execute(array('tarih' => $bugun, 'personel' => 'bedirhan'));
+                        while ($bedirhanmuhasebecek = $bedirhanmuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $ucret = $bedirhanmuhasebecek['sTutar'];
+                            $bedirhanToplam += $ucret;
+                        }
+                        $mehmetmuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih AND sPersonel = :personel");
+                        $mehmetmuhasebesor->execute(array('tarih' => $bugun, 'personel' => 'mehmet'));
+                    
+                        while ($mehmetmuhasebecek = $mehmetmuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $ucret = $mehmetmuhasebecek['sTutar'];
+                            $mehmetToplam += $ucret;
+                        }
+                        ?>
 
 
                         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6 p-2">
@@ -85,7 +154,7 @@
                                     </div>
                                     <div class="w-content">
                                         <div class="w-info">
-                                            <p class="value" style="color:limegreen;">$ 45,141 </p>
+                                            <p class="value" style="color:limegreen;"><?= $servisToplam; ?> TL</p>
                                         </div>
 
                                     </div>
@@ -103,7 +172,7 @@
                                     </div>
                                     <div class="w-content">
                                         <div class="w-info">
-                                            <p class="value" style="color:limegreen;">$ 45,141 </p>
+                                            <p class="value" style="color:limegreen;"><?= $satisToplam; ?> TL </p>
                                         </div>
 
                                     </div>
@@ -120,7 +189,7 @@
                                     </div>
                                     <div class="w-content">
                                         <div class="w-info">
-                                            <p class="value" style="color:crimson;">$ 45,141 </p>
+                                            <p class="value" style="color:crimson;"><?= $tutarToplam - $indirimToplam; ?> TL </p>
                                         </div>
 
                                     </div>
@@ -137,7 +206,7 @@
                                     </div>
                                     <div class="w-content">
                                         <div class="w-info">
-                                            <p class="value" style="color:crimson;">$ 45,141 </p>
+                                            <p class="value" style="color:crimson;"><?= $veresiyeToplam; ?> TL </p>
                                         </div>
 
                                     </div>
@@ -155,7 +224,7 @@
                                     </div>
                                     <div class="w-content">
                                         <div class="w-info">
-                                            <p class="value" style="color:limegreen;">$ 45,141 </p>
+                                            <p class="value" style="color:limegreen;"><?= $bedirhanToplam; ?> TL </p>
                                         </div>
 
                                     </div>
@@ -172,7 +241,7 @@
                                     </div>
                                     <div class="w-content">
                                         <div class="w-info">
-                                            <p class="value" style="color:limegreen;">$ 45,141 </p>
+                                            <p class="value" style="color:limegreen;"><?= $kadirToplam; ?> TL </p>
                                         </div>
 
                                     </div>
@@ -189,7 +258,7 @@
                                     </div>
                                     <div class="w-content">
                                         <div class="w-info">
-                                            <p class="value" style="color:limegreen;">$ 45,141 </p>
+                                            <p class="value" style="color:limegreen;"><?= $mehmetToplam; ?> TL </p>
                                         </div>
 
                                     </div>
@@ -215,36 +284,86 @@
                             </div>
                         </div>
 
+
                         <div class="widget-content widget-content-area col-6">
 
                             <div class="table-responsive">
-                                <h4>Aylık Kazanç</h4>
+                                <h4>Günlük Özet</h4>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Date</th>
-                                            <th class="text-center" scope="col">Sales</th>
-                                            <th class="text-center" scope="col">Status</th>
+                                            <th class="text-center" scope="col">Tarih</th>
+                                            <th class="text-center" scope="col">Kazanç</th>
+                                            <th class="text-center" scope="col">Yapılan İndirim</th>
+                                            <th class="text-center" scope="col">Veresiye</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Shaun Park</td>
-                                            <td>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
-                                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                                </svg>
-                                                <span class="table-inner-text">25 Apr</span>
-                                            </td>
-                                            <td class="text-center">320</td>
-                                            <td class="text-center">
-                                                <span class="badge badge-light-success">Approved</span>
-                                            </td>
-                                        </tr>
+                                    <?php
+setlocale(LC_TIME, 'tr_TR.utf8'); // Türkçe dil ayarını yapın
+
+try {
+    try {
+        $db = new PDO("mysql:host=localhost;dbname=pnr;charset=utf8", "root", "");
+       } catch (PDOException $e) {
+        print $e->getMessage();
+       }
+    $bugun = date("Y-m-d"); // Bugünkü tarihi alın
+    $sonYediGunTarihi = date("Y-m-d", strtotime("-7 days")); // Bugünden 7 gün önceki tarihi alın
+    
+    // Her gün için ayrı satırlar oluşturmak için döngü kullanın
+    $currentDate = strtotime($sonYediGunTarihi);
+    $gunler = array();
+    while ($currentDate <= strtotime($bugun)) {
+        $currentDateStr = date("Y-m-d", $currentDate);
+        $gunler[] = $currentDateStr; // Günlük tarihleri bir diziye ekleyin
+        $currentDate = strtotime("+1 day", $currentDate);
+    }
+    
+    // Tarihleri ters sıralayın
+    $tersSiralamaGunler = array_reverse($gunler);
+    
+    // Her bir tarih için verileri çekin ve tabloya ekleyin
+    foreach ($tersSiralamaGunler as $currentDateStr) {
+        // Verileri çekmek için SQL sorgusu
+        $sql = "SELECT sTarih, sTutar, sIndirim, sVeresiye FROM servismuhasebe WHERE sTarih = :tarih";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":tarih", $currentDateStr);
+        $stmt->execute();
+        
+        // Günlük kazanç, indirim ve veresiye miktarlarını hesaplayın
+        $gunlukKazanc = 0;
+        $gunlukIndirim = 0;
+        $gunlukVeresiye = 0;
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $tutar = $row['sTutar'];
+            $indirim = $row['sIndirim'];
+            $veresiye = $row['sVeresiye'];
+            
+            $gunlukKazanc = is_numeric($tutar) ? $tutar : 0;
+            $indirim = is_numeric($indirim) ? $indirim : 0;
+            $gunlukIndirim = $gunlukKazanc - $indirim;
+            $gunlukVeresiye = is_numeric($veresiye) ? $veresiye : 0;
+        }
+        
+        // Günlük verileri tablo içinde gösterin
+
+        echo "<tr>";
+        echo "<td class='text-center'>" . strftime('%d.%m.%Y', strtotime($currentDateStr)) . "</td>";
+        echo "<td class='text-center' style='color:limegreen;'>" . number_format($gunlukKazanc, 2, ',', '.') . " TL</td>";
+        echo "<td class='text-center' style='color:crimson;'>" . number_format($gunlukIndirim, 2, ',', '.') . " TL</td>";
+        echo "<td class='text-center' style='color:crimson;'>" . number_format($gunlukVeresiye, 2, ',', '.') . " TL</td>";
+        echo "</tr>";
+    }
+    
+    // Veritabanı bağlantısını kapatın
+    $db = null;
+} catch (PDOException $e) {
+    echo "Hata: " . $e->getMessage();
+}
+?>
+
                                         
                                     </tbody>
                                 </table>
@@ -253,41 +372,95 @@
                         <div class="widget-content widget-content-area col-6">
 
 <div class="table-responsive">
-    <h4>Günlük Kazanç</h4>
+    <h4>Aylık Özet</h4>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Date</th>
-                <th class="text-center" scope="col">Sales</th>
-                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">Tarih</th>
+                <th class="text-center" scope="col">Kazanç</th>
+                <th class="text-center" scope="col">Yapılan İndirim</th>
+                <th class="text-center" scope="col">Veresiye</th>
             </tr>
         </thead>
         <tbody>
-           
-            <tr>
-                <td>Xavier</td>
-                <td>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    <span class="table-inner-text">18 May</span>
-                </td>
-                <td class="text-center">784</td>
-                <td class="text-center">
-                    <span class="badge badge-light-info">In Progress</span>
-                </td>
-            </tr>
+
+            
+            <?php
+$suAnkiYil = date("Y");
+$yilbaslangici = "$suAnkiYil-01-01";
+
+try {
+    try {
+        $db = new PDO("mysql:host=localhost;dbname=pnr;charset=utf8", "root", "");
+       } catch (PDOException $e) {
+        print $e->getMessage();
+       }
+    $sql = "SELECT sTarih, sTutar, sIndirim, sVeresiye FROM servismuhasebe WHERE sTarih >= :yilbaslangici";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":yilbaslangici", $yilbaslangici);
+    $stmt->execute();
+    
+    // Aylara göre kazançları, indirimleri ve veresiye miktarlarını toplamak için diziler oluşturun
+    $aylik_kazanc = array();
+    $aylik_indirim = array();
+    $aylik_veresiye = array();
+    
+
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $tarih = $row['sTarih'];
+        $tutar = $row['sTutar'];
+        $indirim = $row['sIndirim'];
+        $veresiye = $row['sVeresiye'];
+        setlocale(LC_TIME, 'tr_TR.utf8');
+        // Tarihten ayı ayıklayın
+        $ay = date("Y-m", strtotime($tarih));
+        $ay = strftime('%B', strtotime($tarih)); // Türkçe ay adı
+
+        // Değişkenleri sayıya dönüştürün veya sıfır (0) olarak ayarlayın
+        $tutar = is_numeric($tutar) ? $tutar : 0;
+        $indirim = is_numeric($indirim) ? $indirim : 0;
+        $veresiye = is_numeric($veresiye) ? $veresiye : 0;
+    
+        // Ayı anahtar olarak kullanarak kazancı, indirimi ve veresiye miktarını toplayın
+        if (!isset($aylik_kazanc[$ay])) {
+            $aylik_kazanc[$ay] = 0;
+            $aylik_indirim[$ay] = 0;
+            $aylik_veresiye[$ay] = 0;
+        }
+        $aylik_kazanc[$ay] += $tutar;
+        $aylik_indirim[$ay] += $indirim;
+        $aylik_veresiye[$ay] += $veresiye;
+    }
+    
+    // Ay ay kazançları, indirimleri ve veresiye miktarlarını yazdırın veya işleyin
+    foreach ($aylik_kazanc as $ay => $kazanc) {
+        $indirim = $kazanc - $aylik_indirim[$ay];
+        $toplam_indirim = $indirim;
+        $toplam_veresiye = $aylik_veresiye[$ay];
+        
+        echo "<tr><td class='text-center'>$ay</td>";
+        echo "<td class='text-center' style='color:limegreen;'>$kazanc TL</td>";
+        echo "<td class='text-center' style='color:crimson;'>$toplam_indirim TL</td>";
+        echo "<td class='text-center' style='color:crimson;'>$toplam_veresiye TL</td></tr>";
+    }
+    
+    // Veritabanı bağlantısını kapatın
+    $db = null;
+} catch (PDOException $e) {
+    echo "Hata: " . $e->getMessage();
+}
+?>
+
+            
         </tbody>
     </table>
 </div>
 </div>
+
+
+
                     </div>
-
-
                 </div>
             </div>
 

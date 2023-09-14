@@ -33,13 +33,12 @@
     <link rel="stylesheet" type="text/css" href="../public/src/fontawesome/all.css">
     <script src="../public/src/fontawesome/all.js"></script>
     <style>
-
-
         .contact-modal {
             background-color: #EEEEEE !important;
             color: #14274E !important;
             cursor: default !important;
         }
+
         .modal-content {
             background: whitesmoke;
         }
@@ -184,18 +183,18 @@
                 <div class="middle-content container-xxl p-0 mt-4">
 
                     <div class="row">
-                               <?php
-                               if (isset($_GET['no'])) {
-                                $msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mno");
-                                $msor->execute(array(
-                                    'mno' => $_GET['no']
-                                ));
-                                $mcek = $msor->fetch(PDO::FETCH_ASSOC);
-                            }
+                        <?php
+                        if (isset($_GET['no'])) {
+                            $msor = $db->prepare("SELECT * from musteriler WHERE mMusteriNo = :mno");
+                            $msor->execute(array(
+                                'mno' => $_GET['no']
+                            ));
+                            $mcek = $msor->fetch(PDO::FETCH_ASSOC);
+                        }
 
-                                ?>
+                        ?>
                         <?php if (isset($_GET['no'])) { ?> <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
- 
+
                                 <div class="statbox widget box box-shadow">
 
                                     <h4 style="float:left;"><?= $mcek['mAdSoyad'] . ' / ' . $mcek['mBolge']; ?></h4>
@@ -253,15 +252,15 @@
 
 
 
-                                                
-                                                <td style="max-width:20px;">
-                                                    <div class="text-center">
-                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel mr-2 detay">
-                                                            <i class="fa-solid fa-address-book"></i>
-                                                        </button>
-                                                    </div>
 
-                                                </td>
+                                                    <td style="max-width:20px;">
+                                                        <div class="text-center">
+                                                            <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel mr-2 detay">
+                                                                <i class="fa-solid fa-address-book"></i>
+                                                            </button>
+                                                        </div>
+
+                                                    </td>
 
 
                                                 </tr>
@@ -327,7 +326,7 @@
                                                 <td><?= date("d.m.Y", strtotime($satiscek['sGarantiBitis'])); ?></td>
 
 
-                                                
+
                                                 <td style="max-width:20px;">
                                                     <div class="text-center">
                                                         <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel mr-2 detay">
@@ -386,9 +385,17 @@
                                 <label for="inputAddress" class="form-label">Ücret</label>
 
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="islemtutari" name="islemucreti" readonly style="color:#505463;">
+                                    <input type="text" class="form-control" id="islemtutari" name="islemucreti" style="color:#505463;">
                                     <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
                                 </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="inputAddress2" class="form-label">Tahsilat</label>
+                                <input type="text" class="form-control" name="tahsilat" oninput="veresiyeHesapla()" id="tahsilat">
+                            </div>
+                            <div class="col-6">
+                                <label for="inputAddress2" class="form-label">Veresiye</label>
+                                <input type="text" class="form-control" name="veresiye" readonly style="color:crimson;" id="veresiye">
                             </div>
 
                             <div class="col-6">
@@ -434,16 +441,16 @@
             </div>
         </div>
         <div id="satisDetayModal" class="modal fade">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;">Satış Bilgisi</h4>
-                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;">Satış Bilgisi</h4>
+                        <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body row" id="musteridetaybody"></div>
                 </div>
-                <div class="modal-body row" id="musteridetaybody"></div>
             </div>
         </div>
-    </div>
         <!--  BEGIN FOOTER  -->
         <div class="footer-wrapper">
             <div class="footer-section f-section-1">
@@ -481,81 +488,103 @@
             });
         });
 
-            $("#choices-multiple-remove-button").on("change", function() {
-                var selectedValues = $("#choices-multiple-remove-button").val();
-                var selectedString = selectedValues.join(",");
+        $("#choices-multiple-remove-button").on("change", function() {
+            var selectedValues = $("#choices-multiple-remove-button").val();
+            var selectedString = selectedValues.join(",");
+
+            $.ajax({
+                url: "../netting/urunlericagir.php",
+                method: "POST",
+                data: {
+                    products: selectedString
+                }
+            }).done(function(response) {
+                // AJAX isteği tamamlandığında, fiyatları alın
+                var prices = JSON.parse(response);
+                // Toplam fiyatı hesaplayın
+                var total = 0;
+                for (var i = 0; i < prices.length; i++) {
+                    total += parseFloat(prices[i]);
+                }
+
+                $("#tahsilat").val(total);
+                $("#tamfiyat").val(total);
+                $("#indirimtutari").val("0");
+                $("#islemtutari").val($("#tamfiyat").val());
+            });
+
+        });
+        
+        const islemUcretiInput = document.getElementById('islemtutari');
+        const tahsilatInput = document.getElementById('tahsilat');
+        islemUcretiInput.addEventListener('input', function() {
+            // Ücreti alın ve tahsilat inputuna yazın
+            tahsilatInput.value = islemUcretiInput.value;
+        });
+
+
+        var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+            removeItemButton: true
+            // searchResultLimit: 5,
+            // renderChoiceLimit: 8
+        });
+
+
+        $("#makediscount").click(function() {
+            var fiyat = $("#islemtutari").val();
+            if (fiyat == "0" || fiyat == "" || fiyat == null) {
+                alert("Ürün seçmeden indirim yapamazsınız!");
+                return false;
+            } else {
+                // $("#makediscount").off("click"); 
+                $("#makediscount").removeClass('btn-outline-primary');
+                $("#makediscount").addClass('btn-outline-danger');
 
                 $.ajax({
-                    url: "../netting/urunlericagir.php",
-                    method: "POST",
-                    data: {
-                        products: selectedString
-                    }
-                }).done(function(response) {
-                    // AJAX isteği tamamlandığında, fiyatları alın
-                    var prices = JSON.parse(response);
-                    // Toplam fiyatı hesaplayın
-                    var total = 0;
-                    for (var i = 0; i < prices.length; i++) {
-                        total += parseFloat(prices[i]);
+                    url: "../netting/ayarcek.php",
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function(data) {
+                        var fiyat = parseFloat($("#islemtutari").val());
+                        var basamak = fiyat.toString().length;
+                        var indirim_tutari = fiyat * 0.1;
+                        var yeni_fiyat = fiyat - indirim_tutari;
+                        var roundedPrice;
+                        if (basamak == 4 || basamak == 5) {
+                            roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                            if (yeni_fiyat - roundedPrice >= 50) {
+                                roundedPrice += 100;
+                            }
+                        } else if (basamak == 3 || basamak == 2) {
+                            roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                        }
+                        $("#tahsilat").val(roundedPrice);
+
+                        $("#islemtutari").val(roundedPrice);
+                        $("#indirimtutari").val(roundedPrice);
                     }
 
-
-                    $("#tamfiyat").val(total);
-                    $("#indirimtutari").val("0");
-                    $("#islemtutari").val($("#tamfiyat").val());
                 });
 
-            });
+            }
+        });
 
+        function veresiyeHesapla() {
+            // Tahsilat miktarını al
+            var costid = "islemtutari";
+            var costval = document.getElementById(costid).value;
 
+            var tahsilatMiktarı = parseFloat(document.getElementById('tahsilat').value);
 
-            var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-                removeItemButton: true
-                // searchResultLimit: 5,
-                // renderChoiceLimit: 8
-            });
-
-
-            $("#makediscount").click(function() {
-                var fiyat = $("#islemtutari").val();
-                if (fiyat == "0" || fiyat == "" || fiyat == null) {
-                    alert("Ürün seçmeden indirim yapamazsınız!");
-                    return false;
-                } else {
-                    // $("#makediscount").off("click"); 
-                    $("#makediscount").removeClass('btn-outline-primary');
-                    $("#makediscount").addClass('btn-outline-danger');
-
-                    $.ajax({
-                        url: "../netting/ayarcek.php",
-                        type: "POST",
-                        dataType: "JSON",
-                        success: function(data) {
-                            var fiyat = parseFloat($("#islemtutari").val());
-                            var basamak = fiyat.toString().length;
-                            var indirim_tutari = fiyat * 0.1;
-                            var yeni_fiyat = fiyat - indirim_tutari;
-                            var roundedPrice;
-                            if (basamak == 4 || basamak == 5) {
-                                roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
-                                if (yeni_fiyat - roundedPrice >= 50) {
-                                    roundedPrice += 100;
-                                }
-                            } else if (basamak == 3 || basamak == 2) {
-                                roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
-                            }
-
-                            $("#islemtutari").val(roundedPrice);
-                            $("#indirimtutari").val(roundedPrice);
-                        }
-
-                    });
-
-                }
-            });
-
-
+            // Eğer tahsilat miktarı bir sayı değilse veya boşsa, borcu sıfırla
+            if (isNaN(tahsilatMiktarı) || tahsilatMiktarı === "") {
+                document.getElementById('veresiye').value = 0;
+            } else {
+                // Tahsilat miktarını değiştirip borcu hesapla
+                var veresiyeMiktarı = costval - tahsilatMiktarı;
+                document.getElementById('veresiye').value = veresiyeMiktarı;
+            }
+        }
     </script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../public/src/plugins/src/global/vendors.min.js"></script>

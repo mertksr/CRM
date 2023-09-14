@@ -505,11 +505,8 @@
                                                                                 <label for="exampleFormControlInput1">Referans </label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sReferans']; ?>">
                                                                             </div>
+
                                                                             <div class="form-group col-6">
-                                                                                <label for="exampleFormControlInput1">Tahsilat Şekli </label>
-                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sTahsilatSekli']; ?>">
-                                                                            </div>
-                                                                            <div class="form-group col-12">
                                                                                 <label for="exampleFormControlInput1">Satış Notları </label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sNot']; ?>">
                                                                             </div>
@@ -640,17 +637,6 @@
                                                                             </div>
 
                                                                             <div class="col-12">
-                                                                                <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
-                                                                                <select id="defaultInputState" name="tahsilattipi" class="form-select">
-                                                                                    <option selected="">Seç</option>
-                                                                                    <option value="nakit">Nakit</option>
-                                                                                    <option value="kredikarti">Kredi Kartı Pos</option>
-                                                                                    <option value="eft">EFT</option>
-                                                                                    <option value="mailorder">Mail Order</option>
-
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="col-12">
                                                                                 <label for="inputAddress2" class="form-label">Notlar</label>
                                                                                 <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
                                                                             </div>
@@ -707,11 +693,20 @@
                                                                             <label for="inputAddress" class="form-label">Ücret</label>
 
                                                                             <div class="input-group">
-                                                                                <input type="text" class="form-control" id="satistutari<?= $randevucek['rNo']; ?>" name="satistutari" readonly style="color:#505463;">
+                                                                                <input type="text" class="form-control" id="satistutari<?= $randevucek['rNo']; ?>" name="satistutari" style="color:#505463;">
                                                                                 <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="satismakediscount">İndirim Uygula</button>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="col-6">
+                                                                                <label for="inputAddress2" class="form-label">Tahsilat</label>
+                                                                                <input type="text" class="form-control" name="satistahsilat" oninput="satisVeresiyeHesapla(<?= $randevucek['rNo']; ?>)" id="satistahsilat<?= $randevucek['rNo']; ?>">
+                                                                            </div>
+                                                                            <div class="col-6">
+                                                                                <label for="inputAddress2" class="form-label">Veresiye</label>
+                                                                                <input type="text" class="form-control" name="veresiye" readonly style="color:crimson;" id="satisveresiye<?= $randevucek['rNo']; ?>">
+                                                                            </div>
 
+                
                                                                         <div class="col-6">
                                                                             <label for="defaultInputState" class="form-label ">Garanti Süresi</label>
                                                                             <select id="defaultInputState" name="garanti" class="form-select">
@@ -729,6 +724,7 @@
                                                                             <select id="defaultInputState" name="referans" class="form-select">
                                                                                 <option selected="">Seç</option>
                                                                                 <option value="Bedirhan">Bedirhan</option>
+                                                                                <option value="Kadir">Kadir</option>
                                                                                 <option value="Mehmet">Mehmet</option>
                                                                             </select>
                                                                         </div>
@@ -743,8 +739,8 @@
 
                                                                     </div>
 
-                                                                    <input type="hidden" name="stamfiyat" id="tamfiyat">
-                                                                    <input type="hidden" name="sindirimlifiyat" id="sindirimtutari">
+                                                                    <input type="hidden" name="stamfiyat" id="stamfiyat<?= $randevucek['rNo']; ?>">
+                                                                    <input type="hidden" name="sindirimlifiyat" id="sindirimtutari<?= $randevucek['rNo']; ?>">
 
                                                                     <div class="modal-footer">
                                                                         <button type="submit" name="satisekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
@@ -946,7 +942,8 @@
                     var indiriminput = "satistutari" + randevuid;
                     var satisurunlerinput = "satisurunlerinput" + randevuid;
                     var stamfiyat = "stamfiyat" + randevuid;
-
+                    var tahsilat = "satistahsilat" + randevuid;
+                    $("#" + tahsilat).val(total);
 
                     $("#" + satisurunlerinput).val(selectedString);
                     $("#" + indiriminput).val(total);
@@ -1024,6 +1021,7 @@
             var randevuid = $(this).attr("data-randevuid");
             var scostid = "satistutari" + randevuid;
             var fiyat = $("#" + scostid).val();
+            var tahsilat = "satistahsilat" + randevuid;
             if (fiyat == "0" || fiyat == "" || fiyat == null) {
                 alert("Ürün seçmeden indirim yapamazsınız!");
                 return false;
@@ -1050,7 +1048,7 @@
                         } else if (basamak == 3 || basamak == 2) {
                             roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
                         }
-
+                        $("#" + tahsilat).val(roundedPrice);
                         $("#" + scostid).val(roundedPrice);
                         //$("#sindirimtutari").val(roundedPrice);
                         var sindirimtutari = "sindirimtutari" + randevuid;
@@ -1061,7 +1059,12 @@
 
             }
         });
-
+        const islemUcretiInput = document.querySelector('[name="satistutari"]');
+        const tahsilatInput = document.querySelector('[name="satistahsilat"]');
+        islemUcretiInput.addEventListener('input', function() {
+            // Ücreti alın ve tahsilat inputuna yazın
+            tahsilatInput.value = islemUcretiInput.value;
+        });
         function veresiyeHesapla(randevuid) {
             // Tahsilat miktarını al
             var costid = "cost" + randevuid;
@@ -1076,6 +1079,22 @@
                 // Tahsilat miktarını değiştirip borcu hesapla
                 var veresiyeMiktarı = costval - tahsilatMiktarı;
                 document.getElementById('veresiye' + randevuid).value = veresiyeMiktarı;
+            }
+        }
+        function satisVeresiyeHesapla(randevuid) {
+            // Tahsilat miktarını al
+            var costid = "satistutari" + randevuid;
+            var costval = document.getElementById(costid).value;
+
+            var tahsilatMiktarı = parseFloat(document.getElementById('satistahsilat' + randevuid).value);
+
+            // Eğer tahsilat miktarı bir sayı değilse veya boşsa, borcu sıfırla
+            if (isNaN(tahsilatMiktarı) || tahsilatMiktarı === "") {
+                document.getElementById('satisveresiye' + randevuid).value = 0;
+            } else {
+                // Tahsilat miktarını değiştirip borcu hesapla
+                var veresiyeMiktarı = costval - tahsilatMiktarı;
+                document.getElementById('satisveresiye' + randevuid).value = veresiyeMiktarı;
             }
         }
         $(document).ready(function() {

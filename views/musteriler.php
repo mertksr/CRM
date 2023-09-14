@@ -112,6 +112,7 @@
 
                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                             <div class="statbox widget box box-shadow"></div>
+                            <h4>Müşteriler</h4>
                             <div style="display:flex;justify-content:right;">
                                 <button type="button" class="btn special1 mr-2" style="color:#EFF5F5;" name="musterieklemodalbtn" id="musterieklemodalbtn" data-bs-toggle="modal" data-bs-target="#musterieklemodal" class="btn btn-warning">Yeni Müşteri</button>
 

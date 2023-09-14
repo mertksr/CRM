@@ -42,14 +42,18 @@
         $query = $db->prepare("INSERT INTO veresiye SET
         vİslemNo = :islemno,
         vMusteriNo = :musterino,
-        vTutar = :veresiye
+        vTutar = :veresiye,
+        vDurum = :durum
+
     
               ");
 
         $insert = $query->execute(array(
             "islemno" => $number,
             "musterino" => $_POST['musterino'],
-            "veresiye" => $_POST['veresiye']
+            "veresiye" => $_POST['veresiye'],
+            "durum" => 1
+
 
         ));
     }
@@ -60,8 +64,7 @@ sMusteriNo = :musterino,
 sTutar = :tutar,
 sIndirim = :indirim,
 sTahsilat = :tahsilat,
-sVeresiye = :veresiye,
-sTahsilatTipi = :tahsilattipi,
+sVeresiye = :veresiye
 sTarih = :tarih
 
       ");
@@ -73,7 +76,6 @@ sTarih = :tarih
             "indirim" => $_POST['indirimlifiyat'],
             "tahsilat" => $_POST['tahsilat'],
             "veresiye" => $_POST['veresiye'],
-            "tahsilattipi" => $_POST['tahsilattipi'],
             "tarih" => date("Y-m-d")
 
         ));
