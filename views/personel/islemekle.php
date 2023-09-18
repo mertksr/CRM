@@ -168,106 +168,111 @@
                 <div class="container" style="margin: 0 auto;">
                     <div class="row layout-top-spacing" id="cancel-row">
                         <div id="flLoginForm" class="col-lg-12  layout-spacing">
-                        <div class="statbox widget box box-shadow"> <a href="index.php" class="btn btn-dark">Geri Dön</a><br><br>
+                            <div class="statbox widget box box-shadow"> <a href="index.php" class="btn btn-dark">Geri Dön</a><br><br>
 
-                            <div class="statbox widget box box-shadow">
-                                <div class="widget-header">
-                                    <div class="row">
-                                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                            <h4>İşlem Ekle</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php
-                                $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
-                                $musterisor->execute(array($_GET['no']));
-                                $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
-                                
-                                ?>
-                                <div class="widget-content widget-content-area">
-                                    <form class="row g-2" method="POST" id="islemekleform" action="../../netting/islemislem.php" enctype="multipart/form-data">
-                                        <div class="col-12 col-lg-6 col-md-6">
-                                            <label for="inputAddress" class="form-label">Müşteri Adı Soyadı</label>
-                                            <input type="text" readonly value="<?= $mustericek['mAdSoyad'] ?>" class="form-control info-input" id="inputAddress">
-                                        </div>
-                                        <div class="col-12 col-lg-6 col-md-6">
-                                            <label for="inputAddress" class="form-label">Bölge</label>
-                                            <input type="text" readonly value="<?= $mustericek['mBolge'] ?>" class="form-control info-input" id="inputAddress">
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
-                                            <input type="text" form="islemekleform" readonly id="defaultInputState" name="islemyapan" value="<?= $_SESSION['kullanici'];?>" class="form-control info-input">
-                                        </div>
-                                        <div class="col-lg-6 col-md-6">
-                                            <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
-                                            <select id="hizmetler" name="hizmetler[]" placeholder="Ürün Seçiniz" multiple>
-                                                <?php
-
-                                                $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
-                                                $hizmetsor->execute();
-                                                while ($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)) {
-                                                ?>
-                                                    <option value="<?= $hizmetcek['HizmetTuru'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
-
-                                                <?php  } ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-lg-6 col-md-6">
-                                            <label for="defaultInputState" class="form-label ">Kullanılan
-                                                Ürünler</label>
-                                            <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
-                                                <?php
-
-                                                $urunsor = $db->prepare("SELECT * FROM urunler");
-                                                $urunsor->execute();
-                                                while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
-                                                ?>
-                                                    <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
-                                                <?php  } ?>
-
-                                            </select>
-                                        </div>
-
-
-                                        <div class="col-12 col-lg-6 col-md-6">
-                                            <label for="inputAddress" class="form-label">İşlem Ücreti</label>
-
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="cost" name="islemucreti" readonly style="color:#505463;">
-                                                <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
+                                <div class="statbox widget box box-shadow">
+                                    <div class="widget-header">
+                                        <div class="row">
+                                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                                <h4>İşlem Ekle</h4>
                                             </div>
                                         </div>
-    
+                                    </div>
+                                    <?php
+                                    $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
+                                    $musterisor->execute(array($_GET['no']));
+                                    $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
 
-                                        <div class="col-12">
-                                            <label for="inputAddress2" class="form-label">Notlar</label>
-                                            <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
-                                        </div>
-                                        <input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
-                                        <input class="form-control file-upload-input" type="file" name="resimler[]" multiple accept="image/*">
+                                    ?>
+                                    <div class="widget-content widget-content-area">
+                                        <form class="row g-2" method="POST" id="islemekleform" action="../../netting/islemislem.php" enctype="multipart/form-data">
+                                            <div class="col-12 col-lg-6 col-md-6">
+                                                <label for="inputAddress" class="form-label">Müşteri Adı Soyadı</label>
+                                                <input type="text" readonly value="<?= $mustericek['mAdSoyad'] ?>" class="form-control info-input" id="inputAddress">
+                                            </div>
+                                            <div class="col-12 col-lg-6 col-md-6">
+                                                <label for="inputAddress" class="form-label">Bölge</label>
+                                                <input type="text" readonly value="<?= $mustericek['mBolge'] ?>" class="form-control info-input" id="inputAddress">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
+                                                <input type="text" form="islemekleform" readonly id="defaultInputState" name="islemyapan" value="<?= $_SESSION['kullanici']; ?>" class="form-control info-input">
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="defaultInputState" class="form-label ">Hizmet Türü</label>
+                                                <select id="hizmetler" name="hizmetler[]" placeholder="Ürün Seçiniz" multiple>
+                                                    <?php
 
-                                        <div class="col-12">
-                                            <button type="submit" name="islemeklepersonel" class="btn islemkaydet">Kaydet</button>
-                                        </div>
-                                        <input type="hidden" form="islemekleform" name="rno" value="<?= $_GET['rno']; ?>">
+                                                    $hizmetsor = $db->prepare("SELECT * FROM hizmetler");
+                                                    $hizmetsor->execute();
+                                                    while ($hizmetcek = $hizmetsor->fetch(PDO::FETCH_ASSOC)) {
+                                                    ?>
+                                                        <option value="<?= $hizmetcek['HizmetTuru'] ?>"><?= $hizmetcek['HizmetTuru'] ?></option>
 
-                                        <input type="hidden" form="islemekleform" name="tamfiyat" id="tamfiyat">
-                                        <input type="hidden"  form="islemekleform" name="indirimlifiyat" id="indirimtutari">
-                                    </form>
+                                                    <?php  } ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="defaultInputState" class="form-label ">Kullanılan
+                                                    Ürünler</label>
+                                                <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
+                                                    <?php
+
+                                                    $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                    $urunsor->execute();
+                                                    while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+                                                    ?>
+                                                        <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
+                                                    <?php  } ?>
+
+                                                </select>
+                                            </div>
+
+
+                                            <div class="col-12 col-lg-6 col-md-6">
+                                                <label for="inputAddress" class="form-label">İşlem Ücreti</label>
+
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="cost" name="islemucreti" readonly style="color:#505463;">
+                                                    <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-12">
+                                                <label for="inputAddress2" class="form-label">Notlar</label>
+                                                <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
+                                            </div>
+                                            <input type="hidden" name="musterino" value="<?= $_GET['no'] ?>">
+                                            <input class="form-control file-upload-input" type="file" name="resimler[]" multiple accept="image/*">
+
+                                            <div class="col-12">
+                                                <button type="submit" name="islemeklepersonel" class="btn islemkaydet">Kaydet</button>
+                                            </div>
+                                            <input type="hidden" form="islemekleform" name="rno" value="<?= $_GET['rno']; ?>">
+
+                                            <input type="hidden" form="islemekleform" name="tamfiyat" id="tamfiyat">
+                                            <input type="hidden" form="islemekleform" name="indirimlifiyat" id="indirimtutari">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
+            </div>
 
+
+        </div>
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © Mert Keser</p>
             </div>
         </div>
-       
-
-    </div>
-    <!--  END CONTENT AREA  -->
+        <!--  END CONTENT AREA  -->
     </div>
     <!-- END MAIN CONTAINER -->
 
@@ -307,56 +312,55 @@
                 // searchResultLimit: 5,
                 // renderChoiceLimit: 8
             });
-       
-        $("#hizmetler").on("change", function() {
-            var selectedValues = $("#hizmetler").val();
-            var selectedString = selectedValues.join(",");
-        });
-       
+
+            $("#hizmetler").on("change", function() {
+                var selectedValues = $("#hizmetler").val();
+                var selectedString = selectedValues.join(",");
+            });
+
             var multipleCancelButton = new Choices('#hizmetler', {
                 removeItemButton: true
             });
-       
- });
 
-            $("#makediscount").click(function() {
-                var fiyat = $("#cost").val();
-                if (fiyat == "0" || fiyat == "" || fiyat == null) {
-                    alert("Ürün seçmeden indirim yapamazsınız!");
-                    return false;
-                } else {
-                    // $("#makediscount").off("click"); 
-                    $("#makediscount").removeClass('btn-outline-primary');
-                    $("#makediscount").addClass('btn-outline-danger');
+        });
 
-                    $.ajax({
-                        url: "../../netting/ayarcek.php",
-                        type: "POST",
-                        dataType: "JSON",
-                        success: function(data) {
-                            var fiyat = parseFloat($("#cost").val());
-                            var basamak = fiyat.toString().length;
-                            var indirim_tutari = fiyat * 0.1;
-                            var yeni_fiyat = fiyat - indirim_tutari;
-                            var roundedPrice;
-                            if (basamak == 4 || basamak == 5) {
-                                 roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
-                                if (yeni_fiyat - roundedPrice >= 50) {
-                                    roundedPrice += 100;
-                                }
-                            } else if (basamak == 3 || basamak == 2) {
-                                 roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+        $("#makediscount").click(function() {
+            var fiyat = $("#cost").val();
+            if (fiyat == "0" || fiyat == "" || fiyat == null) {
+                alert("Ürün seçmeden indirim yapamazsınız!");
+                return false;
+            } else {
+                // $("#makediscount").off("click"); 
+                $("#makediscount").removeClass('btn-outline-primary');
+                $("#makediscount").addClass('btn-outline-danger');
+
+                $.ajax({
+                    url: "../../netting/ayarcek.php",
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function(data) {
+                        var fiyat = parseFloat($("#cost").val());
+                        var basamak = fiyat.toString().length;
+                        var indirim_tutari = fiyat * 0.1;
+                        var yeni_fiyat = fiyat - indirim_tutari;
+                        var roundedPrice;
+                        if (basamak == 4 || basamak == 5) {
+                            roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                            if (yeni_fiyat - roundedPrice >= 50) {
+                                roundedPrice += 100;
                             }
-
-                            $("#cost").val(roundedPrice);
-                            $("#indirimtutari").val(roundedPrice);
+                        } else if (basamak == 3 || basamak == 2) {
+                            roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
                         }
 
-                    });
+                        $("#cost").val(roundedPrice);
+                        $("#indirimtutari").val(roundedPrice);
+                    }
 
-                }
-            });
-   
+                });
+
+            }
+        });
     </script>
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="../../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>

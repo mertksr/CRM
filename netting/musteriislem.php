@@ -105,3 +105,21 @@ if (isset($_POST['personelmusteriekle'])) {
                 exit();
             }
         }
+        if (isset($_POST['konumduzenle'])) {
+            $konum = $_POST['konum'];
+            $musterino = $_POST['musterino'];
+
+                $query = $db->prepare("UPDATE musteriler SET mKonum=:konum WHERE mMusteriNo=:mno");
+                $query->bindParam(':konum', $konum);
+                $query->bindParam(':mno', $musterino);
+                $insert = $query->execute();
+            
+                if ($insert) {
+                    header("Location:../views/personel/index.php?no=$musterino&yt=basarili");
+                    exit();
+                } else {
+                    header("Location:../views/personel/index.php?no=$musterino&yt=basarisiz");
+                    exit();
+                }
+            }
+?>

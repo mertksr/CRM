@@ -197,8 +197,7 @@
 
                     <div class="statbox widget box box-shadow">
                         <h4>Bugünün Randevuları</h4>
-                        <button type="button" class="btn special1 mr-2" style="color:#EFF5F5;" name="musterieklemodalbtn" id="musterieklemodalbtn" data-bs-toggle="modal" data-bs-target="#musterieklemodal" class="btn btn-warning">Yeni Müşteri</button>
-                        <br><br>
+                        <br>
                         <div class="row">
 
 
@@ -219,6 +218,7 @@
                                                     <th style="text-align:center;">Notlar</th>
                                                     <th style="max-width:20px;text-align:left;">Durum</th>
                                                     <th style="max-width:20px;text-align:center;">Detaylar</th>
+                                                    <th style="max-width:20px;text-align:center;">K. Düzenle</th>
                                                     <th style="max-width:20px;text-align:center;">Kapat</th>
 
 
@@ -305,52 +305,65 @@
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body row">
-                                                                        <?php
-                                                                        $iletisimsor = $db->prepare("SELECT * from iletisim where iletisimMusteriNo = $musteriid");
-                                                                        $iletisimsor->execute();
-                                                                        while ($iletisimcek = $iletisimsor->fetch(PDO::FETCH_ASSOC)) {
-                                                                            $iletisimbilgisi =  $iletisimcek["İletisimBilgisi"];
+                                                                        <div class="col-6">
+                                                                            <p>
+                                                                                <?php if (!empty($mustericek['mTel1'])) { ?>
+                                                                            <div class="p-2" style="font-size:17px;"><a href="tel:<?= $mustericek['mTel1']; ?>"><i class="fa-solid fa-phone fa-2xl"></i></a><?= $mustericek['mTel1']; ?></div>
+                                                                        <?php  }
+                                                                                if (!empty($mustericek['mTel2'])) { ?>
+                                                                            <div class="p-2" style="font-size:17px;"><a href="tel:<?= $mustericek['mTel2']; ?>"><i class="fa-solid fa-phone fa-2xl"></i></a><?= $mustericek['mTel2']; ?></div>
+                                                                        <?php } ?>
 
-                                                                        ?>
-                                                                            <div class="col-6">
-                                                                                <p><?php if ($iletisimcek['iletisimTuru'] == "Tel" || $iletisimcek['iletisimTuru'] == "Mobil") {
-                                                                                        echo "<a href='https://google.com/$iletisimbilgisi'><i class='fa-solid fa-phone fa-2xl'></i></a>";
-                                                                                    } else if ($iletisimcek['iletisimTuru'] == "WhatsApp") {
-                                                                                        echo "<a href='https://wa.me/$iletisimbilgisi'><i class='fa-brands fa-whatsapp fa-2xl'></i></a>";
-                                                                                    }
-                                                                                    ?> : <?php echo $iletisimcek['İletisimBilgisi'];
 
-                                                                                        ?>
+                                                                        </p>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <p>
+                                                                                <?php if (!empty($mustericek['mTel1'])) { ?>
+                                                                            <div class="p-2" style="font-size:17px;"><a href="https://wa.me/<?= $mustericek['mTel1']; ?>"><i class="fa-brands fa-whatsapp fa-2xl"></i></a><?= $mustericek['mTel1']; ?></div>
+                                                                        <?php  }
+                                                                                if (!empty($mustericek['mTel2'])) { ?>
+                                                                            <div class="p-2" style="font-size:17px;"><a href="https://wa.me/<?= $mustericek['mTel2']; ?>"><i class="fa-brands fa-whatsapp fa-2xl"></i></a><?= $mustericek['mTel2']; ?></div>
+                                                                        <?php } ?>
 
-                                                                                </p>
-                                                                            </div>
-                                                                        <?php }   ?>
+
+                                                                        </p>
+                                                                        </div>
 
                                                                         <div class="row g-0">
-
-
                                                                             <div class="form-group col-6">
                                                                                 <label for="exampleFormControlInput1">Bölge </label>
-                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mBolge']; ?>">
                                                                             </div>
-                                                                            <div class="form-group col-6">
-                                                                                <label for="exampleFormControlInput1">Cihaz </label>
-                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mCihaz']; ?>">
+                                                                            <div class="input-group col-6">
+
+
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $mustericek['mBolge']; ?>">
+
+
+                                                                                <?php if (!empty($mustericek['mKonum'])) { ?>
+                                                                                    <a style="padding-top:11px;" class="btn btn-outline-success" href="https://maps.google.com/?q=<?= $mustericek['mKonum']; ?> " target="_Blank">Haritada
+                                                                                        Aç</a><?php } else { ?> <a style="padding-top:11px;" class="btn btn-outline-danger">Konum Yok</a> <?php } ?>
                                                                             </div>
+
+
 
                                                                             <div class="form-group col-12">
                                                                                 <label for="exampleFormControlInput1">Adres</label>
                                                                                 <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $mustericek['mAdres'] ?></textarea>
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-6">
+                                                                                <label for="exampleFormControlInput1">Cihaz </label>
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mCihaz']; ?>">
+                                                                            </div>
+                                                                            <div class="form-group col-6">
                                                                                 <label for="exampleFormControlInput1">Randevu Tarihi </label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= date("d.m.Y", strtotime($randevucek['rTarih'])); ?>">
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-6">
                                                                                 <label for="exampleFormControlInput1">Randevu Türü</label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevucek['rHizmetTuru'];  ?>">
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-6">
                                                                                 <label for="exampleFormControlInput1">Son İşlem Yapan</label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $randevucek['rTeknisyen']; ?>">
                                                                             </div>
@@ -416,7 +429,7 @@
                                                                                     <label for="exampleFormControlInput1">Ücret </label>
                                                                                     <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevuislemcek['islemIndirimliFiyat']; ?>TL">
                                                                                 </div>
-                                                                                
+
                                                                                 <div class="form-group col-12">
                                                                                     <label for="exampleFormControlInput1">Servis Notları</label>
                                                                                     <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $randevuislemcek['islemNot'] ?></textarea>
@@ -496,7 +509,10 @@
                                                         </div>
                                                     </td>
 
-
+                                                    <td style="text-align:center;">
+                                                        <a class="btn btn-ozel mr-2" data-bs-toggle="modal" data-bs-target="#borcduzenle<?php echo $modalId; ?>">
+                                                            <i class="fa-solid fa-pen"></i> </a>
+                                                    </td>
                                                     <td style="text-align:center;">
                                                         <a class="btn btn-ozel mr-2" <?php if ($randevucek['rDurum'] == "0") {
                                                                                             echo "style='pointer-events: none;background-color:#c4c4c4;'";
@@ -508,6 +524,262 @@
 
 
                                                 </tr>
+                                                <div class="modal fade" id="borcduzenle<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                                            </div>
+                                                            <div class="modal-body row">
+                                                                <h4 style="color:red;text-align:center;">Konum Düzenle</h4>
+                                                                <div class="row g-1">
+                                                                    <form method="POST" id="konumduzenleform" action="../../netting/musteriislem.php">
+                                                                        <div class="modal-body row g-1">
+                                                                            <div class="col-12 ">
+                                                                                <label for="inputAddress" class="form-label">Konum</label>
+
+                                                                                <div class="input-group col-12 col-lg-6 col-md-6">
+                                                                                    <input type="text" value="<?= $mustericek['mKonum']; ?>" class="form-control" name="konum" id="konuminput<?= $randevucek['rNo']; ?>" readonly placeholder="Konum Bul">
+                                                                                    <button class="btn btn-outline-primary get-location-btn" type="button" id="konum<?= $randevucek['rNo']; ?>" data-modalid="<?= $randevucek['rNo']; ?>">Konum
+                                                                                        Bul</button>
+                                                                                    <input type="hidden" id="konum<?= $randevucek['rNo']; ?>">
+                                                                                    <button class="btn btn-outline-success goLocationBtn" type="button" data-modalid="<?= $randevucek['rNo']; ?>" id="goLocationBtn<?= $randevucek['rNo']; ?>">Haritada
+                                                                                        Aç</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button class="btn btn-success" data-bs-dismiss="modal" name="konumduzenle">Kaydet</button>
+                                                                        </div>
+                                                                        <input type="hidden" value="<?= $mustericek['mMusteriNo']; ?>" name="musterino">
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal fade" id="<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 style="color:crimson;"><?= $mustericek['mAdSoyad']; ?></h4>
+
+
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body row">
+                                                                <div class="col-6">
+                                                                    <p>
+                                                                        <?php if (!empty($mustericek['mTel1'])) { ?>
+                                                                    <div class="p-2" style="font-size:17px;"><a href="tel:<?= $mustericek['mTel1']; ?>"><i class="fa-solid fa-phone fa-2xl"></i></a><?= $mustericek['mTel1']; ?></div>
+                                                                <?php  }
+                                                                        if (!empty($mustericek['mTel2'])) { ?>
+                                                                    <div class="p-2" style="font-size:17px;"><a href="tel:<?= $mustericek['mTel2']; ?>"><i class="fa-solid fa-phone fa-2xl"></i></a><?= $mustericek['mTel2']; ?></div>
+                                                                <?php } ?>
+
+
+                                                                </p>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <p>
+                                                                        <?php if (!empty($mustericek['mTel1'])) { ?>
+                                                                    <div class="p-2" style="font-size:17px;"><a href="https://wa.me/<?= $mustericek['mTel1']; ?>"><i class="fa-brands fa-whatsapp fa-2xl"></i></a><?= $mustericek['mTel1']; ?></div>
+                                                                <?php  }
+                                                                        if (!empty($mustericek['mTel2'])) { ?>
+                                                                    <div class="p-2" style="font-size:17px;"><a href="https://wa.me/<?= $mustericek['mTel2']; ?>"><i class="fa-brands fa-whatsapp fa-2xl"></i></a><?= $mustericek['mTel2']; ?></div>
+                                                                <?php } ?>
+
+
+                                                                </p>
+                                                                </div>
+
+                                                                <div class="row g-0">
+                                                                    <div class="form-group col-6">
+                                                                        <label for="exampleFormControlInput1">Bölge </label>
+                                                                    </div>
+                                                                    <div class="input-group col-6">
+
+
+                                                                        <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $mustericek['mBolge']; ?>">
+
+
+                                                                        <?php if (!empty($mustericek['mKonum'])) { ?>
+                                                                            <a style="padding-top:11px;" class="btn btn-outline-success" href="https://maps.google.com/?q=<?= $mustericek['mKonum']; ?> " target="_Blank">Haritada
+                                                                                Aç</a><?php } else { ?> <a style="padding-top:11px;" class="btn btn-outline-danger">Konum Yok</a> <?php } ?>
+                                                                    </div>
+
+
+
+                                                                    <div class="form-group col-12">
+                                                                        <label for="exampleFormControlInput1">Adres</label>
+                                                                        <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $mustericek['mAdres'] ?></textarea>
+                                                                    </div>
+                                                                    <div class="form-group col-6">
+                                                                        <label for="exampleFormControlInput1">Cihaz </label>
+                                                                        <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mCihaz']; ?>">
+                                                                    </div>
+                                                                    <div class="form-group col-6">
+                                                                        <label for="exampleFormControlInput1">Randevu Tarihi </label>
+                                                                        <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= date("d.m.Y", strtotime($randevucek['rTarih'])); ?>">
+                                                                    </div>
+                                                                    <div class="form-group col-6">
+                                                                        <label for="exampleFormControlInput1">Randevu Türü</label>
+                                                                        <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevucek['rHizmetTuru'];  ?>">
+                                                                    </div>
+                                                                    <div class="form-group col-6">
+                                                                        <label for="exampleFormControlInput1">Son İşlem Yapan</label>
+                                                                        <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $randevucek['rTeknisyen']; ?>">
+                                                                    </div>
+
+
+                                                                    <div class="form-group col-12">
+                                                                        <label for="exampleFormControlInput1">Son Bakımda Değişen Parçalar</label>
+                                                                        <textarea readonly class="form-control contact-modal" style="min-height:70px;">
+<?php
+
+                                                echo $kullanilanurunler;
+
+?> </textarea>
+                                                                    </div>
+
+                                                                    <?php if ($randevucek['rDurum'] == "2") {
+
+                                                                        $randevuislemno = $randevucek['rNo'];
+                                                                        $randevuislemsor = $db->prepare("SELECT * FROM islemler WHERE islemRandevu = :randevu");
+                                                                        $randevuislemsor->bindParam(':randevu', $randevuislemno);
+                                                                        $randevuislemsor->execute();
+                                                                        $randevuislemcek = $randevuislemsor->fetch(PDO::FETCH_ASSOC);
+                                                                        $islemturu = unserialize($randevuislemcek['islemTuru']);
+
+
+
+                                                                        $randevukullanilanurun = unserialize($randevuislemcek['islemKullanilanUrun']);
+
+                                                                        $yapilanislemurun = [];
+                                                                        $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                        $urunsor->execute();
+                                                                        $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
+
+                                                                        foreach ($randevukullanilanurun as $urunid) {
+                                                                            foreach ($urunler as $urun) {
+                                                                                if ($urunid == $urun['urunid']) {
+                                                                                    array_push($yapilanislemurun, $urun['urunAd']);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    ?>
+                                                                        <div class="form-group col-6">
+                                                                            <label for="exampleFormControlInput1">Servis Tarihi </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo date("d.m.Y", strtotime($randevuislemcek['islemTarihi'])); ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-6">
+                                                                            <label for="exampleFormControlInput1">Servis Türü</label>
+                                                                            <textarea type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"><?= implode(", ", $islemturu); ?></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-12">
+                                                                            <label for="exampleFormControlInput1">Kullanılan Ürünler</label>
+                                                                            <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= implode(", ", $yapilanislemurun); ?></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Tutar</label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevuislemcek['islemUcret']; ?>TL">
+                                                                        </div>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Yapılan İndirim </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="-<?= $randevuislemcek['islemUcret'] - $randevuislemcek['islemIndirimliFiyat']; ?>TL">
+                                                                        </div>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Ücret </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevuislemcek['islemIndirimliFiyat']; ?>TL">
+                                                                        </div>
+
+                                                                        <div class="form-group col-12">
+                                                                            <label for="exampleFormControlInput1">Servis Notları</label>
+                                                                            <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $randevuislemcek['islemNot'] ?></textarea>
+                                                                        </div>
+                                                                    <?php } elseif ($randevucek['rDurum'] == "3") {
+                                                                        $randevusatisno = $randevucek['rNo'];
+                                                                        $randevusatissor = $db->prepare("SELECT * FROM satislar WHERE sRandevu = :randevu");
+                                                                        $randevusatissor->bindParam(':randevu', $randevusatisno);
+                                                                        $randevusatissor->execute();
+                                                                        $randevusatiscek = $randevusatissor->fetch(PDO::FETCH_ASSOC);
+
+                                                                        $randevusatilanurun = unserialize($randevusatiscek['sUrun']);
+
+                                                                        $satilanurun = [];
+                                                                        $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                        $urunsor->execute();
+                                                                        $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
+
+                                                                        foreach ($randevusatilanurun as $urunid) {
+                                                                            foreach ($urunler as $urun) {
+                                                                                if ($urunid == $urun['urunid']) {
+                                                                                    array_push($satilanurun, $urun['urunAd']);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    ?>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Satış Tarihi </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo date("d.m.Y", strtotime($randevusatiscek['sTarih'])); ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Garanti Süresi</label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $randevusatiscek['sGarantiSuresi']; ?> Yıl">
+                                                                        </div>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Garanti Bitiş Tarihi </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo date("d.m.Y", strtotime($randevusatiscek['sGarantiBitis']));  ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-12">
+                                                                            <label for="exampleFormControlInput1">Satılan Ürünler</label>
+                                                                            <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= implode(", ", $satilanurun); ?></textarea>
+                                                                        </div>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Satış Tutarı</label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sTutar']; ?>TL">
+                                                                        </div>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Yapılan İndirim </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="-<?= $randevusatiscek['sTutar'] - $randevusatiscek['sIndirimliTutar']; ?>TL">
+                                                                        </div>
+                                                                        <div class="form-group col-4">
+                                                                            <label for="exampleFormControlInput1">Ücret </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sIndirimliTutar']; ?>TL">
+                                                                        </div>
+                                                                        <div class="form-group col-6">
+                                                                            <label for="exampleFormControlInput1">Referans </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sReferans']; ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-6">
+                                                                            <label for="exampleFormControlInput1">Tahsilat Şekli </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sTahsilatSekli']; ?>">
+                                                                        </div>
+                                                                        <div class="form-group col-12">
+                                                                            <label for="exampleFormControlInput1">Satış Notları </label>
+                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sNot']; ?>">
+                                                                        </div>
+                                                                    <?php } ?>
+                                                                </div>
+
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-dark" data-bs-dismiss="modal">Kapat</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </td>
+
+
+
+
+                                                </tr>
+
+
 
 
 
@@ -594,7 +866,7 @@
                                                                                     <input type="text" class="form-control" name="veresiye" readonly style="color:crimson;" id="veresiye<?= $randevucek['rNo']; ?>">
                                                                                 </div>
 
-          
+
                                                                                 <div class="col-12">
                                                                                     <label for="inputAddress2" class="form-label">Notlar</label>
                                                                                     <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
@@ -726,108 +998,15 @@
                     </div>
 
                 </div>
-                <div id="musterieklemodal" class="modal fade">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">Müşteri Ekle</h4>
-                                <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <form method="post" id="musteriekleform" type="POST" action="../../netting/musteriislem.php">
-                                <div class="modal-body row g-1" id="musteridetaybody">
 
-
-                                    <div class="form-group col-12">
-                                        <label for="exampleFormControlInput1" class="mb-1">Ad Soyad</label>
-                                        <input type="text" class="form-control" name="adsoyad" id="adsoyad">
-                                    </div>
-
-                                    <div class="form-group col-6">
-                                        <label for="exampleFormControlInput1" class="mb-1">Tel1</label>
-                                        <input type="text" class="form-control" name="tel1" id="tel1">
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="exampleFormControlInput1" class="mb-1">Tel2</label>
-                                        <input type="text" class="form-control" name="tel2" id="tel2">
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="defaultInputState" class="form-label mb-1">Bölge</label>
-                                        <select id="bolge" name="bolge" class="form-select">
-                                            <option>Seçim yapın</option>
-                                            <?php
-
-                                            $bolgesor = $db->prepare("SELECT * FROM neighborhood WHERE DistrictID = 335 ORDER BY NeighborhoodName ASC");
-                                            $bolgesor->execute();
-                                            while ($bolgecek = $bolgesor->fetch(PDO::FETCH_ASSOC)) {
-                                            ?>
-                                                <option value="<?= $bolgecek['NeighborhoodName']; ?>"><?= $bolgecek['NeighborhoodName']; ?></option>
-                                            <?php  } ?>
-
-                                        </select>
-                                    </div>
-                                    <div class="input-group col-12">
-
-                                        <input type="text" form="musteriekleform" class="form-control" name="konum" id="konum" readonly placeholder="Konum Bul">
-                                        <button class="btn btn-outline-primary" type="button" onclick="getLocation()">Konum
-                                            Bul</button>
-                                        <button class="btn btn-outline-success" type="button" onclick="goLocation()" id="goLocationBtn">Haritada
-                                            Aç</button>
-                                    </div>
-
-                                    <div class="form-group col-12">
-                                        <label for="exampleFormControlInput1" class="mb-1">Adres</label>
-                                        <input type="text" class="form-control" form="musteriekleform" name="adres" id="adres">
-                                    </div>
-                                    <div class=" col-12">
-                                        <label for=" defaultInputState" class="form-label ">Cihaz</label>
-                                        <select id="defaultInputState" name="cihaz" form="musteriekleform" class="form-select select">
-                                            <option value="">Seçim yapın</option>
-
-                                            <?php
-                                            $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 || urunCinsi = 2 || urunCinsi = 3 ORDER BY urunAd ASC");
-                                            $cihazsor->execute();
-                                            while ($cihazcek = $cihazsor->fetch(PDO::FETCH_ASSOC)) {
-                                            ?>
-                                                <option value="<?= $cihazcek['urunAd']; ?>"><?= $cihazcek['urunAd']; ?></option>
-                                            <?php  } ?>
-
-                                        </select>
-                                    </div>
-                                    <div class=" col-12">
-                                        <label for=" defaultInputState" class="form-label ">Bakım Periyodu</label>
-                                        <select id="defaultInputState" form="musteriekleform" name="periyot" class="form-select select">
-                                            <option value="6">6</option>
-                                            <option value="12">12</option>
-                                            <option value="3">3</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-12">
-                                        <label for="exampleFormControlInput1" class="mb-1">Notlar</label>
-                                        <input type="text" form="musteriekleform" class="form-control" name="notlar" id="notlar">
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" name="personelmusteriekle" class="btn btn-success" style="color:#EFF5F5;">Kaydet</button>
-                                </div>
-
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
                 <!--  BEGIN FOOTER  -->
 
                 <!--  END CONTENT AREA  -->
+            </div>
+            <div class="footer-wrapper">
+                <div class="footer-section f-section-1">
+                    <p class="">Copyright © Mert Keser</p>
+                </div>
             </div>
             <!--  END CONTENT AREA  -->
         </div>
@@ -836,6 +1015,59 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="../../public/src/plugins/src/multiselect/jquery.multi-select.js"></script>
         <script>
+            function getLocation(locationInput, mapButton, modalId) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        showPosition(position, modalId);
+                    }, function(error) {
+                        locationInput.value = "Konum alınamadı: " + error.message;
+                    });
+                } else {
+                    locationInput.value = "Geolocation bu tarayıcıda desteklenmiyor.";
+                }
+
+                // Haritada Aç düğmesini etkinleştir
+                mapButton.disabled = false;
+            }
+
+            function showPosition(position, modalId) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // Konumu input alanına yerleştir
+                const locationShowInput = document.getElementById("konuminput" + modalId);
+                locationShowInput.value = latitude + "," + longitude;
+            }
+
+
+            const getLocationButtons = document.querySelectorAll(".get-location-btn");
+
+            getLocationButtons.forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    const modalId = this.getAttribute("data-modalid");
+                    const locationInput = document.getElementById("konuminput" + modalId);
+                    const mapButton = document.getElementById("goLocationBtn" + modalId);
+                    getLocation(locationInput, mapButton, modalId);
+                });
+            });
+
+            const goLocationButtons = document.querySelectorAll(".goLocationBtn");
+
+            goLocationButtons.forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    const modalId = this.getAttribute("data-modalid");
+                    const locationInput = document.getElementById("konuminput" + modalId);
+                    const locationValue = locationInput.value;
+
+                    if (locationValue === "") {
+                        alert("Önce Konumunuzu Bulmalısınız");
+                    } else {
+                        window.open('https://maps.google.com/?q=' + locationValue, '_blank');
+                    }
+                });
+            });
+
+
             $(document).ready(function() {
 
                 $("[id^='choices-multiple-remove-button']").on("change", function() {
@@ -1016,23 +1248,23 @@
 
                 }
             });
-            
-        function veresiyeHesapla(randevuid) {
-            // Tahsilat miktarını al
-            var costid = "cost" + randevuid;
-            var costval = document.getElementById(costid).value;
 
-            var tahsilatMiktarı = parseFloat(document.getElementById('tahsilat' + randevuid).value);
+            function veresiyeHesapla(randevuid) {
+                // Tahsilat miktarını al
+                var costid = "cost" + randevuid;
+                var costval = document.getElementById(costid).value;
 
-            // Eğer tahsilat miktarı bir sayı değilse veya boşsa, borcu sıfırla
-            if (isNaN(tahsilatMiktarı) || tahsilatMiktarı === "") {
-                document.getElementById('veresiye' + randevuid).value = 0;
-            } else {
-                // Tahsilat miktarını değiştirip borcu hesapla
-                var veresiyeMiktarı = costval - tahsilatMiktarı;
-                document.getElementById('veresiye' + randevuid).value = veresiyeMiktarı;
+                var tahsilatMiktarı = parseFloat(document.getElementById('tahsilat' + randevuid).value);
+
+                // Eğer tahsilat miktarı bir sayı değilse veya boşsa, borcu sıfırla
+                if (isNaN(tahsilatMiktarı) || tahsilatMiktarı === "") {
+                    document.getElementById('veresiye' + randevuid).value = 0;
+                } else {
+                    // Tahsilat miktarını değiştirip borcu hesapla
+                    var veresiyeMiktarı = costval - tahsilatMiktarı;
+                    document.getElementById('veresiye' + randevuid).value = veresiyeMiktarı;
+                }
             }
-        }
             $(document).ready(function() {
 
                 const box = $(".boxx");

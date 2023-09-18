@@ -139,7 +139,7 @@ if (empty($_SESSION['kullanici'])) {
                 </a>
             </li>
 
-            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'urunler' || basename($_SERVER['PHP_SELF'], '.php') == 'urunekle') {  echo "active"; } ?>">
+            <!-- <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'urunler' || basename($_SERVER['PHP_SELF'], '.php') == 'urunekle') {  echo "active"; } ?>">
                 <a href="urunler.php" class="dropdown-toggle">                    
                     <div class="">                        
                         <span>Ürünler</span>
@@ -154,7 +154,7 @@ if (empty($_SESSION['kullanici'])) {
                     </div>
                 </a>
             </li>
-           
+            -->
 
         </ul>
 

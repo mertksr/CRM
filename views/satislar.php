@@ -415,6 +415,7 @@
                                 <select id="defaultInputState" form="satisekleform" name="referans" class="form-select">
                                     <option selected="">Seç</option>
                                     <option value="Bedirhan">Bedirhan</option>
+                                    <option value="Kadir">Kadir</option>
                                     <option value="Mehmet">Mehmet</option>
                                 </select>
                             </div>
@@ -428,8 +429,8 @@
 
                         </div>
 
-                        <input type="hidden" form="satisekleform" name="tamfiyat" id="tamfiyat">
-                        <input type="hidden" form="satisekleform" name="indirimlifiyat" id="indirimtutari">
+                        <input type="hidden" form="satisekleform" name="stamfiyat" id="tamfiyat">
+                        <input type="hidden" form="satisekleform" name="sindirimlifiyat" id="indirimtutari">
 
                         <div class="modal-footer">
                             <button type="submit" name="satisekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
@@ -454,13 +455,9 @@
         <!--  BEGIN FOOTER  -->
         <div class="footer-wrapper">
             <div class="footer-section f-section-1">
-                <p class="">Copyright © <span class="dynamic-year">2022</span> <a target="_blank" href="https://designreset.com/cork-admin/">DesignReset</a>, All rights reserved.</p>
+                <p class="">Copyright © Mert Keser</p>
             </div>
-            <div class="footer-section f-section-2">
-                <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg></p>
-            </div>
+
         </div>
         <!--  END CONTENT AREA  -->
     </div>

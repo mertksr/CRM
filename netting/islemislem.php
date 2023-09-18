@@ -2,6 +2,7 @@
  include 'connect.php';
 
  if (isset($_POST['islemekle'])) {
+ 
     $num_of_digits = 6;
     $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
     $sql = "SELECT * FROM islemler WHERE islemNo = '$number'";
@@ -48,11 +49,11 @@
     
               ");
 
-        $insert = $query->execute(array(
+        $vinsert = $query->execute(array(
             "islemno" => $number,
             "musterino" => $_POST['musterino'],
             "veresiye" => $_POST['veresiye'],
-            "durum" => 1
+            "durum" => "1"
 
 
         ));
@@ -64,8 +65,9 @@ sMusteriNo = :musterino,
 sTutar = :tutar,
 sIndirim = :indirim,
 sTahsilat = :tahsilat,
-sVeresiye = :veresiye
-sTarih = :tarih
+sVeresiye = :veresiye,
+sTarih = :tarih,
+sTuru = :tur
 
       ");
 
@@ -76,7 +78,8 @@ sTarih = :tarih
             "indirim" => $_POST['indirimlifiyat'],
             "tahsilat" => $_POST['tahsilat'],
             "veresiye" => $_POST['veresiye'],
-            "tarih" => date("Y-m-d")
+            "tarih" => date("Y-m-d"),
+            "tur" =>  $hizmetler_str
 
         ));
     }
@@ -105,7 +108,8 @@ $insert = $query->execute(array(
          header("Location:../views/islemler.php?no=$musterino&yt=basarisiz");
          exit();
     }
-}}
+}
+}
 /*
 if (isset($_POST['islemeklepersonel'])) {
     $num_of_digits = 6;
