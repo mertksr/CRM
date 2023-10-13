@@ -89,7 +89,7 @@ if (isset($_POST['personelmusteriekle'])) {
         $sonrakibakim = $_POST['sonrakibakimtarihi'];
             if (!empty($erteleay) && is_numeric($erteleay)) {
                 $yeni_tarih = date('Y-m-d', strtotime($sonrakibakim . '+' . $erteleay . 'months'));
-            } else if (!empty($erteletarih)) {
+            } else if (!empty($erteletarih) && isset($erteletarih)) {
                 $yeni_tarih = date('Y-m-d', strtotime($erteletarih));
             }
             $query = $db->prepare("UPDATE musteriler SET mSonrakiBakim=:tarih WHERE mMusteriNo=:mno");
@@ -105,6 +105,7 @@ if (isset($_POST['personelmusteriekle'])) {
                 exit();
             }
         }
+
         if (isset($_POST['konumduzenle'])) {
             $konum = $_POST['konum'];
             $musterino = $_POST['musterino'];
@@ -119,6 +120,36 @@ if (isset($_POST['personelmusteriekle'])) {
                     exit();
                 } else {
                     header("Location:../views/personel/index.php?no=$musterino&yt=basarisiz");
+                    exit();
+                }
+            }
+            if ($_GET['musterisil']=="ok") {
+                $query1 = $db->prepare("DELETE FROM musteriler WHERE mMusteriNo = :mid");
+                $delete = $query1->execute(array(
+                    'mid' => $_GET['musterino']
+                ));
+                $query2 = $db->prepare("DELETE FROM islemler WHERE islemMusteriNo = :mid");
+                $delete2 = $query2->execute(array(
+                    'mid' => $_GET['musterino']
+                ));
+                $query3 = $db->prepare("DELETE FROM randevular WHERE rMID = :mid");
+                $delete3 = $query3->execute(array(
+                    'mid' => $_GET['musterino']
+                ));
+                $query4 = $db->prepare("DELETE FROM satislar WHERE sMID = :mid");
+                $delete4 = $query4->execute(array(
+                    'mid' => $_GET['musterino']
+                ));
+                $query5 = $db->prepare("DELETE FROM veresiye WHERE vMusteriNo = :mid");
+                $delete5 = $query5->execute(array(
+                    'mid' => $_GET['musterino']
+                ));
+
+                if ($delete){
+                    header("Location:../views/musteriler.php?yt=basarili");
+                    exit();
+                } else {
+                    header("Location:../views/musteriler.php?yt=basarisiz");
                     exit();
                 }
             }

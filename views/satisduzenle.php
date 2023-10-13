@@ -15,6 +15,8 @@
   <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
   <!-- END GLOBAL MANDATORY STYLES -->
   <!-- Mültiselect -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
   <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
   <!--  BEGIN CUSTOM STYLE FILE  -->
@@ -171,9 +173,30 @@
 
     <?php include 'partials/navbar.php';
 
+    $satissor = $db->prepare("SELECT * from satislar where sMID =  ?");
+    $satissor->execute(array($_GET['musterino']));
+    $satiscek = $satissor->fetch(PDO::FETCH_ASSOC);
+    $satissor = $db->prepare("SELECT * from satislar where sMID =  ?");
+    $satissor->execute(array($_GET['musterino']));
+    $satiscek = $satissor->fetch(PDO::FETCH_ASSOC);
+
+    
     $musterisor = $db->prepare("SELECT * from musteriler where mMusteriNo =  ?");
-    $musterisor->execute(array($_GET['no']));
+    $musterisor->execute(array($satiscek['sMID'])); 
     $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
+    $urunsor = $db->prepare("SELECT * FROM urunler");
+    $urunsor->execute();
+    $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
+    $islemurun = [];
+$kullanilanurun = unserialize($satiscek['sUrun']);
+foreach ($kullanilanurun as $urunid) {
+    foreach ($urunler as $urun) {
+        if ($urunid == $urun['urunid']) {
+            array_push($islemurun, $urun['urunAd']);
+        }
+    }
+}
+$kullanilanurunler = implode(", ", $islemurun);
     ?>
     <!--  BEGIN CONTENT AREA  -->
     <div id="content" class="main-content">
@@ -199,7 +222,7 @@
                           <div class="modal-body">
                           <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $mustericek['mAdSoyad']; ?></h4>
 
-                          <h4 style="color:crimson;text-align:center;">MÜŞTERİYİ SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>  
+                          <h4 style="color:crimson;text-align:center;">SATIŞI SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>  
                           </div>
                           <div class="modal-footer">
                             <a class="btn btn-danger" href="../netting/musteriislem.php?musterino=<?= $mustericek['mMusteriNo']; ?>&musterisil=ok">SİLMEYİ ONAYLA</a>
@@ -212,7 +235,7 @@
                     <div class="widget-header">
                       <div class="row">
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                          <h4>Müşteri Düzenle</h4>
+                          <h4>Satış Düzenle</h4>
                         </div>
                       </div>
                     </div>
@@ -222,126 +245,60 @@
 
                         <div class="col-12 col-lg-6 col-md-6">
                           <label for="inputAddress" class="form-label">Müşteri Adı Soyadı</label>
-                          <input type="text" name="adsoyad" value="<?= $mustericek['mAdSoyad'] ?>" class="form-control" id="inputAddress">
+                          <input type="text" name="adsoyad" style="color:#505463;" readonly value="<?= $mustericek['mAdSoyad'] ?>" class="form-control" id="inputAddress">
                         </div>
-                        <div class="col-6 col-lg-3 col-md-3">
-                          <label for="inputAddress" class="form-label">Tel1</label>
-                          <input type="text" name="tel1" value="<?= $mustericek['mTel1'] ?>" class="form-control" id="inputAddress">
-                        </div>
-                        <div class="col-6 col-lg-3 col-md-3">
-                          <label for="inputAddress" class="form-label">Tel2</label>
-                          <input type="text" name="tel2" value="<?= $mustericek['mTel2'] ?>" class="form-control" id="inputAddress">
-                        </div>
-                        <div class="col-12 col-lg-12 col-md-12">
-                          <label for="inputAddress" class="form-label">Adres</label>
-                          <input type="text" name="adres" value="<?= $mustericek['mAdres'] ?>" class="form-control" id="inputAddress">
-                        </div>
-                        <div class="col-12 mb-3 col-lg-6 col-md-6">
-                          <label for="defaultInputState" class="form-label">Bölge</label>
-                          <select id="bolge" name="bolge" class="form-select">
-                            <option>Seçim yapın</option>
-                            <?php
-
-                            $bolgesor = $db->prepare("SELECT * FROM neighborhood WHERE DistrictID = 335 ORDER BY NeighborhoodName ASC");
-                            $bolgesor->execute();
-                            while ($bolgecek = $bolgesor->fetch(PDO::FETCH_ASSOC)) {
-                            ?>
-                              <option value="<?= $bolgecek['NeighborhoodName']; ?>" <?php if ($mustericek['mBolge'] == $bolgecek['NeighborhoodName']) {
-                                                                                      echo "selected";
-                                                                                    } ?>>
-                                <?= $bolgecek['NeighborhoodName']; ?>
-                              </option>
-                            <?php  } ?>
-
-                          </select>
-                        </div>
+                        
                         <div class="col-12 col-lg-6 col-md-6">
-                          <label for="inputAddress" class="form-label">Konum</label>
-
-                          <div class="input-group col-12 col-lg-6 col-md-6">
-                            <input type="text" value="<?= $mustericek['mKonum']; ?>" class="form-control" name="konum" id="konum" readonly placeholder="Konum Bul">
-                            <button class="btn btn-outline-primary" type="button" onclick="getLocation()">Konum
-                              Bul</button>
-                            <button class="btn btn-outline-success" type="button" onclick="goLocation()" id="goLocationBtn">Haritada
-                              Aç</button>
-                          </div>
-                        </div>
-                        <div class=" col-12">
-                          <label for=" defaultInputState" class="form-label ">Cihaz</label>
-                          <select id="defaultInputState" name="cihaz" class="form-select select">
-                            <option value="">Seçim yapın</option>
-
-                            <?php
-                            $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 || urunCinsi = 3 ORDER BY urunSiralama ASC");
-                            $cihazsor->execute();
-                            while ($cihazcek = $cihazsor->fetch(PDO::FETCH_ASSOC)) {
-                            ?>
-                              <option <?php if ($cihazcek['urunAd'] == $mustericek['mCihaz']) {
-                                        echo 'selected';
-                                      } ?> value="<?= $cihazcek['urunAd']; ?>"><?= $cihazcek['urunAd']; ?></option>
-                            <?php  } ?>
-
-                          </select>
-                        </div>
-                        <div class=" col-3">
-                          <label for=" defaultInputState" class="form-label ">Bakım Periyodu</label>
-                          <select id="defaultInputState" name="periyot" class="form-select select">
-                            <option value="6" <?php if ($mustericek['mPeriyot'] == "6") {
-                                                echo 'selected';
-                                              } ?>>6</option>
-                            <option value="12" <?php if ($mustericek['mPeriyot'] == "12") {
-                                                  echo 'selected';
-                                                } ?>>12</option>
-                            <option value="3" <?php if ($mustericek['mPeriyot'] == "3") {
-                                                echo 'selected';
-                                              } ?>>3</option>
-                            <option value="1" <?php if ($mustericek['mPeriyot'] == "1") {
-                                                echo 'selected';
-                                              } ?>>1</option>
-                            <option value="2" <?php if ($mustericek['mPeriyot'] == "2") {
-                                                echo 'selected';
-                                              } ?>>2</option>
-                            <option value="4" <?php if ($mustericek['mPeriyot'] == "4") {
-                                                echo 'selected';
-                                              } ?>>4</option>
-                            <option value="5" <?php if ($mustericek['mPeriyot'] == "5") {
-                                                echo 'selected';
-                                              } ?>>5</option>
-                            <option value="7" <?php if ($mustericek['mPeriyot'] == "7") {
-                                                echo 'selected';
-                                              } ?>>7</option>
-                            <option value="8" <?php if ($mustericek['mPeriyot'] == "8") {
-                                                echo 'selected';
-                                              } ?>>8</option>
-                            <option value="9" <?php if ($mustericek['mPeriyot'] == "9") {
-                                                echo 'selected';
-                                              } ?>>9</option>
-                            <option value="10" <?php if ($mustericek['mPeriyot'] == "10") {
-                                                  echo 'selected';
-                                                } ?>>10</option>
-                            <option value="11" <?php if ($mustericek['mPeriyot'] == "11") {
-                                                  echo 'selected';
-                                                } ?>>11</option>
-                          </select>
-                        </div>
-                        <div class="form-group col-3">
-                          <label for="exampleFormControlInput1" class="mb-1">Sonraki Bakım Tarihi</label>
-                          <input type="date" class="form-control" value="<?= $mustericek['mSonrakiBakim'] ?>" name="sonrakibakim" id="notlar">
+                          <label for="inputAddress" class="form-label">Satılan Ürünler</label>
+                          <input type="text" name="adsoyad" style="color:#505463;" readonly value="<?= $kullanilanurunler; ?>" class="form-control" id="inputAddress">
                         </div>
 
-                        <div class="form-group col-6">
-                          <label for="exampleFormControlInput1" class="mb-1">Notlar</label>
-                          <input type="text" class="form-control" value="<?= $mustericek['mNot'] ?>" name="notlar" id="notlar">
+                        <div class="col-lg-6 col-md-6 col-6 col-sm-12">
+                                <label for="defaultInputState" class="form-label ">Satılan
+                                    Ürünleri Değiştir</label>
+                                <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
+                                    <?php
+
+                                    $urunsor = $db->prepare("SELECT *  FROM urunler WHERE urunCinsi = 3 ORDER BY urunCinsi DESC");
+                                    $urunsor->execute();
+                                    while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+                                        if(!empty($uruncek['urunFiyat'])){
+                                            $urunfiyat= "{" .$uruncek['urunFiyat']. "TL}";
+                                        }else{
+                                            $urunfiyat="";
+                                        }
+                                    ?>
+                                        <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd'] . $urunfiyat; ?></option>
+                                    <?php  } ?>
+
+                                </select>
+                            </div>
+
+
+                            <div class="col-12 col-lg-6 col-md-6">
+                                <label for="inputAddress" class="form-label">Satış Tutarı</label>
+
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="islemtutari" name="islemucreti" style="color:#505463;">
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="form-group col-6">
+                          <label for="exampleFormControlInput1" class="mb-1">Referans</label>
+                          <input type="text" class="form-control" value="<?= $satiscek['sReferans'] ?>" name="notlar" id="notlar">
                         </div>
-<input type="hidden" value="<?=$mustericek['mPeriyot']; ?>"name="eskiperiyot">
 
-<input type="hidden" value="<?=$mustericek['mSonIslem']; ?>"name="eskibakim">
 
-                        <input type="hidden" value="<?= $mustericek['mMusteriNo']; ?>" name="musterino">
+
+
+                        <input type="hidden" value="<?= $satiscek['sNo']; ?>" name="satisno">
 
 
                         <div class="col-12">
-                          <button style="float:right;" type="submit" name="musteriduzenle" class="btn btn-success">Kaydet</button>
+                          <button style="float:right;" type="submit" name="satisduzenle" class="btn btn-success">Kaydet</button>
                         </div>
 
 
@@ -363,32 +320,103 @@
   </div>
   <!-- END MAIN CONTAINER -->
   <script>
-    var locationInput = document.getElementById("konum");
 
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(showPosition);
-      } else {
-        locationInput.innerHTML = "Geolocation is not supported by this browser.";
-      }
+
+$("#choices-multiple-remove-button").on("change", function() {
+var selectedValues = $("#choices-multiple-remove-button").val();
+var selectedString = selectedValues.join(",");
+
+$.ajax({
+    url: "../netting/urunlericagir.php",
+    method: "POST",
+    data: {
+        products: selectedString
+    }
+}).done(function(response) {
+    // AJAX isteği tamamlandığında, fiyatları alın
+    var prices = JSON.parse(response);
+    // Toplam fiyatı hesaplayın
+    var total = 0;
+    for (var i = 0; i < prices.length; i++) {
+        total += parseFloat(prices[i]);
     }
 
-    function showPosition(position) {
-      locationInput.value = position.coords.latitude + "," + position.coords.longitude;
-    }
+    $("#islemtutari").val(total);
 
-    const goLocationBtn = document.getElementById("goLocationBtn");
+});
 
-    function goLocation() {
-      if (locationInput.value == "") {
-        alert("Önce Konumunuzu Bulmalısınız")
-      } else {
-        window.open('https://maps.google.com/?q=' + locationInput.value, '_blank');
-        // goLocationBtn.target= '_blank';
-        // window.location.href = "https://maps.google.com/?q=" + locationInput.value;
-      }
+});
 
-    }
+const islemUcretiInput = document.getElementById('islemtutari');
+const tahsilatInput = document.getElementById('tahsilat');
+islemUcretiInput.addEventListener('input', function() {
+// Ücreti alın ve tahsilat inputuna yazın
+tahsilatInput.value = islemUcretiInput.value;
+});
+
+
+var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+removeItemButton: true
+// searchResultLimit: 5,
+// renderChoiceLimit: 8
+});
+
+
+$("#makediscount").click(function() {
+var fiyat = $("#islemtutari").val();
+if (fiyat == "0" || fiyat == "" || fiyat == null) {
+    alert("Ürün seçmeden indirim yapamazsınız!");
+    return false;
+} else {
+    // $("#makediscount").off("click"); 
+    $("#makediscount").removeClass('btn-outline-primary');
+    $("#makediscount").addClass('btn-outline-danger');
+
+    $.ajax({
+        url: "../netting/ayarcek.php",
+        type: "POST",
+        dataType: "JSON",
+        success: function(data) {
+            var fiyat = parseFloat($("#islemtutari").val());
+            var basamak = fiyat.toString().length;
+            var indirim_tutari = fiyat * 0.1;
+            var yeni_fiyat = fiyat - indirim_tutari;
+            var roundedPrice;
+            if (basamak == 4 || basamak == 5) {
+                roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                if (yeni_fiyat - roundedPrice >= 50) {
+                    roundedPrice += 100;
+                }
+            } else if (basamak == 3 || basamak == 2) {
+                roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+            }
+            $("#tahsilat").val(roundedPrice);
+
+            $("#islemtutari").val(roundedPrice);
+            $("#indirimtutari").val(roundedPrice);
+        }
+
+    });
+
+}
+});
+
+function veresiyeHesapla() {
+// Tahsilat miktarını al
+var costid = "islemtutari";
+var costval = document.getElementById(costid).value;
+
+var tahsilatMiktarı = parseFloat(document.getElementById('tahsilat').value);
+
+// Eğer tahsilat miktarı bir sayı değilse veya boşsa, borcu sıfırla
+if (isNaN(tahsilatMiktarı) || tahsilatMiktarı === "") {
+    document.getElementById('veresiye').value = 0;
+} else {
+    // Tahsilat miktarını değiştirip borcu hesapla
+    var veresiyeMiktarı = costval - tahsilatMiktarı;
+    document.getElementById('veresiye').value = veresiyeMiktarı;
+}
+}
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="../public/src/plugins/src/multiselect/jquery.multi-select.js"></script>

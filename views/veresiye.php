@@ -196,7 +196,7 @@
                 <div class="middle-content container-xxl p-0 mt-4">
 
                     <div class="statbox widget box box-shadow">
-                        <h4>Veresiye Defteri</h4>
+                        <h4>VERESİYELER</h4>
                         <br>
                         <div class="row">
 
@@ -220,6 +220,7 @@
                                                     <th style="text-align:center;">Not</th>
                                                     <th style="text-align:center;max-width:20px;">Detay</th>
                                                     <th style="max-width:20px;text-align:center;">V. Düş</th>
+                                                    <th style="max-width:20px;text-align:center;">Not</th>
                                                     <th style="max-width:20px;text-align:center;">Sil</th>
 
 
@@ -227,7 +228,7 @@
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $veresiyesor = $db->prepare("SELECT * FROM veresiye WHERE vDurum = 1 ORDER BY vTutar DESC");
+                                            $veresiyesor = $db->prepare("SELECT * FROM veresiye WHERE vDurum = 1 ORDER BY vId DESC");
                                             $veresiyesor->execute();
 
                                             while ($veresiyecek = $veresiyesor->fetch(PDO::FETCH_ASSOC)) {
@@ -264,7 +265,7 @@
 
                                                     <td style="text-align:center;"><?= $mustericek['mBolge']; ?></td>
                                                     <td style="text-align:center;"><?= $mustericek['mAdSoyad']; ?></td>
-                                                    <td style="text-align:center;"><?= $islemcek['sVeresiye']; ?> TL</td>
+                                                    <td style="text-align:center;"><?= $veresiyecek['vTutar']; ?> TL</td>
                                                     <td style="text-align:center;"><?= $islemturu; ?></td>
                                                     <td style="text-align:center;"><?= date("d.m.Y", strtotime($islemcek['sTarih']));  ?></td>
                                                     <td style="text-align:center;"><?= $tahsilatToplam ?> TL</td>
@@ -279,10 +280,44 @@
                                                             <i class="fa-solid fa-calendar-plus"></i>
                                                     </td>
                                                     <td style="text-align:center;">
+                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#notduzenle<?= $veresiyecek['vId']; ?>">
+                                                            <i class="fa-solid fa-pen"></i>
+                                                    </td>
+                                                    <td style="text-align:center;">
                                                         <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#sil<?= $veresiyecek['vId']; ?>">
                                                             <i class="fa-solid fa-trash"></i>
                                                     </td>
                                                 </tr>
+                                                <div class="modal fade" id="notduzenle<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                                            </div>
+                                                            <div class="modal-body row">
+
+                                                                <div class="row g-1">
+                                                                    <h4 style="color:red;text-align:center;"><?= $mustericek['mAdSoyad']; ?></h4>
+                                                                    <form action="../netting/veresiyeislem.php" method="POST">
+
+                                                                        <div class="form-group col-12">
+                                                                            <label for="exampleFormControlInput1">Veresiye Notu</label>
+                                                                            <input type="text" name="vnot"  class="form-control contact-modal" value="<?= $veresiyecek['vNot'];?>" id="exampleFormControlInput1">
+                                                                            <input type="hidden" value="<?= $veresiyecek['vId'];?>" name="veresiyeid">
+                                                                        </div>
+ 
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-success" name="notduzenle" type="submit">Kaydet</button>
+                                                            </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="modal fade" id="detay<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
@@ -390,6 +425,7 @@
                                                                         </div>
                                                                         <input type="hidden" value="<?= $veresiyecek['vTutar']; ?>" name="tutar">
                                                                         <input type="hidden" value="<?= $veresiyecek['vId']; ?>" name="veresiyeno">
+                                                                        <input type="hidden" value="<?= $veresiyecek['vAlinan']; ?>" name="alinan">
 
                                                                 </div>
                                                             </div>
@@ -411,15 +447,14 @@
                                                             <div class="modal-body row">
 
                                                                 <div class="row g-1">
-                                                                    <h4 style="color:red;text-align:center;"><?= $mustericek['mAdSoyad']; ?></h4>
+                                                                    <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $mustericek['mAdSoyad']; ?></h4>
+                                                                    <h4 style="color:#F24C3D;text-align:center;">VERESİYEYİ SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>  
                                                                     <form action="../netting/veresiyeislem.php" method="POST" id="erteleform">
 
-                                                                        <h3>Veresiyeyi silmek için yönetici şifresini girin</h3>
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Şifre </label>
-                                                                            <input type="text" name="sifre" class="form-control contact-modal" id="exampleFormControlInput1">
-                                                                        </div>
                                                                         <input type="hidden" value="<?= $veresiyecek['vId']; ?>" name="veresiyeno">
+                                                                        <input type="hidden" value="<?= $veresiyecek['vKalan']; ?>" name="veresiyekalan">
+                                                                        <input type="hidden" value="<?= $veresiyecek['vTutar']; ?>" name="veresiyetoplam">
+
 
                                                                 </div>
                                                             </div>

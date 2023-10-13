@@ -36,7 +36,7 @@ if (empty($_SESSION['kullanici'])) {
             <li class="menu <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'index') {  echo "active"; } ?>">
                 <a href="index.php" class="dropdown-toggle">
                     <div class="">
-                        <span>Ana Sayfa</span>
+                        <span>ANA SAYFA</span>
                     </div>
 
                 </a>
@@ -45,7 +45,7 @@ if (empty($_SESSION['kullanici'])) {
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'musteriler' || basename($_SERVER['PHP_SELF'], '.php') == 'musteriekle'|| basename($_SERVER['PHP_SELF'], '.php') == 'musteriduzenle') {  echo "active"; } ?>">
                 <a href="musteriler.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span> Müşteriler</span>
+                        <span>MÜŞTERİLER</span>
                     </div>
                        
                     <div>
@@ -61,7 +61,7 @@ if (empty($_SESSION['kullanici'])) {
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'randevular' || basename($_SERVER['PHP_SELF'], '.php') == 'randevuekle'|| basename($_SERVER['PHP_SELF'], '.php') == 'mrandevular' || basename($_SERVER['PHP_SELF'], '.php') == 'randevuduzenle') {  echo "active"; } ?>">
                 <a href="randevular.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span>Randevular</span>
+                        <span>RANDEVULAR</span>
                     </div>
                        
                     <div>
@@ -77,7 +77,7 @@ if (empty($_SESSION['kullanici'])) {
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'satislar' || basename($_SERVER['PHP_SELF'], '.php') == 'satisekle') {  echo "active"; } ?>">
                 <a href="satislar.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span>Satışlar</span>
+                        <span>SATIŞLAR</span>
                     </div>
                        
                     <div>
@@ -94,7 +94,7 @@ if (empty($_SESSION['kullanici'])) {
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'islemler' || basename($_SERVER['PHP_SELF'], '.php') == 'islemekle') {  echo "active"; } ?>">
                 <a href="islemler.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span>Servis</span>
+                        <span>SERVİS</span>
                     </div>
                        
                     <div>
@@ -111,7 +111,7 @@ if (empty($_SESSION['kullanici'])) {
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'muhasebe') {  echo "active"; } ?>">
                 <a href="muhasebe.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span>Muhasebe</span>
+                        <span>MUHASEBE</span>
                     </div>
                        
                     <div>
@@ -126,7 +126,7 @@ if (empty($_SESSION['kullanici'])) {
             <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'veresiye') {  echo "active"; } ?>">
                 <a href="veresiye.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span>Veresiye</span>
+                        <span>VERESİYE</span>
                     </div>
                        
                     <div>

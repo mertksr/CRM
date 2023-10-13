@@ -235,7 +235,6 @@
                                                 <option selected="">Seç</option>
                                                 <option name="Mehmet">Mehmet</option>
                                                 <option name="Cihan">Cihan</option>
-                                                <option name="Bedirhan">Bedirhan</option>
                                             </select>
                                         </div>
 

@@ -1,4 +1,7 @@
 <?php
+date_default_timezone_set('Europe/Istanbul');
+setlocale(LC_TIME, 'tr_TR.UTF-8');
+
 ob_start();
 session_start();
         try {

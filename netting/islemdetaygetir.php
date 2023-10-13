@@ -92,12 +92,8 @@ $output.='
 </div>
 
 
-<div class="col-6">
-    <label for="inputAddress2" class="form-label">Periyot</label>
-    <input type="text" readonly class="form-control info-input" value="' . $islemcek['islemPeriyot'] . '" name="islemnotlari" id="inputAddress2">
-</div>
 
-<div class="col-12">
+<div class="col-6">
     <label for="inputAddress2" class="form-label">Notlar</label>
     <input type="text" readonly class="form-control info-input" value="' . $islemcek['islemNot'] . '" name="islemnotlari" id="inputAddress2">
 </div>

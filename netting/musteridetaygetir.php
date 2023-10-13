@@ -59,9 +59,9 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
    <div class="col-6">
    <p> ';
                 if (!empty($mustericek['mTel1'])) {
-                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/'.$mustericek['mTel1'].'"><i class="fa-solid fa-phone fa-2xl"></i></a> :'  .  $mustericek['mTel1'] .'</div>';
+                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="tel:0'.$mustericek['mTel1'].'"><i class="fa-solid fa-phone fa-2xl"></i></a> :'  .  $mustericek['mTel1'] .'</div>';
                 }if (!empty($mustericek['mTel2'])) {
-                    $output .= '<div class="p-2" style="font-size:17px;"><a href="https://wa.me/'.$mustericek['mTel2'].'"><i class="fa-solid fa-phone fa-2xl"></i></a> :'  .  $mustericek['mTel2'] .'</div>';
+                    $output .= '<div class="p-2" style="font-size:17px;"><a href="tel:0'.$mustericek['mTel2'].'"><i class="fa-solid fa-phone fa-2xl"></i></a> :'  .  $mustericek['mTel2'] .'</div>';
                 }
 
               $output .= '  
@@ -71,9 +71,9 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
    <p> ';
   
                 if (!empty($mustericek['mTel1'])) {
-                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/'.$mustericek['mTel1'].'"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :'  .  $mustericek['mTel1'] .'</div>';
+                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/0'.$mustericek['mTel1'].'"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :'  .  $mustericek['mTel1'] .'</div>';
                 } if (!empty($mustericek['mTel2'])) {
-                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/'.$mustericek['mTel2'].'"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :'  .  $mustericek['mTel2'] .'</div>';
+                    $output .= ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/0'.$mustericek['mTel2'].'"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :'  .  $mustericek['mTel2'] .'</div>';
                 }
                 $output .= '
    </p>
@@ -94,8 +94,7 @@ $sonrakibakim = iconv('ISO-8859-9', 'UTF-8', $sonrakibakim);
    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="'. $mustericek['mBolge'].'">
 
   '; 
-  if(!empty($mustericek['mKonum'])){$output.= ' <a style="padding-top:11px;" class="btn btn-outline-success" href="https://maps.google.com/?q='. $mustericek['mKonum'] .'" target="_Blank">Haritada
-       Aç</a>';} else{ $output.= ' <a style="padding-top:11px;" class="btn btn-outline-danger" >Konum Yok</a>';}
+  if(!empty($mustericek['mKonum'])){$output.= ' <a style="padding-top:11px;" class="btn btn-outline-success" href="https://maps.google.com/?q='. $mustericek['mKonum'] .'" target="_Blank">HARİTADA AÇ</a>';} else{ $output.= ' <a style="padding-top:11px;" class="btn btn-outline-danger" >KONUM YOK</a>';}
         $output.= '</div>
    <div class="form-group col-12">
    <label for="exampleFormControlInput1">Cihaz </label>

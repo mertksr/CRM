@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
   /*
 
@@ -106,34 +107,40 @@ $(document).ready(function () {
       sSearchPlaceholder: "Search...",
       sLengthMenu: "Results :  _MENU_",
     },
+    "fnCreatedRow": function(nRow, aData, iDataIndex) {
+      $(nRow).attr('id', aData[0]);
+    },
+    proccessing: true,
+    serverSide: true,
+    ajax: "musterigetir.php?mode=musterigetir",
     responsive: true,
     stripeClasses: [],
-    pageLength: 10,
+    pageLength: 25,
     columnDefs: [{ orderable: false, targets: "_all" }],
-    stateSave: true,
-    stateSaveCallback: function (settings, data) {
-      // Sütunlardaki özel arama değerlerini kaydedin
-      data.searchCols = [];
-      $("#specialsearch").each(function () {
-        data.searchCols.push({
-          search: this.value,
-        });
-      });
+    // stateSave: true,
+    // stateSaveCallback: function (settings, data) {
+    //   // Sütunlardaki özel arama değerlerini kaydedin
+    //   data.searchCols = [];
+    //   $("#specialsearch").each(function () {
+    //     data.searchCols.push({
+    //       search: this.value,
+    //     });
+    //   });
 
-      localStorage.setItem("myDataTableState", JSON.stringify(data));
-    },
-    stateLoadCallback: function (settings) {
-      // Kaydedilmiş durumu yüklerken sütunlardaki özel arama değerlerini geri yükleyin
-      if (savedState && savedState.searchCols) {
-        $("#specialsearch").each(function (index) {
-          if (savedState.searchCols[index]) {
-            this.value = savedState.searchCols[index].search;
-          }
-        });
-      }
+    //   localStorage.setItem("myDataTableState", JSON.stringify(data));
+    // },
+    // stateLoadCallback: function (settings) {
+    //   // Kaydedilmiş durumu yüklerken sütunlardaki özel arama değerlerini geri yükleyin
+    //   if (savedState && savedState.searchCols) {
+    //     $("#specialsearch").each(function (index) {
+    //       if (savedState.searchCols[index]) {
+    //         this.value = savedState.searchCols[index].search;
+    //       }
+    //     });
+    //   }
 
-      return savedState;
-    }
+    //   return savedState;
+    // }
   });
   $('input[id="specialsearch"]').on("keyup", function () {
     // table.columns().search( '' ); // Reset all column searches
@@ -159,32 +166,32 @@ $(document).ready(function () {
     },
     responsive: true,
     stripeClasses: [],
-    pageLength: 10,
+    pageLength: 50,
     columnDefs: [{ orderable: false, targets: "_all" }],
-    stateSave: true,
-    stateSaveCallback: function (settings, data) {
-      // Sütunlardaki özel arama değerlerini kaydedin
-      data.searchCols = [];
-      $("#specialsearch").each(function () {
-        data.searchCols.push({
-          search: this.value,
-        });
-      });
+    // stateSave: true,
+    // stateSaveCallback: function (settings, data) {
+    //   // Sütunlardaki özel arama değerlerini kaydedin
+    //   data.searchCols = [];
+    //   $("#specialsearch").each(function () {
+    //     data.searchCols.push({
+    //       search: this.value,
+    //     });
+    //   });
 
-      localStorage.setItem("myDataTableState", JSON.stringify(data));
-    },
-    stateLoadCallback: function (settings) {
-      // Kaydedilmiş durumu yüklerken sütunlardaki özel arama değerlerini geri yükleyin
-      if (savedState && savedState.searchCols) {
-        $("#specialsearch").each(function (index) {
-          if (savedState.searchCols[index]) {
-            this.value = savedState.searchCols[index].search;
-          }
-        });
-      }
+    //   localStorage.setItem("myDataTableState", JSON.stringify(data));
+    // },
+    // stateLoadCallback: function (settings) {
+    //   // Kaydedilmiş durumu yüklerken sütunlardaki özel arama değerlerini geri yükleyin
+    //   if (savedState && savedState.searchCols) {
+    //     $("#specialsearch").each(function (index) {
+    //       if (savedState.searchCols[index]) {
+    //         this.value = savedState.searchCols[index].search;
+    //       }
+    //     });
+    //   }
 
-      return savedState;
-    },
+    //   return savedState;
+    // },
   });
   $("#html5-extensionaaa").DataTable({
     dom:

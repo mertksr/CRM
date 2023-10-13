@@ -149,7 +149,6 @@
                                                 <option selected="">Seç</option>
                                                 <option>Mehmet</option>
                                                 <option>Cihan</option>
-                                                <option>Bedirhan</option>
                                             </select>
                                         </div>
 

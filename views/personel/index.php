@@ -20,7 +20,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../public/src/fontawesome/all.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    <script src="../../public/src/plugins/src/choices/choices.min.js"></script>
     <!-- BEGIN PAGE LEVEL STYLES -->
     <link rel="stylesheet" type="text/css" href="../../public/src/plugins/src/table/datatable/datatables.css">
 
@@ -196,7 +196,7 @@
                 <div class="middle-content container-xxl p-0 mt-4">
 
                     <div class="statbox widget box box-shadow">
-                        <h4>Bugünün Randevuları</h4>
+                        <h4>BUGÜNÜN RANDEVULARI</h4>
                         <br>
                         <div class="row">
 
@@ -216,10 +216,11 @@
                                                     <th style="text-align:center;">Hizmet Türü</th>
                                                     <th style="text-align:center;">Randevu Tarihi</th>
                                                     <th style="text-align:center;">Notlar</th>
-                                                    <th style="max-width:20px;text-align:left;">Durum</th>
-                                                    <th style="max-width:20px;text-align:center;">Detaylar</th>
-                                                    <th style="max-width:20px;text-align:center;">K. Düzenle</th>
+                                                    <th style="max-width:20px;text-align:center;">Durum</th>
+                                                    <th style="max-width:20px;text-align:center;">Detay</th>
+                                                    <th style="max-width:20px;text-align:center;">Konum</th>
                                                     <th style="max-width:20px;text-align:center;">Kapat</th>
+
 
 
 
@@ -227,10 +228,12 @@
                                             </thead>
                                             <?php
                                             $bugun = date("Y-m-d");
-                                            $randevusor = $db->prepare("SELECT * from randevular WHERE rTarih = :tarih AND rTeknisyen = :personel ORDER BY rDurum ASC");
+                                            $randevusor = $db->prepare("SELECT * from randevular WHERE rTarih = :tarih AND rTeknisyen = :personel AND rDurum = :durum ORDER BY rDurum ASC");
                                             $randevusor->execute(array(
                                                 'tarih' => $bugun,
-                                                'personel' => $_SESSION['personel']
+                                                'personel' => $_SESSION['personel'],
+                                                'durum' => "1"
+
                                             ));
                                             $say = 0;
                                             while ($randevucek = $randevusor->fetch(PDO::FETCH_ASSOC)) {
@@ -246,7 +249,7 @@
                                                 $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
                                                 $islemturu = unserialize($islemcek['islemTuru']);
 
-                                                $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                $urunsor = $db->prepare("SELECT *   FROM urunler ORDER BY urunSiralama ASC");
                                                 $urunsor->execute();
                                                 $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
 
@@ -393,7 +396,7 @@
                                                                                 $randevukullanilanurun = unserialize($randevuislemcek['islemKullanilanUrun']);
 
                                                                                 $yapilanislemurun = [];
-                                                                                $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                                $urunsor = $db->prepare("SELECT *  FROM urunler ORDER BY urunSiralama ASC");
                                                                                 $urunsor->execute();
                                                                                 $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
 
@@ -430,10 +433,7 @@
                                                                                     <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevuislemcek['islemIndirimliFiyat']; ?>TL">
                                                                                 </div>
 
-                                                                                <div class="form-group col-12">
-                                                                                    <label for="exampleFormControlInput1">Servis Notları</label>
-                                                                                    <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $randevuislemcek['islemNot'] ?></textarea>
-                                                                                </div>
+
                                                                             <?php } elseif ($randevucek['rDurum'] == "3") {
                                                                                 $randevusatisno = $randevucek['rNo'];
                                                                                 $randevusatissor = $db->prepare("SELECT * FROM satislar WHERE sRandevu = :randevu");
@@ -444,7 +444,7 @@
                                                                                 $randevusatilanurun = unserialize($randevusatiscek['sUrun']);
 
                                                                                 $satilanurun = [];
-                                                                                $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                                $urunsor = $db->prepare("SELECT *  FROM urunler ORDER BY urunSiralama ASC");
                                                                                 $urunsor->execute();
                                                                                 $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
 
@@ -492,10 +492,7 @@
                                                                                     <label for="exampleFormControlInput1">Tahsilat Şekli </label>
                                                                                     <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sTahsilatSekli']; ?>">
                                                                                 </div>
-                                                                                <div class="form-group col-12">
-                                                                                    <label for="exampleFormControlInput1">Satış Notları </label>
-                                                                                    <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sNot']; ?>">
-                                                                                </div>
+
                                                                             <?php } ?>
                                                                         </div>
 
@@ -510,11 +507,11 @@
                                                     </td>
 
                                                     <td style="text-align:center;">
-                                                        <a class="btn btn-ozel mr-2" data-bs-toggle="modal" data-bs-target="#borcduzenle<?php echo $modalId; ?>">
+                                                        <a class="btn btn-ozel mr-2" data-bs-toggle="modal" data-bs-target="#konumduzenle<?php echo $modalId; ?>">
                                                             <i class="fa-solid fa-pen"></i> </a>
                                                     </td>
                                                     <td style="text-align:center;">
-                                                        <a class="btn btn-ozel mr-2" <?php if ($randevucek['rDurum'] == "0") {
+                                                        <a class="btn btn-ozel mr-2" <?php if ($randevucek['rDurum'] == "2"|| $randevucek['rDurum'] == "3") {
                                                                                             echo "style='pointer-events: none;background-color:#c4c4c4;'";
                                                                                         }  ?> data-bs-toggle="modal" data-bs-target="#onayla<?php echo $modalId; ?>">
                                                             <i class="fa-solid fa-check"></i> </a>
@@ -524,7 +521,7 @@
 
 
                                                 </tr>
-                                                <div class="modal fade" id="borcduzenle<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="konumduzenle<?php echo $modalId; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -573,10 +570,10 @@
                                                                 <div class="col-6">
                                                                     <p>
                                                                         <?php if (!empty($mustericek['mTel1'])) { ?>
-                                                                    <div class="p-2" style="font-size:17px;"><a href="tel:<?= $mustericek['mTel1']; ?>"><i class="fa-solid fa-phone fa-2xl"></i></a><?= $mustericek['mTel1']; ?></div>
+                                                                    <div class="p-2" style="font-size:17px;"><a href="tel:0<?= $mustericek['mTel1']; ?>"><i class="fa-solid fa-phone fa-2xl"></i></a>0<?= $mustericek['mTel1']; ?></div>
                                                                 <?php  }
                                                                         if (!empty($mustericek['mTel2'])) { ?>
-                                                                    <div class="p-2" style="font-size:17px;"><a href="tel:<?= $mustericek['mTel2']; ?>"><i class="fa-solid fa-phone fa-2xl"></i></a><?= $mustericek['mTel2']; ?></div>
+                                                                    <div class="p-2" style="font-size:17px;"><a href="tel:0<?= $mustericek['mTel2']; ?>"><i class="fa-solid fa-phone fa-2xl"></i></a>0<?= $mustericek['mTel2']; ?></div>
                                                                 <?php } ?>
 
 
@@ -585,10 +582,10 @@
                                                                 <div class="col-6">
                                                                     <p>
                                                                         <?php if (!empty($mustericek['mTel1'])) { ?>
-                                                                    <div class="p-2" style="font-size:17px;"><a href="https://wa.me/<?= $mustericek['mTel1']; ?>"><i class="fa-brands fa-whatsapp fa-2xl"></i></a><?= $mustericek['mTel1']; ?></div>
+                                                                    <div class="p-2" style="font-size:17px;"><a href="https://wa.me/0<?= $mustericek['mTel1']; ?>"><i class="fa-brands fa-whatsapp fa-2xl"></i></a>0<?= $mustericek['mTel1']; ?></div>
                                                                 <?php  }
                                                                         if (!empty($mustericek['mTel2'])) { ?>
-                                                                    <div class="p-2" style="font-size:17px;"><a href="https://wa.me/<?= $mustericek['mTel2']; ?>"><i class="fa-brands fa-whatsapp fa-2xl"></i></a><?= $mustericek['mTel2']; ?></div>
+                                                                    <div class="p-2" style="font-size:17px;"><a href="https://wa.me/0<?= $mustericek['mTel2']; ?>"><i class="fa-brands fa-whatsapp fa-2xl"></i></a>0<?= $mustericek['mTel2']; ?></div>
                                                                 <?php } ?>
 
 
@@ -643,6 +640,11 @@
 
 ?> </textarea>
                                                                     </div>
+                                                                    <div class="form-group col-12">
+                                                                        <label for="exampleFormControlInput1">Müşteri Notu</label>
+                                                                        <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?php echo $mustericek['mNot']; ?>">
+                                                                    </div>
+
 
                                                                     <?php if ($randevucek['rDurum'] == "2") {
 
@@ -658,7 +660,7 @@
                                                                         $randevukullanilanurun = unserialize($randevuislemcek['islemKullanilanUrun']);
 
                                                                         $yapilanislemurun = [];
-                                                                        $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                        $urunsor = $db->prepare("SELECT *  FROM urunler ORDER BY urunSiralama ASC");
                                                                         $urunsor->execute();
                                                                         $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
 
@@ -695,10 +697,7 @@
                                                                             <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevuislemcek['islemIndirimliFiyat']; ?>TL">
                                                                         </div>
 
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Servis Notları</label>
-                                                                            <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= $randevuislemcek['islemNot'] ?></textarea>
-                                                                        </div>
+
                                                                     <?php } elseif ($randevucek['rDurum'] == "3") {
                                                                         $randevusatisno = $randevucek['rNo'];
                                                                         $randevusatissor = $db->prepare("SELECT * FROM satislar WHERE sRandevu = :randevu");
@@ -709,7 +708,7 @@
                                                                         $randevusatilanurun = unserialize($randevusatiscek['sUrun']);
 
                                                                         $satilanurun = [];
-                                                                        $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                        $urunsor = $db->prepare("SELECT *  FROM urunler ORDER BY urunSiralama ASC");
                                                                         $urunsor->execute();
                                                                         $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
 
@@ -757,10 +756,7 @@
                                                                             <label for="exampleFormControlInput1">Tahsilat Şekli </label>
                                                                             <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sTahsilatSekli']; ?>">
                                                                         </div>
-                                                                        <div class="form-group col-12">
-                                                                            <label for="exampleFormControlInput1">Satış Notları </label>
-                                                                            <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sNot']; ?>">
-                                                                        </div>
+
                                                                     <?php } ?>
                                                                 </div>
 
@@ -773,6 +769,7 @@
                                                     </div>
                                                 </div>
                                                 </td>
+
 
 
 
@@ -838,23 +835,28 @@
                                                                                     <select id="choices-multiple-remove-button-<?= $randevucek['rNo']; ?>" data-id="<?= $randevucek['rNo']; ?>" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
                                                                                         <?php
 
-                                                                                        $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                                        $urunsor = $db->prepare("SELECT *  FROM urunler WHERE urunCinsi = 1  || urunCinsi = 2 || urunCinsi = 4|| urunCinsi = 5 ORDER BY urunSiralama ASC");
                                                                                         $urunsor->execute();
                                                                                         while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+
+                                                                                            if(!empty($uruncek['urunFiyat'])){
+                                                                                                $urunfiyat= "{" .$uruncek['urunFiyat']. "TL}";
+                                                                                            }else{
+                                                                                                $urunfiyat="";
+                                                                                            }
                                                                                         ?>
-                                                                                            <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
+                                                                                            <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd'] . $urunfiyat; ?></option>
                                                                                         <?php  } ?>
 
                                                                                     </select>
                                                                                 </div>
-
 
                                                                                 <div class="col-12 col-lg-12 col-md-12">
                                                                                     <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
                                                                                     <div class="input-group">
                                                                                         <input type="text" class="form-control" id="cost<?= $randevucek['rNo']; ?>" name="islemucreti" readonly style="color:#505463;">
-                                                                                        <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount<?= $randevucek['rNo']; ?>">İndirim Uygula</button>
+                                                                                        <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount<?= $randevucek['rNo']; ?>">İNDİRİM UYGULA</button>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-6">
@@ -868,8 +870,8 @@
 
 
                                                                                 <div class="col-12">
-                                                                                    <label for="inputAddress2" class="form-label">Notlar</label>
-                                                                                    <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
+                                                                                    <label for="inputAddress2" class="form-label">Veresiye Notu</label>
+                                                                                    <input type="text" class="form-control" name="notlar" id="inputAddress2">
                                                                                 </div>
 
                                                                                 <!-- <div class="col-12">
@@ -909,11 +911,17 @@
                                                                                 <select id="choices-multiple-remove-button" class="satilanurunler-<?= $randevucek['rNo']; ?>" data-id="<?= $randevucek['rNo']; ?>" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
                                                                                     <?php
 
-                                                                                    $urunsor = $db->prepare("SELECT * FROM urunler");
+                                                                                    $urunsor = $db->prepare("SELECT *  FROM urunler WHERE  urunCinsi = 3  ORDER BY urunSiralama ASC");
                                                                                     $urunsor->execute();
                                                                                     while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+
+                                                                                        if(!empty($uruncek['urunFiyat'])){
+                                                                                            $urunfiyat= "{" .$uruncek['urunFiyat']. "TL}";
+                                                                                        }else{
+                                                                                            $urunfiyat="";
+                                                                                        }
                                                                                     ?>
-                                                                                        <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
+                                                                                        <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd'] . $urunfiyat; ?></option>
                                                                                     <?php  } ?>
 
                                                                                 </select>
@@ -945,12 +953,12 @@
                                                                                 <label for="defaultInputState" class="form-label ">Referans</label>
                                                                                 <select id="defaultInputState" name="referans" class="form-select">
                                                                                     <option selected="">Seç</option>
-                                                                                    <option value="Bedirhan">Bedirhan</option>
+                                                                                    <option value="Kadir">Kadir</option>
                                                                                     <option value="Mehmet">Mehmet</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-12">
-                                                                                <label for="exampleFormControlInput1">Notlar</label>
+                                                                                <label for="exampleFormControlInput1">Veresiye Notu</label>
                                                                                 <input type="text" name="notlar" style="text-transform:uppercase;" class="form-control">
 
                                                                             </div>

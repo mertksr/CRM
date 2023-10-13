@@ -68,11 +68,9 @@ include '../netting/connect.php'; ?>
                                 <div class="d-flex breadcrumb-content">
                                     <div class="page-header">
 
-                                        <div class="page-title">
-                                            <h3>Merhaba, <?= $_SESSION['kullanici'] ?></h3>
-                                        </div>
+
                                         <br>
-                                        <a href="../netting/kullaniciislem.php?s=out" class="btn btn-dark">Çıkış Yap</a>
+                                        <a href="../netting/kullaniciislem.php?s=out" class="btn btn-dark">ÇIKIŞ YAP</a>
 
                                         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                                             <ol class="breadcrumb">
@@ -166,21 +164,21 @@ include '../netting/connect.php'; ?>
 
                                     </div>
                                     <?php
-                                        $buAyBaslangic = date("Y-m-01"); // Bu ayın başlangıcı
-                                        $buAyBitis = date("Y-m-t"); // Bu ayın sonu
+                                    $buAyBaslangic = date("Y-m-01"); // Bu ayın başlangıcı
+                                    $buAyBitis = date("Y-m-t"); // Bu ayın sonu
 
-                                        // SQL sorgusunu hazırlayın ve çalıştırın
-                                        $sql = "SELECT * FROM musteriler WHERE mSonrakiBakim BETWEEN :baslangic AND :bitis AND  islemTuru LIKE '%Bakım%'";
-                                        $islemsor = $db->prepare($sql);
-                                        $islemsor->bindParam(":baslangic", $buAyBaslangic);
-                                        $islemsor->bindParam(":bitis", $buAyBitis);
-                                        $islemsor->execute();
-                                        $islemSayisi =  $islemsor->rowCount();
-                                        ?>
+                                    // SQL sorgusunu hazırlayın ve çalıştırın
+                                    $sql = "SELECT * FROM musteriler WHERE mSonrakiBakim BETWEEN :baslangic AND :bitis AND  islemTuru LIKE '%Bakım%'";
+                                    $islemsor = $db->prepare($sql);
+                                    $islemsor->bindParam(":baslangic", $buAyBaslangic);
+                                    $islemsor->bindParam(":bitis", $buAyBitis);
+                                    $islemsor->execute();
+                                    $islemSayisi =  $islemsor->rowCount();
+                                    ?>
                                     <div class="w-content">
 
                                         <div class="w-info">
-                                            <p class="value"><?= $islemSayisi;?></p>
+                                            <p class="value"><?= $islemSayisi; ?></p>
                                         </div>
 
                                     </div>
@@ -205,7 +203,24 @@ include '../netting/connect.php'; ?>
                                     <div class="w-content">
 
                                         <div class="w-info">
-                                            <p class="value">14</p>
+                                            <p class="value"><?php
+                                                                // Bu ayın başlangıcı
+                                                                $buAyBaslangic = date("Y-m-01");
+
+                                                                // Bu ayın sonu
+                                                                $buAyBitis = date("Y-m-t");
+                                                                $datem = date('m');
+                                                                // SQL sorgusunu hazırlayın ve çalıştırın
+                                                                $sql = "SELECT * FROM satislar WHERE MONTH(sTarih) = :ay";
+                                                                $satissor = $db->prepare($sql);
+                                                                $satissor->bindParam(":ay", $datem); // Aktif ayı al
+                                                                $satissor->execute();
+                                                                $satissayisi = $satissor->rowCount();
+                                                                ?>
+
+                                                <?= $satissayisi; ?>
+
+                                            </p>
                                         </div>
 
                                     </div>

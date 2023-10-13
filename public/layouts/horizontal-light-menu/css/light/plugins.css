@@ -10,4 +10,14 @@
 	@Note:-  monokai-sublime.css stylesheet is for highliting the code;
 
 */
+th{
+    text-transform: uppercase !important; }
+    #specialsearch{
+        text-transform: uppercase !important; }
+thead{
+background-color: #647ef0 !important;
+}
+button{
+    text-transform: uppercase !important;
+    }
 @import '../../../../src/plugins/src/highlight/styles/monokai-sublime.css';

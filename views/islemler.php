@@ -1,13 +1,12 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>Miscellaneous DataTables | CORK - Multipurpose Bootstrap Dashboard Template </title>
-    <link rel="icon" type="image/x-icon" href="../public/src/assets/img/favicon.ico" />
+    <title>Pınar Su Arıtma</title>
     <link href="../public/layouts/horizontal-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
     <script src="../public/layouts/horizontal-light-menu/loader.js"></script>
@@ -20,7 +19,7 @@
     <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    <script src="../public/src/plugins/src/choices/choices.min.js"></script>
     <!-- BEGIN PAGE LEVEL STYLES -->
     <link rel="stylesheet" type="text/css" href="../public/src/plugins/src/table/datatable/datatables.css">
 
@@ -186,7 +185,7 @@
 
 
                                 ?>
-                                <h4 style='color:red'>Bütün işlemler gösteriliyor </h4>
+
 
 
                                 <!-- <div class="statbox widget box box-shadow"> <a href="musteriler.php" class="btn btn-dark">Geri Dön</a><br><br> -->
@@ -259,29 +258,10 @@
                     </div>
 
                 <?php } else {
-                            /*********  Randevu zamanı değişkenini değiştiren kod altta olunca çalışmadığı için burası yukarıda ********/
-                            $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
-                            $randevuzamani = "<h4 style='color:red'>Bugün yapılan işlemler gösteriliyor </h4>";
-                            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                                if (isset($_POST['buton'])) {
-                                    if ($_POST['buton'] == 'butunservis') {
-                                        $islemsor = $db->prepare("SELECT * from islemler ORDER BY islemTarihi DESC");
-                                        $randevuzamani = "<h4 style='color:red'>Bütün işlemler gösteriliyor</h4>";
-                                    } elseif ($_POST['buton'] == 'bugununservisi') {
-                                        $bugun = date("Y-m-d");
-                                        $islemsor = $db->prepare("SELECT * from islemler WHERE DATE(islemTarihi) ='$bugun'ORDER BY islemTarihi DESC");
 
-                                        $randevuzamani = "<h4 style='color:red'>Bugün yapılan işlemler gösteriliyor </h4>";
-                                    }
-                                }
-                            }
-                            /***********************************/
                 ?>
-                    <?php
-                            echo $randevuzamani; ?>
+                    <h4 style='color:red'>BUGÜN YAPILAN İŞLEMLER</h4>
                     <form method='POST'>
-                        <button class="btn btn-primary" type="submit" name="buton" value="bugununservisi">Bugün Yapılan İşlemler</button>
-                        <button class="btn btn-primary" type="submit" name="buton" value="butunservis">Bütün İşlemler</button>
 
 
                     </form>
@@ -313,6 +293,9 @@
                                         </tr>
                                     </thead>
                                     <?php
+                                        $bugun = date("Y-m-d");
+                                        $islemsor = $db->prepare("SELECT * from islemler WHERE DATE(islemTarihi) ='$bugun'ORDER BY islemTarihi DESC");
+
                                     $islemsor->execute();
                                     $say = 0;
                                     while ($islemcek = $islemsor->fetch(PDO::FETCH_ASSOC)) {
@@ -410,11 +393,16 @@
                                 <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
                                     <?php
 
-                                    $urunsor = $db->prepare("SELECT * FROM urunler");
+                                    $urunsor = $db->prepare("SELECT *  FROM urunler WHERE urunCinsi = 1  || urunCinsi = 2 || urunCinsi = 4|| urunCinsi = 5 ORDER BY urunSiralama ASC");
                                     $urunsor->execute();
                                     while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
+                                        if (!empty($uruncek['urunFiyat'])) {
+                                            $urunfiyat = "{" . $uruncek['urunFiyat'] . "TL}";
+                                        } else {
+                                            $urunfiyat = "";
+                                        }
                                     ?>
-                                        <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd']; ?></option>
+                                        <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd'] . $urunfiyat; ?></option>
                                     <?php  } ?>
 
                                 </select>
@@ -425,7 +413,7 @@
                                 <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="islemtutari" name="islemucreti" readonly style="color:#505463;">
+                                    <input type="text" class="form-control" id="islemtutari" name="islemucreti"  style="color:#505463;">
                                     <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
                                 </div>
                             </div>
@@ -443,14 +431,15 @@
                                 <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
                                 <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
                                     <option value="">Seç</option>
-                                    <option name="Mehmet">Mehmet</option>
-                                    <option name="Bedirhan">Bedirhan</option>
+                                    <option value="mehmet">Mehmet</option>
+                                    <option value="kadir">Kadir</option>
+
                                 </select>
                             </div>
 
                             <div class="col-12">
-                                <label for="inputAddress2" class="form-label">Notlar</label>
-                                <input type="text" class="form-control" name="islemnotlari" id="inputAddress2">
+                                <label for="inputAddress2" class="form-label">Veresiye Notu</label>
+                                <input type="text" class="form-control" name="notlar" id="inputAddress2">
                             </div>
 
                             <input type="hidden" form="islemekleform" name="musterino" value="<?= $mcek['mMusteriNo']; ?>">
@@ -480,7 +469,6 @@
     <!--  END CONTENT AREA  -->
     </div>
     <script>
-        
         $(document).ready(function() {
 
             $("#choices-multiple-remove-button").on("change", function() {
@@ -502,7 +490,7 @@
                         total += parseFloat(prices[i]);
                     }
 
- 
+
                     $("#tahsilat").val(total);
                     $("#tamfiyat").val(total);
                     $("#indirimtutari").val("0");
@@ -511,7 +499,12 @@
 
             });
 
-
+            const islemUcretiInput = document.querySelector('[name="islemucreti"]');
+            const tahsilatInput = document.querySelector('[name="tahsilat"]');
+            islemUcretiInput.addEventListener('input', function() {
+                // Ücreti alın ve tahsilat inputuna yazın
+                tahsilatInput.value = islemUcretiInput.value;
+            });
 
             var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
                 removeItemButton: true
@@ -591,18 +584,19 @@
             });
 
         });
+
         function veresiyeHesapla() {
             // Tahsilat miktarını al
             var costid = "islemtutari";
-             var costval = document.getElementById(costid).value;
+            var costval = document.getElementById(costid).value;
             var tahsilatMiktarı = parseFloat(document.getElementById('tahsilat').value);
-            
+
             // Eğer tahsilat miktarı bir sayı değilse veya boşsa, borcu sıfırla
             if (isNaN(tahsilatMiktarı) || tahsilatMiktarı === "") {
                 document.getElementById('veresiye').value = 0;
             } else {
                 // Tahsilat miktarını değiştirip borcu hesapla
-                var borcMiktarı = costval- tahsilatMiktarı;
+                var borcMiktarı = costval - tahsilatMiktarı;
                 document.getElementById('veresiye').value = borcMiktarı;
             }
         }
