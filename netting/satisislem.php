@@ -40,8 +40,8 @@ if (isset($_POST['satisekle'])) {
         "kullanilanurunler" => $yapilanislem_str,
         "garanti" => $_POST['garanti'],
         "gbitis" => date('Y-m-d', strtotime(' + ' . $_POST['garanti'] . ' years')),
-        "ucret" =>  $_POST['tamfiyat'],
-        "indirimlifiyat" => $_POST['indirimlifiyat'],
+        "ucret" =>  $_POST['islemucreti'],
+        "indirimlifiyat" => $_POST['sindirimlifiyat'],
         "referans" => $_POST['referans'],
         "notlar" => $_POST['notlar']
     ));
@@ -74,7 +74,7 @@ if (isset($_POST['satisekle'])) {
         $insert = $query->execute(array(
             "islemno" => $number,
             "musterino" => $_POST['musterino'],
-            "tutar" =>  $_POST['stamfiyat'],
+            "tutar" =>  $_POST['islemucreti'],
             "indirim" => $_POST['sindirimlifiyat'],
             "yapilanindirim" => $indirim,
             "tahsilat" => $_POST['tahsilat'],
@@ -112,7 +112,8 @@ if (isset($_POST['satisekle'])) {
         header("Location:../views/satislar.php?no=$musterino&yt=basarisiz");
         exit();
     }
-}};
+}
+};
 
 
 if (isset($_POST['muhasebedissatisekle'])) {
@@ -156,10 +157,15 @@ if ($_GET['satissil']=="ok") {
     $delete = $query1->execute(array(
         'sno' => $_GET['satisno']
     ));
-    $query5 = $db->prepare("DELETE FROM veresiye WHERE vSatisNo = :mid");
-    $delete5 = $query5->execute(array(
+    $query2 = $db->prepare("DELETE FROM veresiye WHERE vSatisNo = :mid");
+    $delete2 = $query2->execute(array(
         'mid' =>$satisno
     ));
+    $query3 = $db->prepare("DELETE FROM servismuhasebe WHERE sSatisNo = :smid");
+    $delete3 = $query3->execute(array(
+        'smid' =>$satisno
+    ));
+
 
     if ($delete){
         header("Location:../views/satislar.php?yt=basarili");
