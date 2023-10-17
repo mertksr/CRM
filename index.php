@@ -1,10 +1,38 @@
+
+<?php
+
+include "netting/connect.php"; // Veritabanı bağlantısı için gerekli dosya
+
+if (!empty($_COOKIE['auth_token'])) {
+    $auth_token = $_COOKIE['auth_token'];
+    // Veritabanında kullanıcıyı sorgula
+    $sorgu = $db->prepare("SELECT * FROM kullanicilar WHERE auth_token = ?");
+    $sorgu->execute(array($auth_token));
+    $kullanici = $sorgu->fetch(PDO::FETCH_ASSOC);
+
+    if ($kullanici) {
+        // Kullanıcı oturumu açmış olarak kabul edilir
+        $_SESSION['kullanici'] = $kullanici['kAd'];
+        $_SESSION['kid'] = $kullanici['kId'];
+        $_SESSION['kyetki'] = $kullanici['kYetki'];
+        $_SESSION['personel'] = $kullanici['kPersonel'];
+        // Otomatik yönlendirme yap
+        if ($_SESSION['kyetki'] == 1) {
+            header("Location:views/index.php?f=y");
+        } elseif ($_SESSION['kyetki'] == 2) {
+            header("Location:views/personel/index.php?f=y");
+        }
+     
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>SignIn Boxed | CORK - Multipurpose Bootstrap Dashboard Template </title>
+    <title>Pınar Su Arıtma</title>
     <link rel="icon" type="image/x-icon" href="public/src/assets/img/favicon.ico"/>
     <link href="public/layouts/horizontal-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
     <link href="public/layouts/horizontal-light-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
@@ -43,7 +71,7 @@
                             <div class="row">
                                 <form action="netting/kullaniciislem.php" method="POST">
                                 <div class="col-md-12 mb-3">
-                                    
+
                                     <h2>Pınar Su Arıtma MYS Giriş</h2>
                                     <p>Giriş yapmak için size tanımlı kulanıcı adı ve şifrenizi girin</p>
                                     
@@ -63,7 +91,7 @@
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <div class="form-check form-check-primary form-check-inline">
-                                            <input class="form-check-input me-3" name="hatirla" type="checkbox" id="form-check-default">
+                                            <input class="form-check-input me-3" name="benihatirla" type="checkbox" id="form-check-default">
                                             <label class="form-check-label" for="form-check-default">
                                                 Beni Hatırla
                                             </label>

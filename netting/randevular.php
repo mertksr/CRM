@@ -425,12 +425,6 @@
                                                                                     }
                                                                                 }
                                                                             }
-                                                                            if(!empty($randevuislemcek['islemIndirimliFiyat']) && $randevuislemcek['islemIndirimliFiyat'] != 0){
-                                                                                $indirim = $randevuislemcek['islemUcret'] - $randevuislemcek['islemIndirimliFiyat'];
-                                                                                $yapilanindirim = "-". $indirim." TL";
-                                                                            }else{
-                                                                                $yapilanindirim = "İndirim Yapılmamış";
-                                                                            }
                                                                         ?>
                                                                             <div class="form-group col-6">
                                                                                 <label for="exampleFormControlInput1">Servis Tarihi </label>
@@ -450,7 +444,7 @@
                                                                             </div>
                                                                             <div class="form-group col-4">
                                                                                 <label for="exampleFormControlInput1">Yapılan İndirim </label>
-                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $yapilanindirim; ?>">
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="-<?= $randevuislemcek['islemUcret'] - $randevuislemcek['islemIndirimliFiyat']; ?>TL">
                                                                             </div>
                                                                             <div class="form-group col-4">
                                                                                 <label for="exampleFormControlInput1">Ücret </label>

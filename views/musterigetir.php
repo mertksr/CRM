@@ -80,9 +80,9 @@ require '../public/serverSide/ssp.class.php';
 
 $dbhDetails = array(
     'host' => 'localhost',
-    'user' => 'root',
-    'pass' => '',
-    'db' => 'pnr',
+    'user' => 'pinarmy1_pinarmys',
+    'pass' => 'Mk.1828545',
+    'db' => 'pinarmy1_pinarmys',
     'charset' => 'utf8'
 );
 
