@@ -1,7 +1,11 @@
 <?php include '../../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php 
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../../../../index.php?erisim=izinsiz");
+}
+?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -856,7 +860,7 @@
 
                                                                                     <div class="input-group">
                                                                                         <input type="text" class="form-control" id="cost<?= $randevucek['rNo']; ?>" name="islemucreti" readonly style="color:#505463;">
-                                                                                        <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount<?= $randevucek['rNo']; ?>">İNDİRİM UYGULA</button>
+                                                                                        <button class="btn btn-outline-primary makediscount" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount<?= $randevucek['rNo']; ?>">UYGULA</button>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-6">
@@ -933,7 +937,7 @@
 
                                                                                 <div class="input-group">
                                                                                     <input type="text" class="form-control" id="satistutari<?= $randevucek['rNo']; ?>" name="satistutari" readonly style="color:#505463;">
-                                                                                    <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="satismakediscount">İndirim Uygula</button>
+                                                                                    <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="satismakediscount">Uygula</button>
                                                                                 </div>
                                                                             </div>
 
@@ -1181,9 +1185,7 @@
                     alert("Ürün seçmeden indirim yapamazsınız!");
                     return false;
                 } else {
-                    // $("#makediscount").off("click"); 
-                    $("#makediscount").removeClass('btn-outline-primary');
-                    $("#makediscount").addClass('btn-outline-danger');
+
 
                     $.ajax({
                         url: "../../netting/ayarcek.php",
@@ -1208,7 +1210,12 @@
                             $("#" + tahsilat).val(roundedPrice);
                             var iindirimtutari = "iindirimtutari" + randevuid;
                             $("#" + iindirimtutari).val(roundedPrice);
-
+                            /* Butona tıklandığında tekrar tıklanmasını enegelleme */
+                            var makediscount = "makediscount" + randevuid;
+                            var button = document.querySelector("#" + makediscount);
+                            button.disabled = true;                     
+                            $("#" + makediscount).removeClass('btn-outline-primary');
+                            $("#" + makediscount).addClass('btn-outline-danger');
                         }
 
                     });

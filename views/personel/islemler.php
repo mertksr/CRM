@@ -1,7 +1,11 @@
 <?php include '../../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php 
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../../../../index.php?erisim=izinsiz");
+}
+?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

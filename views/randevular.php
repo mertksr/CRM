@@ -1,12 +1,17 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
+<?php
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../../../index.php?erisim=izinsiz");
+}
+?>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>Miscellaneous DataTables | CORK - Multipurpose Bootstrap Dashboard Template </title>
+    <title>Pınar Su Arıtma</title>
     <link href="../public/layouts/horizontal-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
     <script src="../public/layouts/horizontal-light-menu/loader.js"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -70,7 +75,10 @@
             display: inline-block;
             position: relative;
         }
-
+        table td{
+    color: #000000 !important;
+    font-weight: 600 !important;
+    }
         @media only screen and (max-width: 600px) {
             .ms-container {
                 width: 320px;
@@ -222,7 +230,6 @@
 
                                         $randevuzamani = "<h4 style='color:red'>İLERİ TARİHLİ RANDEVULAR</h4>";
                                     }
-                                    
                                 }
                             }
                             /***********************************/
@@ -231,9 +238,9 @@
                                 <?php
                                 echo $randevuzamani; ?>
                                 <form method='POST'>
-                                    <button class="btn btn-primary" type="submit" name="buton" value="bugununrandevulari">Bugünün Randevuları</button>
-                                    <button class="btn btn-primary" type="submit" name="buton" value="yarininrandevulari">Yarının Randevuları</button>
-                                    <button class="btn btn-primary" type="submit" name="buton" value="ileritarihlirandevular">İleri Tarihli Randevular</button>
+                                    <button class="btn btn-primary" type="submit" name="buton" value="bugununrandevulari">BUGÜNÜN RANDEVULARI</button>
+                                    <button class="btn btn-primary" type="submit" name="buton" value="yarininrandevulari">YARININ RANDEVULARI</button>
+                                    <button class="btn btn-primary" type="submit" name="buton" value="ileritarihlirandevular">İLERİ TARİHLİ RANDEVULAR</button>
 
 
 
@@ -425,11 +432,13 @@
                                                                                     }
                                                                                 }
                                                                             }
-                                                                            if(!empty($randevuislemcek['islemIndirimliFiyat']) && $randevuislemcek['islemIndirimliFiyat'] != 0){
+                                                                            if (!empty($randevuislemcek['islemIndirimliFiyat']) && $randevuislemcek['islemIndirimliFiyat'] != 0) {
                                                                                 $indirim = $randevuislemcek['islemUcret'] - $randevuislemcek['islemIndirimliFiyat'];
-                                                                                $yapilanindirim = "-". $indirim." TL";
-                                                                            }else{
-                                                                                $yapilanindirim = "İndirim Yapılmamış";
+                                                                                $yapilanindirim = "-" . $indirim . " TL";
+                                                                                $ucret = $randevuislemcek['islemIndirimliFiyat'];
+                                                                            } else {
+                                                                                $yapilanindirim = "Yapılmamış";
+                                                                                $ucret = $randevuislemcek['islemUcret'];
                                                                             }
                                                                         ?>
                                                                             <div class="form-group col-6">
@@ -454,7 +463,7 @@
                                                                             </div>
                                                                             <div class="form-group col-4">
                                                                                 <label for="exampleFormControlInput1">Ücret </label>
-                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevuislemcek['islemIndirimliFiyat']; ?>TL">
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $ucret; ?>TL">
                                                                             </div>
 
                                                                         <?php } elseif ($randevucek['rDurum'] == "3") {
@@ -639,6 +648,7 @@
                                                                                     <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount<?= $randevucek['rNo']; ?>">İndirim Uygula</button>
                                                                                 </div>
                                                                             </div>
+
                                                                             <div class="col-6">
                                                                                 <label for="inputAddress2" class="form-label">Tahsilat</label>
                                                                                 <input type="text" class="form-control" name="tahsilat" oninput="veresiyeHesapla(<?= $randevucek['rNo']; ?>)" id="tahsilat<?= $randevucek['rNo']; ?>">
@@ -741,6 +751,7 @@
                                                                             <select id="defaultInputState" name="referans" class="form-select">
                                                                                 <option selected="">Seç</option>
                                                                                 <option value="Kadir">Kadir</option>
+                                                                                <option value="Tayfun">Tayfun</option>
                                                                                 <option value="Mehmet">Mehmet</option>
                                                                             </select>
                                                                         </div>
@@ -756,7 +767,7 @@
                                                                     </div>
 
                                                                     <input type="hidden" name="stamfiyat" id="stamfiyat<?= $randevucek['rNo']; ?>">
-                                                                    <input type="hidden" name="sindirimlifiyat" id="sindirimtutari<?= $randevucek['rNo']; ?>">
+                                                                    <input type="hidden" name="sindirimlifiyat" value="" id="sindirimtutari<?= $randevucek['rNo']; ?>">
 
                                                                     <div class="modal-footer">
                                                                         <button type="submit" name="satisekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
@@ -798,11 +809,18 @@
                                                         <!-- <div class="form-group col-6">
                                                             <label for="exampleFormControlInput1">Kaç Ay </label>
                                                             <input type="text" name="erteleay" class="form-control contact-modal" id="exampleFormControlInput1">
-                                                        </div> -->
+                                                        </div> --> <h5>Randevu Ertele</h>
                                                         <div class="form-group col-12">
-                                                            <label for="exampleFormControlInput1">Hangi Tarih</label>
+                                                            <label for="exampleFormControlInput1">Hangi Güne</label>
                                                             <input type="date" name="erteletarih" class="form-control contact-modal" id="exampleFormControlInput1">
                                                         </div>
+                                                        <br>
+                                                        <h5>Sonraki Bakımı Ertele</h5>
+                                                        <div class="form-group col-12">
+                                                            <label for="exampleFormControlInput1">Kaç Ay</label>
+                                                            <input type="number" name="sonrakibakimerteleay" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                        </div>
+                                                        <input type="hidden" name="musterino" value="<?= $randevucek['rMID']; ?>">
 
                                                         <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
                                                 </div>
@@ -857,9 +875,13 @@
                                                                 <option name="Mehmet" <?php if ($randevucek['rTeknisyen'] == "Mehmet") {
                                                                                             echo "selected";
                                                                                         } ?>>Mehmet</option>
-                                                                <option name="Mehmet" <?php if ($randevucek['rTeknisyen'] == "Kadir") {
+                                                                <option name="Kadir" <?php if ($randevucek['rTeknisyen'] == "Kadir") {
                                                                                             echo "selected";
                                                                                         } ?>>Kadir</option>
+                                                                <option name="tayfun" <?php if ($randevucek['rTeknisyen'] == "tayfun") {
+                                                                                            echo "selected";
+                                                                                        } ?>>Tayfun</option>
+
                                                             </select>
                                                         </div>
                                                         <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
@@ -1053,8 +1075,8 @@
             }
         });
         $("[id^='satismakediscount']").click(function() {
-            var randevuid = $(this).attr("data-randevuid");
-            var scostid = "satistutari" + randevuid;
+            var randevuid = $(this).attr("data-randevuid")
+            var scostid = "satistutari" + randevuid;;
             var fiyat = $("#" + scostid).val();
             var tahsilat = "satistahsilat" + randevuid;
             if (fiyat == "0" || fiyat == "" || fiyat == null) {
@@ -1086,21 +1108,22 @@
                         }
 
                         $("#" + tahsilat).val(roundedPrice);
-                        $("#" + scostid).val(roundedPrice);
                         //$("#sindirimtutari").val(roundedPrice);
                         var sindirimtutari = "sindirimtutari" + randevuid;
                         $("#" + sindirimtutari).val(roundedPrice);
+                        $("#" + scostid).val(roundedPrice);
+
                     }
 
                 });
 
             }
         });
-        const islemUcretiInput = document.querySelector('[name="satistutari"]');
-        const tahsilatInput = document.querySelector('[name="satistahsilat"]');
-        islemUcretiInput.addEventListener('input', function() {
+        const satisUcretiInput = document.querySelector('[name="satistutari"]');
+        const satisTahsilatInput = document.querySelector('[name="satistahsilat"]');
+        satisUcretiInput.addEventListener('input', function() {
             // Ücreti alın ve tahsilat inputuna yazın
-            tahsilatInput.value = islemUcretiInput.value;
+            satisTahsilatInput.value = satisUcretiInput.value;
         });
 
         function veresiyeHesapla(randevuid) {

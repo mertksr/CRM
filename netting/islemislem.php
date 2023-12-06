@@ -74,6 +74,7 @@ if (isset($_POST['islemekle'])) {
                     vMusteriNo = :musterino,
                     vTutar = :veresiye,
                     vDurum= :durum,
+                    vYapan= :yapan,
                     vNot = :notlar
                 
                           ");
@@ -83,6 +84,7 @@ if (isset($_POST['islemekle'])) {
                         "musterino" => $_POST['musterino'],
                         "veresiye" => $_POST['veresiye'],
                         "durum" => 1,
+                        "yapan" => $_SESSION['kullanici'],
                         "notlar" => $_POST['notlar']
                     ));
                 }

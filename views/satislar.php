@@ -1,7 +1,11 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php 
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../../../index.php?erisim=izinsiz");
+}
+?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,7 +51,10 @@
             color: white;
 
         }
-
+        table td{
+    color: #000000 !important;
+    font-weight: 600 !important;
+    }
         .info-input {
             background-color: #EEEEEE !important;
             color: #14274E !important;
@@ -475,6 +482,7 @@
                                 <select id="defaultInputState" form="satisekleform" name="referans" class="form-select">
                                     <option selected="">Seç</option>
                                     <option value="Kadir">Kadir</option>
+                                    <option value="tayfun">tayfun</option>
                                     <option value="Mehmet">Mehmet</option>
                                 </select>
                             </div>
@@ -617,7 +625,6 @@
                         }
                         $("#tahsilat").val(roundedPrice);
 
-                        $("#islemtutari").val(roundedPrice);
                         $("#indirimtutari").val(roundedPrice);
                     }
 

@@ -68,21 +68,28 @@ foreach ($kullanilanurun as $urunid) {
         </div>
 
         '; 
-        $ucret = intval($satiscek['sTutar']);
+        $tutar = intval($satiscek['sTutar']);
 $indirim=intval($satiscek['sIndirimliTutar']); 
-$tutar = $ucret - $indirim;
-        $output .= '
+if($tutar != $indirim && $tutar>$indirim && $indirim != 0 && $indirim != "" && $indirim != "0" && $indirim != null){
+    $yapilanindirim = $tutar - $indirim;
+    $yapilanindirim = "-" . $yapilanindirim . " TL";
+    $ucret = $indirim;
+}else{
+    $yapilanindirim = "Yok";
+    $ucret = $tutar;
+}
+$output .= '
         <div class="form-group col-4">
         <label for="exampleFormControlInput1">Tutar</label>
-        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sTutar'] .'">
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sTutar'] .' TL">
         </div>
         <div class="form-group col-4">
         <label for="exampleFormControlInput1">İndirim</label>
-        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="-'. $satiscek['sIndirimliTutar'] .'">
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $yapilanindirim .'">
         </div>
         <div class="form-group col-4">
         <label for="exampleFormControlInput1">Ücret</label>
-        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'.$tutar .'">
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'.$ucret .' TL">
         </div>
         <div class="form-group col-lg-5">
         <label for="exampleFormControlInput1">Referans</label>

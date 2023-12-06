@@ -1,12 +1,18 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
+<?php
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../../../index.php?erisim=izinsiz");
+}
+?>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>Pınar Su Arıtma</title>    <link rel="icon" type="image/x-icon" href="../public/src/assets/img/favicon.ico" />
+    <title>Pınar Su Arıtma</title>
+    <link rel="icon" type="image/x-icon" href="../public/src/assets/img/favicon.ico" />
     <link href="../public/layouts/horizontal-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
     <script src="../public/layouts/horizontal-light-menu/loader.js"></script>
@@ -16,7 +22,7 @@
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
-    
+
 
     <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -89,14 +95,18 @@
                         $indirimToplam = 0;
                         $tutarToplam = 0;
                         $veresiyeToplam = 0;
-                        $kadirToplam = 0;
                         $mehmetToplam = 0;
+                        $kadirToplam = 0;
                         $kadirVeresiyeToplam = 0;
                         $kadirIndirimToplam = 0;
+                        $tayfunToplam = 0;
+                        $tayfunVeresiyeToplam = 0;
+                        $tayfunIndirimToplam = 0;
                         $mehmetVeresiyeToplam = 0;
                         $mehmetIndirimToplam = 0;
                         $veresiyeTahsilatToplam = 0;
                         $veresiyeTumToplam = 0;
+                        $toplamsirketborcu = 0;
                         $bugun = date('Y-m-d');
                         $servismuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih AND (sTuru LIKE '%Bakım%' OR sTuru LIKE '%Arız%' OR sTuru LIKE '%Montaj%' OR sTuru LIKE '%2. Montaj%' OR sTuru LIKE '%Nakil%')");
                         $servismuhasebesor->execute(array('tarih' => $bugun));
@@ -139,7 +149,7 @@
                             }
                             $veresiyeTumToplam += $veresiyeucret;
                         }
-                        
+
                         $veresiyetahsilatsor = $db->prepare("SELECT * FROM veresiyetahsilat WHERE vtTarih = :tarih");
                         $veresiyetahsilatsor->execute(array('tarih' => $bugun));
                         while ($veresiyetahsilatcek = $veresiyetahsilatsor->fetch(PDO::FETCH_ASSOC)) {
@@ -155,9 +165,16 @@
                             $kadirucret = $kadirmuhasebecek['sTahsilat'];
                             $kadirToplam += $kadirucret;
                             $kadirIndirimToplam += $kadirmuhasebecek['sYapilanIndirim'];
-                            $kadirVeresiyeToplam += $kadirmuhasebecek['sVeresiye'];
                         }
+                        $tayfunmuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih AND sPersonel = :personel");
+                        $tayfunmuhasebesor->execute(array('tarih' => $bugun, 'personel' => 'tayfun'));
 
+                        while ($tayfunmuhasebecek = $tayfunmuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                            // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+                            $tayfunucret = $tayfunmuhasebecek['sTahsilat'];
+                            $tayfunToplam += $tayfunucret;
+                            $tayfunIndirimToplam += $tayfunmuhasebecek['sYapilanIndirim'];
+                        }
                         $mehmetmuhasebesor = $db->prepare("SELECT * FROM servismuhasebe WHERE sTarih = :tarih AND sPersonel = :personel");
                         $mehmetmuhasebesor->execute(array('tarih' => $bugun, 'personel' => 'mehmet'));
 
@@ -166,32 +183,61 @@
                             $mehmetucret = $mehmetmuhasebecek['sTahsilat'];
                             $mehmetToplam += $mehmetucret;
                             $mehmetIndirimToplam += $mehmetmuhasebecek['sYapilanIndirim'];
-                            $mehmetVeresiyeToplam += $mehmetmuhasebecek['sVeresiye'];
                         }
-                        $borcsor = $db->prepare("SELECT * FROM ayarlar");
-                        $borcsor->execute();
 
-                        $borccek = $borcsor->fetch(PDO::FETCH_ASSOC);
+                        $mehmetveresiyesor = $db->prepare("SELECT * FROM veresiye WHERE DATE_FORMAT(vTarih, '%Y-%m-%d') = :tarih AND vYapan = :personel AND vDurum = 1");
+                        $mehmetveresiyesor->execute(array('tarih' => $bugun, 'personel' => 'Mehmet'));
+                        while ($mehmetveresiyecek = $mehmetveresiyesor->fetch(PDO::FETCH_ASSOC)) {
+                            if (!isset($mehmetveresiyecek['vKalan']) && $mehmetveresiyecek['vKalan'] == null || $mehmetveresiyecek == "0") {
+                                $mehmetveresiye = $mehmetveresiyecek['vTutar'];
+                            } else {
+                                $mehmetveresiye = $mehmetveresiyecek['vKalan'];
+                            }
+                            $mehmetVeresiyeToplam += $mehmetveresiye;
+                        }
+                        $kadirveresiyesor = $db->prepare("SELECT * FROM veresiye WHERE DATE_FORMAT(vTarih, '%Y-%m-%d') = :tarih AND vYapan = :personel AND vDurum = 1");
+                        $kadirveresiyesor->execute(array('tarih' => $bugun, 'personel' => 'Kadir'));
+                        while ($kadirveresiyecek = $kadirveresiyesor->fetch(PDO::FETCH_ASSOC)) {
+                            if (!isset($kadirveresiyecek['vKalan']) && $kadirveresiyecek['vKalan'] == null || $kadirveresiyecek == "0") {
+                                $kadirveresiye = $kadirveresiyecek['vTutar'];
+                            } else {
+                                $kadirveresiye = $kadirveresiyecek['vKalan'];
+                            }
+                            $kadirVeresiyeToplam += $kadirveresiye;
+                        }
+
+                        $tayfunveresiyesor = $db->prepare("SELECT * FROM veresiye WHERE DATE_FORMAT(vTarih, '%Y-%m-%d') = :tarih AND vYapan = :personel AND vDurum = 1");
+                        $tayfunveresiyesor->execute(array('tarih' => $bugun, 'personel' => 'Tayfun'));
+                        while ($tayfunveresiyecek = $tayfunveresiyesor->fetch(PDO::FETCH_ASSOC)) {
+                            if (!isset($tayfunveresiyecek['vKalan']) && $tayfunveresiyecek['vKalan'] == null || $tayfunveresiyecek == "0") {
+                                $tayfunveresiye = $tayfunveresiyecek['vTutar'];
+                            } else {
+                                $tayfunveresiye = $tayfunveresiyecek['vKalan'];
+                            }
+                            $tayfunVeresiyeToplam += $tayfunveresiye;
+                        }
+
+
+                       
+                        $odenenborc = 0;
+                        $odenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =1");
+                        $odenenborcsor->execute();
+                        while ($odenenborccek = $odenenborcsor->fetch(PDO::FETCH_ASSOC)) {
+                            $odenenborc += $odenenborccek['bMiktar'];
+                         }
+
+                         $eklenenborc = 0;
+                         $eklenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =0");
+                         $eklenenborcsor->execute();
+                         while ($eklenenborccek = $eklenenborcsor->fetch(PDO::FETCH_ASSOC)) {
+                             $eklenenborc += $eklenenborccek['bMiktar'];
+                          }
+                          $toplamsirketborcu = $eklenenborc - $odenenborc;
+                        
                         ?>
 
 
-                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6 p-2">
-                            <div class="widget widget-card-four">
-                                <div class="widget-content">
-                                    <div class="w-header">
-                                        <div class="w-info">
-                                            <h6 class="value">Günlük Servis Kazancı</h6>
-                                        </div>
-                                    </div>
-                                    <div class="w-content">
-                                        <div class="w-info">
-                                            <p class="value" style="color:limegreen;"><?= $servisToplam; ?> TL</p>
-                                        </div>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6 p-2">
                             <div class="widget widget-card-four">
@@ -273,7 +319,24 @@
                             </div>
                         </div>
 
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6  p-2">
+                            <div class="widget widget-card-four">
+                                <div class="widget-content">
+                                    <div class="w-header">
+                                        <div class="w-info">
+                                            <h6 class="value">Şirket Borcu</h6>
+                                        </div>
+                                    </div>
+                                    <div class="w-content">
+                                        <div class="w-info">
+                                            <p class="value" style="color:burlywood;"><?= $toplamsirketborcu; ?> TL</p>
+                                        </div>
+                                        <button type="button" class="btn btn-warning mb-2" style="color:#EFF5F5;margin:0 0 10px 10px;" name="borcekle" id="borcekle" data-bs-toggle="modal" data-bs-target="#borceklemodal">Değiştir</button>
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12  p-2">
                             <div class="widget widget-card-four">
                                 <div class="widget-content">
@@ -291,6 +354,28 @@
                                         </div>
                                         <div class="w-info" style="color:#e95f2b;"> Veresiye
                                             <p class="value" style="font-size:x-large;"><?= $kadirVeresiyeToplam; ?> TL </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12  p-2">
+                            <div class="widget widget-card-four">
+                                <div class="widget-content">
+                                    <div class="w-header">
+                                        <div class="w-info">
+                                            <h6 class="value">Tayfun Günlük Özet</h6>
+                                        </div>
+                                    </div>
+                                    <div class="w-content">
+                                        <div class="w-info" style="color:limegreen;">Kazanç
+                                            <p class="value" style="color:limegreen;font-size:x-large;"><?= $tayfunToplam; ?> TL </p>
+                                        </div>
+                                        <div class="w-info" style="color:#e95f2b;"> İndirim
+                                            <p class="value" style="font-size:x-large;"><?= $tayfunIndirimToplam; ?> TL </p>
+                                        </div>
+                                        <div class="w-info" style="color:#e95f2b;"> Veresiye
+                                            <p class="value" style="font-size:x-large;"><?= $tayfunVeresiyeToplam; ?> TL </p>
                                         </div>
                                     </div>
                                 </div>
@@ -319,45 +404,96 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6  p-2">
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6 p-2">
                             <div class="widget widget-card-four">
                                 <div class="widget-content">
                                     <div class="w-header">
                                         <div class="w-info">
-                                            <h6 class="value">Şirket Borcu</h6>
+                                            <h6 class="value">Günlük Servis Kazancı</h6>
                                         </div>
                                     </div>
                                     <div class="w-content">
                                         <div class="w-info">
-                                            <p class="value" style="color:burlywood;"><?= $borccek['ayarSirketBorcu']; ?> TL</p>
+                                            <p class="value" style="color:limegreen;"><?= $servisToplam; ?> TL</p>
                                         </div>
-                                        <button type="button" class="btn btn-warning mb-2" style="color:#EFF5F5;margin:0 0 10px 10px;" name="borcekle" id="borcekle" data-bs-toggle="modal" data-bs-target="#borceklemodal">Değiştir</button>
 
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div id="borceklemodal" class="modal fade">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">Müşteri Ekle</h4>
+                                        <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">ŞİRKET BORCU</h4>
                                         <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <?php
+                                                    $odenenborc = 0;
+                                                    $odenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =1");
+                                                    $odenenborcsor->execute();
+                                                    while ($odenenborccek = $odenenborcsor->fetch(PDO::FETCH_ASSOC)) {
+                                                        $odenenborc += $odenenborccek['bMiktar'];
+                                                     }
+
+                                                     $eklenenborc = 0;
+                                                     $eklenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =0");
+                                                     $eklenenborcsor->execute();
+                                                     while ($eklenenborccek = $eklenenborcsor->fetch(PDO::FETCH_ASSOC)) {
+                                                         $eklenenborc += $eklenenborccek['bMiktar'];
+                                                      }
+                                                      $toplamborc = $eklenenborc - $odenenborc;
+                                                     ?>
+                                    <div style="margin:10px auto 0 auto;">
+                                        <h4 style="color:#E21818;">GÜNCEL BORÇ: <?=$toplamborc;?> TL</h4>
                                     </div>
                                     <form method="post" id="musteriekleform" type="POST" action="../netting/ayarislem.php">
                                         <div class="modal-body row g-1" id="musteridetaybody">
 
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlInput1" class="mb-1">Borç Öde</label>
+                                                    <input type="text" class="form-control" name="borcdus">
+                                                </div>
 
-                                            <div class="form-group col-12">
-                                                <label for="exampleFormControlInput1" class="mb-1">Şirket Borcu</label>
-                                                <input type="text" class="form-control" name="borc" id="borc" value="<?= $borccek['ayarSirketBorcu']; ?>">
+
                                             </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlInput1" class="mb-1">Borç Ekle</label>
+                                                    <input type="text" class="form-control" name="borcekle">
+                                                </div>
 
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1" class="mb-1">Not</label>
+                                                <input type="text" class="form-control" name="not">
+                                            </div>
                                             <div class="modal-footer">
                                                 <button type="submit" name="borcdegistir" class="btn btn-success" style="color:#EFF5F5;">Kaydet</button>
                                             </div>
-
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <?php
+                                                    $borcsor = $db->prepare("SELECT * FROM sirketborcu ORDER BY bID DESC");
+                                                    $borcsor->execute();
+                                                    while ($borccek = $borcsor->fetch(PDO::FETCH_ASSOC)) { 
+                                                        $tarih = date("d.m.Y", strtotime($borccek['bTarih']));
+                                                        if($borccek['bTip'] == 0){
+                                                            $tip = "Eklendi";}
+                                                            else{
+                                                                $tip = "Ödendi";
+                                                            }
+                                                        ?>
+                                                        <tr>
+                                                            <td <?= ($tip == "Eklendi") ? "style='color:red;'" : "style='color:green;'";?>><?= $borccek['bMiktar'] . " " .$tip; ?></td>
+                                                            <td class="text-center"><?= $tarih;?></td>
+                                                            <td class="text-center"><?= $borccek['bNot'];?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                </table>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -407,6 +543,13 @@
                                                 $stmt->bindParam(":tarih", $currentDateStr);
                                                 $stmt->execute();
 
+
+                                                $veresiyemuhasebesor = $db->prepare("SELECT * FROM veresiye WHERE DATE_FORMAT(vTarih, '%Y-%m-%d') = :tarih AND vDurum = 1");
+                                                $veresiyemuhasebesor->execute(array('tarih' => $currentDateStr));
+                                                $veresiyemuhasebecek = $veresiyemuhasebesor->fetch(PDO::FETCH_ASSOC);
+
+
+
                                                 $gunlukKazanc = 0;
                                                 $gunlukVeresiye = 0;
                                                 $gunlukIndirimMiktari = 0;
@@ -415,13 +558,26 @@
                                                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                                     $tutar = $row['sTahsilat'];
                                                     $indirim = $row['sIndirim'];
-                                                    $veresiye = $row['sVeresiye'];
+
+
                                                     $yapilanindirim = $row['sYapilanIndirim'];
                                                     if (isset($tutar) && is_numeric($tutar)) {
-                                                        $gunlukKazanc += (float)$tutar;
+                                                        $gunlukKazanc += $tutar;
                                                     }
 
+
                                                     $gunlukIndirimMiktari += is_numeric($yapilanindirim) ? $yapilanindirim : 0;
+                                                }
+
+                                                $veresiyemuhasebesor = $db->prepare("SELECT * FROM veresiye WHERE DATE_FORMAT(vTarih, '%Y-%m-%d') = :tarih AND vDurum = 1");
+                                                $veresiyemuhasebesor->execute(array('tarih' => $currentDateStr));
+                                                while ($veresiyemuhasebecek = $veresiyemuhasebesor->fetch(PDO::FETCH_ASSOC)) {
+                                                    if (!isset($veresiyemuhasebecek['vKalan']) && $veresiyemuhasebecek['vKalan'] == null || $veresiyemuhasebecek == "0") {
+                                                        $veresiye = $veresiyemuhasebecek['vTutar'];
+                                                    } else {
+                                                        $veresiye = $veresiyemuhasebecek['vKalan'];
+                                                    }
+
                                                     $gunlukVeresiye += is_numeric($veresiye) ? $veresiye : 0;
                                                 }
                                                 $veresiyeTahsilatToplam = 0;
@@ -433,8 +589,9 @@
                                                     $veresiyetahsilat = $veresiyetahsilatcek['vtTahsilat'];
                                                     $veresiyeTahsilatToplam += $veresiyetahsilat;
                                                 }
-                                                if($gunlukKazanc !="0"){
-                                                $gunlukKazanc = $gunlukKazanc + $veresiyeTahsilatToplam;}
+                                                if ($gunlukKazanc != "0") {
+                                                    $gunlukKazanc = $gunlukKazanc + $veresiyeTahsilatToplam;
+                                                }
                                                 // Günlük verileri tablo içinde gösterin
                                                 echo "<tr>";
                                                 echo "<td class='text-center'>" . strftime('%d.%m.%Y', strtotime($currentDateStr)) . "</td>";
@@ -518,7 +675,7 @@
 
                                             // Ay ay kazançları, indirimleri ve veresiye miktarlarını yazdırın veya işleyin
                                             foreach ($aylik_kazanc as $ay => $kazanc) {
-                                            
+
                                                 $toplam_indirim = $aylik_indirim[$ay];
                                                 $toplam_veresiye = $aylik_veresiye[$ay];
 

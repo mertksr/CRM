@@ -1,5 +1,16 @@
 <?php
 include 'connect.php';
+function formatPhoneNumber($phoneNumber) {
+    // Sadece rakamları tutacak şekilde temizleme
+    $cleaned = preg_replace('/\D/', '', $phoneNumber);
+
+    // Eğer başında 0 varsa sadece 0'ı sil
+    if (strlen($cleaned) > 0 && $cleaned[0] === '0') {
+        $cleaned = substr($cleaned, 1);
+    }
+
+    return $cleaned;
+}
 
 if (isset($_POST['musteriekle'])) {
     $durum = 1;
@@ -14,7 +25,8 @@ if (isset($_POST['musteriekle'])) {
     $notlar = $_POST["notlar"];
     $periyot = $_POST["periyot"];
     $cihaz = $_POST["cihaz"];
-
+$tel1 = formatPhoneNumber($tel1);
+$tel2 =formatPhoneNumber($tel2);
 $sonrakibakim = date('Y-m-d', strtotime('+' . $periyot . ' months'));
         $num_of_digits = 6;
         $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
@@ -43,44 +55,44 @@ $sonrakibakim = date('Y-m-d', strtotime('+' . $periyot . ' months'));
         }
         
     }
-if (isset($_POST['personelmusteriekle'])) {
-    $durum = 1;
+// if (isset($_POST['personelmusteriekle'])) {
+//     $durum = 1;
 
-    $adsoyad = $_POST["adsoyad"];
-    $tel1 = $_POST["tel1"];
-    $tel2 = $_POST["tel2"];
-    $bolge = $_POST["bolge"];
-    $konum = $_POST["konum"];
-    $adres = $_POST["adres"];
-    $cihaz = $_POST["cihaz"];
-    $notlar = $_POST["notlar"];
-    $periyot = $_POST["periyot"];
+//     $adsoyad = $_POST["adsoyad"];
+//     $tel1 = $_POST["tel1"];
+//     $tel2 = $_POST["tel2"];
+//     $bolge = $_POST["bolge"];
+//     $konum = $_POST["konum"];
+//     $adres = $_POST["adres"];
+//     $cihaz = $_POST["cihaz"];
+//     $notlar = $_POST["notlar"];
+//     $periyot = $_POST["periyot"];
 
-    $num_of_digits = 6;
-    $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
-    $query = "INSERT INTO musteriler(mDurum, mMusteriNo, mAdSoyad, mTel1, mTel2, mKonum, mAdres, mBolge, mCihaz, mNot, mPeriyot) VALUES(:durum, :musterino, :adsoyad, :tel1, :tel2, :konum, :adres, :bolge, :cihaz, :notlar, :periyot)";
-    $statement = $db->prepare($query);
-    $statement->bindParam(':durum', $durum);
-    $statement->bindParam(':musterino', $number);
-    $statement->bindParam(':adsoyad', $adsoyad);
-    $statement->bindParam(':tel1', $tel1);
-    $statement->bindParam(':tel2', $tel2);
-    $statement->bindParam(':bolge', $bolge);
-    $statement->bindParam(':konum', $konum);
-    $statement->bindParam(':adres', $adres);
-    $statement->bindParam(':cihaz', $cihaz);
-    $statement->bindParam(':notlar', $notlar);
-    $statement->bindParam(':periyot', $periyot);
+//     $num_of_digits = 6;
+//     $number = str_pad(mt_rand(1, pow(10, $num_of_digits) - 1), $num_of_digits, '0', STR_PAD_LEFT);
+//     $query = "INSERT INTO musteriler(mDurum, mMusteriNo, mAdSoyad, mTel1, mTel2, mKonum, mAdres, mBolge, mCihaz, mNot, mPeriyot) VALUES(:durum, :musterino, :adsoyad, :tel1, :tel2, :konum, :adres, :bolge, :cihaz, :notlar, :periyot)";
+//     $statement = $db->prepare($query);
+//     $statement->bindParam(':durum', $durum);
+//     $statement->bindParam(':musterino', $number);
+//     $statement->bindParam(':adsoyad', $adsoyad);
+//     $statement->bindParam(':tel1', $tel1);
+//     $statement->bindParam(':tel2', $tel2);
+//     $statement->bindParam(':bolge', $bolge);
+//     $statement->bindParam(':konum', $konum);
+//     $statement->bindParam(':adres', $adres);
+//     $statement->bindParam(':cihaz', $cihaz);
+//     $statement->bindParam(':notlar', $notlar);
+//     $statement->bindParam(':periyot', $periyot);
 
-    $insert = $statement->execute();
-    if($insert){
-        header("Location: ../views/personel/index.php?yt=basarili");
-        exit();
-    } else {
-        header("Location: ../views/personel/index.php?yt=basarisiz");
-        exit();
-    }
-}
+//     $insert = $statement->execute();
+//     if($insert){
+//         header("Location: ../views/personel/index.php?yt=basarili");
+//         exit();
+//     } else {
+//         header("Location: ../views/personel/index.php?yt=basarisiz");
+//         exit();
+//     }
+// }
 
     if (isset($_POST['bakimertele'])) {
         $erteleay = $_POST['erteleay'];

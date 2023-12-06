@@ -1,7 +1,11 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php 
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../../../index.php?erisim=izinsiz");
+}
+?>
 <head>
 <title>Pınar Su Arıtma</title>
   <?php include 'partials/header.php' ?>
@@ -272,7 +276,7 @@
                             <option value="">Seçim yapın</option>
 
                             <?php
-                            $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 || urunCinsi = 3 ORDER BY urunSiralama ASC");
+                            $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 || urunCinsi = 3 || urunCinsi = 10 ORDER BY urunSiralama ASC");
                             $cihazsor->execute();
                             while ($cihazcek = $cihazsor->fetch(PDO::FETCH_ASSOC)) {
                             ?>

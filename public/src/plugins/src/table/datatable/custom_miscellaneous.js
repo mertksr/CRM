@@ -70,83 +70,7 @@ $(document).ready(function () {
   //     return savedState;
   // }
   // });
-
-  $('input[id="specialsearch"]').on("keyup", function () {
-    // table.columns().search( '' ); // Reset all column searches
-    table.column($(this).parent().index()).search(this.value).draw(); // Apply the search on the corresponding column
-  }); //     $('#musteriler thead tr').clone(true).appendTo( '#musteriler thead' );
-  //     $('#musteriler thead tr:eq(1) th').each( function (i) {
-  //         if(i!= 6 && i!= 7){
-  //         var title = $(this).text();
-  //         $(this).html( '<input type="text"  class="form-control" placeholder="Ara '+title+'" />' );
-  //         $( 'input', this ).on( 'keyup change', function () {
-  //             if ( table.column(i).search() !== this.value ) {
-  //                 table
-  //                     .column(i)
-  //                     .search( this.value )
-  //                     .draw();
-  //             }
-  //         } );
-  //  } } );
-  // Apply the search
-  var table = $("#musteriler").DataTable({
-    dom:
-      "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
-      "<'table-responsive'tr>" +
-      "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
-    oLanguage: {
-      oPaginate: {
-        sPrevious:
-          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
-        sNext:
-          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>',
-      },
-      sInfo: "_TOTAL_ kayıttan _END_ tanesi gösteriliyor",
-      sSearch:
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
-      sSearchPlaceholder: "Search...",
-      sLengthMenu: "Results :  _MENU_",
-    },
-    "fnCreatedRow": function(nRow, aData, iDataIndex) {
-      $(nRow).attr('id', aData[0]);
-    },
-    proccessing: true,
-    serverSide: true,
-    ajax: "musterigetir.php?mode=musterigetir",
-    responsive: true,
-    stripeClasses: [],
-    pageLength: 25,
-    columnDefs: [{ orderable: false, targets: "_all" }],
-    // stateSave: true,
-    // stateSaveCallback: function (settings, data) {
-    //   // Sütunlardaki özel arama değerlerini kaydedin
-    //   data.searchCols = [];
-    //   $("#specialsearch").each(function () {
-    //     data.searchCols.push({
-    //       search: this.value,
-    //     });
-    //   });
-
-    //   localStorage.setItem("myDataTableState", JSON.stringify(data));
-    // },
-    // stateLoadCallback: function (settings) {
-    //   // Kaydedilmiş durumu yüklerken sütunlardaki özel arama değerlerini geri yükleyin
-    //   if (savedState && savedState.searchCols) {
-    //     $("#specialsearch").each(function (index) {
-    //       if (savedState.searchCols[index]) {
-    //         this.value = savedState.searchCols[index].search;
-    //       }
-    //     });
-    //   }
-
-    //   return savedState;
-    // }
-  });
-  $('input[id="specialsearch"]').on("keyup", function () {
-    // table.columns().search( '' ); // Reset all column searches
-    randevuTable.column($(this).parent().index()).search(this.value).draw(); // Apply the search on the corresponding column
-  });
-  var randevuTable = $("#randevular").DataTable({
+  var veresiyeTable = $("#veresiyeler").DataTable({
     dom:
       "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
       "<'table-responsive'tr>" +
@@ -192,6 +116,245 @@ $(document).ready(function () {
 
     //   return savedState;
     // },
+  });
+  $('input[id="specialsearch"]').on("keyup", function () {
+    // table.columns().search( '' ); // Reset all column searches
+    table.column($(this).parent().index()).search(this.value).draw(); // Apply the search on the corresponding column
+  }); //     $('#musteriler thead tr').clone(true).appendTo( '#musteriler thead' );
+  //     $('#musteriler thead tr:eq(1) th').each( function (i) {
+  //         if(i!= 6 && i!= 7){
+  //         var title = $(this).text();
+  //         $(this).html( '<input type="text"  class="form-control" placeholder="Ara '+title+'" />' );
+  //         $( 'input', this ).on( 'keyup change', function () {
+  //             if ( table.column(i).search() !== this.value ) {
+  //                 table
+  //                     .column(i)
+  //                     .search( this.value )
+  //                     .draw();
+  //             }
+  //         } );
+  //  } } );
+  // Apply the search
+
+  var table = $("#musteriler").DataTable({
+    dom:
+      "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+      "<'table-responsive'tr>" +
+      "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+    oLanguage: {
+      oPaginate: {
+        sPrevious:
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+        sNext:
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>',
+      },
+      sInfo: "_TOTAL_ kayıttan _END_ tanesi gösteriliyor",
+      sSearch:
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+      sSearchPlaceholder: "Search...",
+      sLengthMenu: "Results :  _MENU_",
+    },
+    "fnCreatedRow": function (nRow, aData, iDataIndex) {
+      $(nRow).attr('id', aData[0]);
+    },
+    processing: true,
+    serverSide: true,
+    ajax: "musterigetir.php?mode=musterigetir",
+    responsive: true,
+    stripeClasses: [],
+    pageLength: 25,
+    columnDefs: [
+      { orderable: false, targets: "_all" }],
+
+    initComplete: function () {
+      var table = this.api();
+
+      table.columns('1,4').every(function () {
+        var column = this;
+        if (column.index() === 1) { // Sadece belirli bir sütunu filtrelemek istiyorsanız index'i kontrol edebilirsiniz
+          var mahalleselect = $('<select class="form-select" id="mahalleselect"><option value="" class="tumu">Tümü</option></select>')
+            .appendTo($(column.header()).empty())
+            .on('change', function () {
+              var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+              );
+
+            });
+
+          $.ajax({
+            url: '/mysV00.1/netting/mahallegetir.php',
+            type: 'GET',
+
+            success: function (data) {
+
+              var mahalleler = [];
+
+              for (var i = 0; i < data.length; i++) {
+                var isim = data[i];
+
+                isim = isim.trim(); 
+                mahalleler.push(isim); 
+              }
+              mahalleler.forEach(function (d) {
+                mahalleselect.append('<option value="' + d + '">' + d + '</option>');
+              });
+              mahalleselect.on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                column.search(this.value).draw();
+
+                var secilenMahalle = $(this).val();
+                $.ajax({
+                  url: '/mysV00.1/netting/mahdentarihgetir.php',
+                  type: 'POST', 
+                  data: { mahalle: secilenMahalle }, 
+                  success: function (data) {
+
+                    var select2 = $('#tarihselect');
+                    select2.find('option:not(.tumu):not(:selected)').remove();
+
+                    for (var key in data) {
+                      if (data.hasOwnProperty(key)) {
+                        var tarih = key;
+                        var bakimSayisi = data[key];
+                        var date = new Date(tarih);
+      
+                        var ay = date.toLocaleString('tr-TR', { month: 'long' }); // Ayı al
+                        var yil = date.getFullYear(); 
+                        var bakimtarihi = ay + ' ' + yil;
+                        bakimtarihi = bakimtarihi.toUpperCase();
+                        select2.append('<option value="' + tarih + '">' + bakimtarihi + " II " + bakimSayisi + '</option>');
+                      }
+                    }
+
+                    mahalleselect.on('change', function () {
+                      var val = $(this).val();
+                      column
+                        .search(val ? val : '', true, false) // Sadece val ile arama yap
+                        .draw();
+                    });
+
+                  },
+
+                });
+
+              });
+
+            }
+          });
+
+        } else if (column.index() === 4) { 
+          var tarihselect = $('<select class="form-select" id="tarihselect"><option value="" class="tumu">Tümü</option></select>')
+            .appendTo($(column.header()).empty())
+            .on('change', function () {
+              var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+              );
+
+            });
+
+
+          $.ajax({
+            url: '/mysV00.1/netting/tarihgetir.php',
+            type: 'POST',
+
+            success: function (data) {
+
+              for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+
+                  var tarih = key;
+                  var bakimSayisi = data[key];
+                  var date = new Date(tarih);
+
+                  var ay = date.toLocaleString('tr-TR', { month: 'long' });
+                  var yil = date.getFullYear();
+                  var bakimtarihi = ay + ' ' + yil;
+                  bakimtarihi = bakimtarihi.toUpperCase();
+
+                  tarihselect.append('<option value="' + tarih + '">' + bakimtarihi + " II " + bakimSayisi + '</option>');
+                }
+              }
+              var select1 = $('#mahalleselect');
+              tarihselect.on('change', function () {
+
+                var secilenTarih = $(this).val();
+                $.ajax({
+                  url: '/mysV00.1/netting/tarihdenmahgetir.php', 
+                  type: 'POST',
+                  data: { tarih: secilenTarih }, 
+                  success: function (data) {
+                    console.log(data);
+
+
+                    var select1 = $('#mahalleselect');
+
+
+                   select1.find('option:not(.tumu):not(:selected)').remove();
+
+                    
+                    for (var key in data) {
+                      if (data.hasOwnProperty(key)) {
+                        var mahalle = key;
+                        var bakimSayisi = data[key];      
+
+                        select1.append('<option value="' + mahalle + '">' + mahalle + " II " + bakimSayisi + '</option>');
+                      }
+                    }
+
+                    tarihselect.on('change', function () {
+                      var val = $(this).val();
+                      column
+                        .search(val ? val : '', true, false) // Sadece val ile arama yap
+                        .draw();
+                    });
+
+                  },
+
+                });
+
+                var val = $(this).val();
+                column
+                  .search(val ? val : '', true, false) 
+                  .draw();
+              });
+            
+            }
+
+            // }
+          });
+        }
+      });
+    }
+
+  });
+
+  $('input[id="specialsearch"]').on("keyup", function () {
+    // table.columns().search( '' ); // Reset all column searches
+    randevuTable.column($(this).parent().index()).search(this.value).draw(); // Apply the search on the corresponding column
+  });
+  var randevuTable = $("#randevular").DataTable({
+    dom:
+      "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+      "<'table-responsive'tr>" +
+      "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+    oLanguage: {
+      oPaginate: {
+        sPrevious:
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+        sNext:
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>',
+      },
+      sInfo: "_TOTAL_ kayıttan _END_ tanesi gösteriliyor",
+      sSearch:
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+      sSearchPlaceholder: "Search...",
+      sLengthMenu: "Results :  _MENU_",
+    },
+    responsive: true,
+    stripeClasses: [],
+    pageLength: 50,
+    columnDefs: [
+      { orderable: false, targets: "_all" }],
   });
   $("#html5-extensionaaa").DataTable({
     dom:

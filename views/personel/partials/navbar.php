@@ -1,9 +1,4 @@
-<?php 
-    require_once '../../netting/connect.php';
-if (empty($_SESSION['kullanici']) && $_SESSION['kyetki'] != 2) {
-    header("Location:../../../index.php?erisim=izinsiz");
-}
-?>
+
 <!--  BEGIN SIDEBAR  -->
 <div class="sidebar-wrapper sidebar-theme">
 

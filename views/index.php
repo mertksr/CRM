@@ -2,7 +2,11 @@
 include '../netting/connect.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php 
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../../../index.php?erisim=izinsiz");
+}
+?>
 <head>
     <?php include 'partials/header.php' ?>
     <link href="../public/layouts/horizontal-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
@@ -168,10 +172,13 @@ include '../netting/connect.php'; ?>
                                     $buAyBitis = date("Y-m-t"); // Bu ayın sonu
 
                                     // SQL sorgusunu hazırlayın ve çalıştırın
-                                    $sql = "SELECT * FROM musteriler WHERE mSonrakiBakim BETWEEN :baslangic AND :bitis AND  islemTuru LIKE '%Bakım%'";
-                                    $islemsor = $db->prepare($sql);
+                                    
+    
+
+                                    $islemsor = $db->prepare("SELECT * FROM islemler WHERE islemTarihi BETWEEN :baslangic AND :bitis AND islemTuru LIKE '%Bakım%'");
                                     $islemsor->bindParam(":baslangic", $buAyBaslangic);
                                     $islemsor->bindParam(":bitis", $buAyBitis);
+
                                     $islemsor->execute();
                                     $islemSayisi =  $islemsor->rowCount();
                                     ?>

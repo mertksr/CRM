@@ -1,12 +1,16 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php 
+if (empty($_SESSION['kullanici'])) {
+    header("Location:../../../index.php?erisim=izinsiz");
+}
+?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>Miscellaneous DataTables | CORK - Multipurpose Bootstrap Dashboard Template </title>
+    <title>Pınar Su Arıtma</title>
     <link rel="icon" type="image/x-icon" href="../public/src/assets/img/favicon.ico" />
     <link href="../public/layouts/horizontal-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
@@ -147,7 +151,10 @@
             cursor: pointer;
         }
 
-
+        table td{
+    color: #000000 !important;
+    font-weight: 600 !important;
+    }
         .choices__inner,
         .choices__input,
         .choices__list {
@@ -207,7 +214,7 @@
 
                                     <div class="widget-content widget-content-area">
 
-                                        <table id="islemler" class="table dt-table-hover" style="width:100%">
+                                        <table id="veresiyeler" class="table dt-table-hover" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th style="text-align:center;">Bölge</th>
@@ -221,6 +228,8 @@
                                                     <th style="text-align:center;max-width:20px;">Detay</th>
                                                     <th style="max-width:20px;text-align:center;">V. Düş</th>
                                                     <th style="max-width:20px;text-align:center;">Not</th>
+                                                    <th style="max-width:20px;text-align:center;">İptal Et</th>
+
                                                     <th style="max-width:20px;text-align:center;">Sil</th>
 
 
@@ -237,10 +246,11 @@
                                                     'musterino' => $veresiyecek['vMusteriNo']
                                                 ));
                                                 $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
-                                                $islemsor = $db->prepare("SELECT * FROM servismuhasebe WHERE sIslemNo =:islemno OR sSatisNo =:satisno");
+                                                $islemsor = $db->prepare("SELECT * FROM servismuhasebe WHERE sSatisNo =:satisno OR sIslemNo =:islemno");
                                                 $islemsor->execute(array(
-                                                    'islemno' => $veresiyecek['vIslemNo'],
-                                                    'satisno' => $veresiyecek['vSatisNo']
+                                                    'satisno' => $veresiyecek['vSatisNo'],
+                                                    'islemno' => $veresiyecek['vIslemNo']
+                                                    
                                                 ));
                                                 $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
                                                 $islemturu = unserialize($islemcek['sTuru']);
@@ -267,7 +277,7 @@
                                                     <td style="text-align:center;"><?= $mustericek['mAdSoyad']; ?></td>
                                                     <td style="text-align:center;"><?= $veresiyecek['vTutar']; ?> TL</td>
                                                     <td style="text-align:center;"><?= $islemturu; ?></td>
-                                                    <td style="text-align:center;"><?= date("d.m.Y", strtotime($islemcek['sTarih']));  ?></td>
+                                                    <td style="text-align:center;"><?= date("d.m.Y", strtotime($veresiyecek['vTarih']));  ?></td>
                                                     <td style="text-align:center;"><?= $tahsilatToplam ?> TL</td>
                                                     <td style="text-align:center;"><?= $kalan ?> TL</td>
                                                     <td style="text-align:center;"><?= $veresiyecek['vNot']; ?></td>
@@ -282,6 +292,10 @@
                                                     <td style="text-align:center;">
                                                         <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#notduzenle<?= $veresiyecek['vId']; ?>">
                                                             <i class="fa-solid fa-pen"></i>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#iptal<?= $veresiyecek['vId']; ?>">
+                                                            <i class="fa-solid fa-xmark"></i>
                                                     </td>
                                                     <td style="text-align:center;">
                                                         <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#sil<?= $veresiyecek['vId']; ?>">
@@ -358,7 +372,7 @@
                                                                         </div>
                                                                         <div class="form-group col-4">
                                                                             <label for="exampleFormControlInput1">Toplam Ücret</label>
-                                                                            <input type="text" name="tahsilattarih" readonly value="<?= $islemcek['sVeresiye']; ?> TL" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                                            <input type="text" name="tahsilattarih" readonly value="<?= $veresiyecek['vTutar']; ?> TL" class="form-control contact-modal" id="exampleFormControlInput1">
                                                                         </div>
                                                                         <div class="form-group col-4">
                                                                             <label for="exampleFormControlInput1">Ödenen Miktar</label>
@@ -431,6 +445,35 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-success" name="tahsilatekle" type="submit">Kaydet</button>
+                                                            </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal fade" id="iptal<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                                            </div>
+                                                            <div class="modal-body row">
+
+                                                                <div class="row g-1">
+                                                                    <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $mustericek['mAdSoyad']; ?></h4>
+                                                                    <h4 style="color:#F24C3D;text-align:center;">VERESİYEYİ İPTAL ETMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>  
+                                                                    <form action="../netting/veresiyeislem.php" method="POST" id="erteleform">
+
+                                                                        <input type="hidden" value="<?= $veresiyecek['vId']; ?>" name="veresiyeno">
+                                                                        <input type="hidden" value="<?= $veresiyecek['vKalan']; ?>" name="veresiyekalan">
+                                                                        <input type="hidden" value="<?= $veresiyecek['vTutar']; ?>" name="veresiyetoplam">
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-danger" name="veresiyeiptal" type="submit">İptal Et</button>
                                                             </div>
                                                             </form>
                                                         </div>

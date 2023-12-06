@@ -49,6 +49,22 @@ if (isset($_POST['tahsilatekle'])) {
         exit();
     }
 }
+if (isset($_POST['veresiyeiptal'])) {
+    $veresiyeno = $_POST['veresiyeno'];
+    $query = $db->prepare("DELETE FROM veresiye WHERE vId = :vid");
+    $delete = $query->execute(array(
+        'vid' => $veresiyeno
+    ));
+    if ($delete) {
+
+        header("Location:../views/veresiye.php?yt=basarili");
+        exit();
+    } else {
+
+        header("Location:../views/veresiye.php?yt=basarisiz");
+        exit();
+    }
+}
 if (isset($_POST['veresiyesil'])) {
     $bugun = date("Y-m-d");
     $durum = 0;
@@ -88,9 +104,9 @@ if (isset($_POST['veresiyesil'])) {
     }
 }
 if (isset($_POST['notduzenle'])) {
-$vnot = $_POST['vnot'];
-$rid = $_POST['veresiyeid'];
-$query = $db->prepare("UPDATE veresiye SET vNot=:vnot WHERE vId=:vid");
+    $vnot = $_POST['vnot'];
+    $rid = $_POST['veresiyeid'];
+    $query = $db->prepare("UPDATE veresiye SET vNot=:vnot WHERE vId=:vid");
     $query->bindParam(':vnot', $vnot);
     $query->bindParam(':vid', $rid);
     $insert = $query->execute();

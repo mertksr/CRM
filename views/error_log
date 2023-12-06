@@ -1,15 +1,52 @@
-[17-Oct-2023 17:34:38 UTC] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting '-' or identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in /home/pinarmy1/public_html/views/randevular.php on line 429
-[17-Oct-2023 17:34:40 UTC] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting '-' or identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in /home/pinarmy1/public_html/views/randevular.php on line 429
-[17-Oct-2023 17:34:45 UTC] PHP Parse error:  syntax error, unexpected '' (T_ENCAPSED_AND_WHITESPACE), expecting '-' or identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in /home/pinarmy1/public_html/views/randevular.php on line 429
-[17-Oct-2023 20:37:17 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 429
-[17-Oct-2023 20:37:17 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 429
-[17-Oct-2023 20:40:23 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/randevular.php on line 421
-[17-Oct-2023 20:40:23 Europe/Istanbul] PHP Warning:  implode(): Invalid arguments passed in /home/pinarmy1/public_html/views/randevular.php on line 441
-[17-Oct-2023 20:40:23 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/randevular.php on line 421
-[17-Oct-2023 20:40:23 Europe/Istanbul] PHP Warning:  implode(): Invalid arguments passed in /home/pinarmy1/public_html/views/randevular.php on line 441
-[17-Oct-2023 20:40:23 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/randevular.php on line 474
-[17-Oct-2023 20:40:30 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/randevular.php on line 421
-[17-Oct-2023 20:40:30 Europe/Istanbul] PHP Warning:  implode(): Invalid arguments passed in /home/pinarmy1/public_html/views/randevular.php on line 441
-[17-Oct-2023 20:40:30 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/randevular.php on line 421
-[17-Oct-2023 20:40:30 Europe/Istanbul] PHP Warning:  implode(): Invalid arguments passed in /home/pinarmy1/public_html/views/randevular.php on line 441
-[17-Oct-2023 20:40:30 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/randevular.php on line 474
+[25-Oct-2023 17:14:32 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 17:14:32 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 17:14:47 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 17:14:47 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:22:16 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:22:16 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:24:35 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:24:35 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:24:45 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:24:45 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:27:29 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:27:29 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:56:16 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 19:56:16 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 21:56:26 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[25-Oct-2023 21:56:26 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[27-Oct-2023 13:32:45 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[27-Oct-2023 13:32:45 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[29-Oct-2023 19:04:24 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[29-Oct-2023 19:04:24 Europe/Istanbul] PHP Warning:  Invalid argument supplied for foreach() in /home/pinarmy1/public_html/views/satislar.php on line 339
+[01-Nov-2023 16:39:39 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:41:59 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:42:37 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:43:09 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:43:32 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:44:23 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:44:33 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:45:03 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:48:49 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:49:36 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:49:47 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:49:56 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:50:04 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:50:13 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:50:21 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:51:16 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:51:35 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:52:06 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:52:32 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:52:55 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:53:39 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:55:06 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:55:29 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:55:49 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:56:05 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:56:20 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:56:51 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:57:12 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 16:57:20 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 17:00:58 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 17:04:34 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
+[01-Nov-2023 17:10:28 Europe/Istanbul] PHP Warning:  A non-numeric value encountered in /home/pinarmy1/public_html/views/randevular.php on line 504
