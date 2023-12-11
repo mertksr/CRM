@@ -218,22 +218,22 @@ if (empty($_SESSION['kullanici'])) {
                         }
 
 
-                       
+
                         $odenenborc = 0;
                         $odenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =1");
                         $odenenborcsor->execute();
                         while ($odenenborccek = $odenenborcsor->fetch(PDO::FETCH_ASSOC)) {
                             $odenenborc += $odenenborccek['bMiktar'];
-                         }
+                        }
 
-                         $eklenenborc = 0;
-                         $eklenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =0");
-                         $eklenenborcsor->execute();
-                         while ($eklenenborccek = $eklenenborcsor->fetch(PDO::FETCH_ASSOC)) {
-                             $eklenenborc += $eklenenborccek['bMiktar'];
-                          }
-                          $toplamsirketborcu = $eklenenborc - $odenenborc;
-                        
+                        $eklenenborc = 0;
+                        $eklenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =0");
+                        $eklenenborcsor->execute();
+                        while ($eklenenborccek = $eklenenborcsor->fetch(PDO::FETCH_ASSOC)) {
+                            $eklenenborc += $eklenenborccek['bMiktar'];
+                        }
+                        $toplamsirketborcu = $eklenenborc - $odenenborc;
+
                         ?>
 
 
@@ -260,7 +260,7 @@ if (empty($_SESSION['kullanici'])) {
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">Müşteri Ekle</h4>
+                                        <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;text-transform:uppercase;">Dış Satış Ekle</h4>
                                         <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form method="post" id="musteriekleform" type="POST" action="../netting/satisislem.php">
@@ -430,23 +430,23 @@ if (empty($_SESSION['kullanici'])) {
                                         <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <?php
-                                                    $odenenborc = 0;
-                                                    $odenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =1");
-                                                    $odenenborcsor->execute();
-                                                    while ($odenenborccek = $odenenborcsor->fetch(PDO::FETCH_ASSOC)) {
-                                                        $odenenborc += $odenenborccek['bMiktar'];
-                                                     }
+                                    $odenenborc = 0;
+                                    $odenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =1");
+                                    $odenenborcsor->execute();
+                                    while ($odenenborccek = $odenenborcsor->fetch(PDO::FETCH_ASSOC)) {
+                                        $odenenborc += $odenenborccek['bMiktar'];
+                                    }
 
-                                                     $eklenenborc = 0;
-                                                     $eklenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =0");
-                                                     $eklenenborcsor->execute();
-                                                     while ($eklenenborccek = $eklenenborcsor->fetch(PDO::FETCH_ASSOC)) {
-                                                         $eklenenborc += $eklenenborccek['bMiktar'];
-                                                      }
-                                                      $toplamborc = $eklenenborc - $odenenborc;
-                                                     ?>
+                                    $eklenenborc = 0;
+                                    $eklenenborcsor = $db->prepare("SELECT * FROM sirketborcu WHERE bTip =0");
+                                    $eklenenborcsor->execute();
+                                    while ($eklenenborccek = $eklenenborcsor->fetch(PDO::FETCH_ASSOC)) {
+                                        $eklenenborc += $eklenenborccek['bMiktar'];
+                                    }
+                                    $toplamborc = $eklenenborc - $odenenborc;
+                                    ?>
                                     <div style="margin:10px auto 0 auto;">
-                                        <h4 style="color:#E21818;">GÜNCEL BORÇ: <?=$toplamborc;?> TL</h4>
+                                        <h4 style="color:#E21818;">GÜNCEL BORÇ: <?= $toplamborc; ?> TL</h4>
                                     </div>
                                     <form method="post" id="musteriekleform" type="POST" action="../netting/ayarislem.php">
                                         <div class="modal-body row g-1" id="musteridetaybody">
@@ -478,18 +478,18 @@ if (empty($_SESSION['kullanici'])) {
                                                     <?php
                                                     $borcsor = $db->prepare("SELECT * FROM sirketborcu ORDER BY bID DESC");
                                                     $borcsor->execute();
-                                                    while ($borccek = $borcsor->fetch(PDO::FETCH_ASSOC)) { 
+                                                    while ($borccek = $borcsor->fetch(PDO::FETCH_ASSOC)) {
                                                         $tarih = date("d.m.Y", strtotime($borccek['bTarih']));
-                                                        if($borccek['bTip'] == 0){
-                                                            $tip = "Eklendi";}
-                                                            else{
-                                                                $tip = "Ödendi";
-                                                            }
-                                                        ?>
+                                                        if ($borccek['bTip'] == 0) {
+                                                            $tip = "Eklendi";
+                                                        } else {
+                                                            $tip = "Ödendi";
+                                                        }
+                                                    ?>
                                                         <tr>
-                                                            <td <?= ($tip == "Eklendi") ? "style='color:red;'" : "style='color:green;'";?>><?= $borccek['bMiktar'] . " " .$tip; ?></td>
-                                                            <td class="text-center"><?= $tarih;?></td>
-                                                            <td class="text-center"><?= $borccek['bNot'];?></td>
+                                                            <td <?= ($tip == "Eklendi") ? "style='color:red;'" : "style='color:green;'"; ?>><?= $borccek['bMiktar'] . " " . $tip; ?></td>
+                                                            <td class="text-center"><?= $tarih; ?></td>
+                                                            <td class="text-center"><?= $borccek['bNot']; ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                 </table>
@@ -506,7 +506,7 @@ if (empty($_SESSION['kullanici'])) {
 
                             <div class="table-responsive">
                                 <h4>Günlük Özet</h4>
-                                <table class="table table-bordered">
+                                <table class="table table-bordered ozet">
                                     <thead>
                                         <tr style="color:#fff;">
                                             <th class="text-center" scope="col">Tarih</th>
@@ -544,9 +544,7 @@ if (empty($_SESSION['kullanici'])) {
                                                 $stmt->execute();
 
 
-                                                $veresiyemuhasebesor = $db->prepare("SELECT * FROM veresiye WHERE DATE_FORMAT(vTarih, '%Y-%m-%d') = :tarih AND vDurum = 1");
-                                                $veresiyemuhasebesor->execute(array('tarih' => $currentDateStr));
-                                                $veresiyemuhasebecek = $veresiyemuhasebesor->fetch(PDO::FETCH_ASSOC);
+
 
 
 
@@ -568,7 +566,9 @@ if (empty($_SESSION['kullanici'])) {
 
                                                     $gunlukIndirimMiktari += is_numeric($yapilanindirim) ? $yapilanindirim : 0;
                                                 }
-
+                                                $veresiyemuhasebesor = $db->prepare("SELECT * FROM veresiye WHERE DATE_FORMAT(vTarih, '%Y-%m-%d') = :tarih AND vDurum = 1");
+                                                $veresiyemuhasebesor->execute(array('tarih' => $currentDateStr));
+                                                $veresiyemuhasebecek = $veresiyemuhasebesor->fetch(PDO::FETCH_ASSOC);
                                                 $veresiyemuhasebesor = $db->prepare("SELECT * FROM veresiye WHERE DATE_FORMAT(vTarih, '%Y-%m-%d') = :tarih AND vDurum = 1");
                                                 $veresiyemuhasebesor->execute(array('tarih' => $currentDateStr));
                                                 while ($veresiyemuhasebecek = $veresiyemuhasebesor->fetch(PDO::FETCH_ASSOC)) {
@@ -583,7 +583,7 @@ if (empty($_SESSION['kullanici'])) {
                                                 $veresiyeTahsilatToplam = 0;
                                                 $bugun = date('Y-m-d');
                                                 $veresiyetahsilatsor = $db->prepare("SELECT * FROM veresiyetahsilat WHERE vtTarih = :tarih");
-                                                $veresiyetahsilatsor->execute(array('tarih' => $bugun));
+                                                $veresiyetahsilatsor->execute(array('tarih' => $currentDateStr));
                                                 while ($veresiyetahsilatcek = $veresiyetahsilatsor->fetch(PDO::FETCH_ASSOC)) {
                                                     // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
                                                     $veresiyetahsilat = $veresiyetahsilatcek['vtTahsilat'];
@@ -595,9 +595,9 @@ if (empty($_SESSION['kullanici'])) {
                                                 // Günlük verileri tablo içinde gösterin
                                                 echo "<tr>";
                                                 echo "<td class='text-center'>" . strftime('%d.%m.%Y', strtotime($currentDateStr)) . "</td>";
-                                                echo "<td class='text-center' style='color:limegreen;'>" . number_format($gunlukKazanc, 2, ',', '.') . " TL</td>";
-                                                echo "<td class='text-center' style='color:crimson;'>" . number_format($gunlukIndirimMiktari, 2, ',', '.') . " TL</td>";
-                                                echo "<td class='text-center' style='color:crimson;'>" . number_format($gunlukVeresiye, 2, ',', '.') . " TL</td>";
+                                                echo "<td class='text-center' style='color:#65B741;'>" . $gunlukKazanc . " TL</td>";
+                                                echo "<td class='text-center' style='color:red;'>" . $gunlukIndirimMiktari . " TL</td>";
+                                                echo "<td class='text-center' style='color:red;'>" . $gunlukVeresiye . " TL</td>";
                                                 echo "</tr>";
                                             }
                                         } catch (PDOException $e) {
@@ -617,7 +617,7 @@ if (empty($_SESSION['kullanici'])) {
 
                             <div class="table-responsive">
                                 <h4>Aylık Özet</h4>
-                                <table class="table table-bordered">
+                                <table class="table table-bordered ozet">
                                     <thead>
                                         <tr style="color:#fff;">
                                             <th class="text-center" scope="col">Tarih</th>
@@ -628,68 +628,107 @@ if (empty($_SESSION['kullanici'])) {
                                     </thead>
                                     <tbody>
 
+                                    <?php
+$suAnkiYil = date("Y");
+$yilbaslangici = "$suAnkiYil-01-01";
 
-                                        <?php
-                                        $suAnkiYil = date("Y");
-                                        $yilbaslangici = "$suAnkiYil-01-01";
+try {
+    $sql = "SELECT sTarih, sTutar, sTahsilat, sYapilanIndirim FROM servismuhasebe WHERE sTarih >= :yilbaslangici";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(":yilbaslangici", $yilbaslangici);
+    $stmt->execute();
 
-                                        try {
+    // Aylara göre kazançları, indirimleri ve veresiye miktarlarını toplamak için diziler oluşturun
+    $aylik_kazanc = array();
+    $aylik_indirim = array();
+    $aylik_veresiye = array();
+    $aylik_tahsilat = array();
 
-                                            $sql = "SELECT sTarih, sTutar,sTahsilat, sIndirim,sYapilanIndirim, sVeresiye FROM servismuhasebe WHERE sTarih >= :yilbaslangici";
-                                            $stmt = $db->prepare($sql);
-                                            $stmt->bindParam(":yilbaslangici", $yilbaslangici);
-                                            $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $tarih = $row['sTarih'];
+        $tutar = $row['sTahsilat'];
+        $indirim = $row['sYapilanIndirim'];
+        
+        // Ay ve yıl bilgisini al
+        $ay = date("Y-m", strtotime($tarih));
 
-                                            // Aylara göre kazançları, indirimleri ve veresiye miktarlarını toplamak için diziler oluşturun
-                                            $aylik_kazanc = array();
-                                            $aylik_indirim = array();
-                                            $aylik_veresiye = array();
+        // Değişkenleri sayıya dönüştürün veya sıfır (0) olarak ayarlayın
+        $tutar = is_numeric($tutar) ? $tutar : 0;
+        $indirim = is_numeric($indirim) ? $indirim : 0;
 
+        // Ayı anahtar olarak kullanarak kazancı, indirimi ve veresiye miktarını toplayın
+        if (!isset($aylik_kazanc[$ay])) {
+            $aylik_kazanc[$ay] = 0;
+            $aylik_indirim[$ay] = 0;
+            $aylik_veresiye[$ay] = 0;
+            $aylik_tahsilat[$ay] = 0;
 
+        }
 
-                                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                                $tarih = $row['sTarih'];
-                                                $tutar = $row['sTahsilat'];
-                                                $indirim = $row['sYapilanIndirim'];
-                                                $veresiye = $row['sVeresiye'];
-                                                setlocale(LC_TIME, 'tr_TR.utf8');
-                                                // Tarihten ayı ayıklayın
-                                                $ay = date("Y-m", strtotime($tarih));
-                                                $ay = strftime('%B', strtotime($tarih)); // Türkçe ay adı
+        $aylik_kazanc[$ay] += $tutar;
+        $aylik_indirim[$ay] += $indirim;
+        $aylik_tahsilat[$ay] = 0;
 
-                                                // Değişkenleri sayıya dönüştürün veya sıfır (0) olarak ayarlayın
-                                                $tutar = is_numeric($tutar) ? $tutar : 0;
-                                                $indirim = is_numeric($indirim) ? $indirim : 0;
-                                                $veresiye = is_numeric($veresiye) ? $veresiye : 0;
+    }
 
-                                                // Ayı anahtar olarak kullanarak kazancı, indirimi ve veresiye miktarını toplayın
-                                                if (!isset($aylik_kazanc[$ay])) {
-                                                    $aylik_kazanc[$ay] = 0;
-                                                    $aylik_indirim[$ay] = 0;
-                                                    $aylik_veresiye[$ay] = 0;
-                                                }
-                                                $aylik_kazanc[$ay] += $tutar;
-                                                $aylik_indirim[$ay] += $indirim;
-                                                $aylik_veresiye[$ay] += $veresiye;
-                                            }
+    // Veresiye miktarını ayrı olarak hesaplayarak ekleyin
+    $veresiye_sorgu = $db->prepare("SELECT vTarih, vTutar, vKalan FROM veresiye WHERE vTarih >= :yilbaslangici AND vDurum = 1");
+    $veresiye_sorgu->bindParam(":yilbaslangici", $yilbaslangici);
+    $veresiye_sorgu->execute();
 
-                                            // Ay ay kazançları, indirimleri ve veresiye miktarlarını yazdırın veya işleyin
-                                            foreach ($aylik_kazanc as $ay => $kazanc) {
+    while ($veresiye_row = $veresiye_sorgu->fetch(PDO::FETCH_ASSOC)) {
+        $veresiye_tarih = $veresiye_row['vTarih'];
+        $veresiye_tutar = $veresiye_row['vTutar'];
 
-                                                $toplam_indirim = $aylik_indirim[$ay];
-                                                $toplam_veresiye = $aylik_veresiye[$ay];
+        if (!isset($veresiye_row['vKalan']) && $veresiye_row['vKalan'] == null || $veresiye_row == "0") {
+            $veresiye_tutar = $veresiye_row['vTutar'];
+        } else {
+            $veresiye_tutar = $veresiye_row['vKalan'];
+        }
 
-                                                echo "<tr><td class='text-center'>$ay</td>";
-                                                echo "<td class='text-center' style='color:limegreen;'>$kazanc TL</td>";
-                                                echo "<td class='text-center' style='color:crimson;'>$toplam_indirim TL</td>";
-                                                echo "<td class='text-center' style='color:crimson;'>$toplam_veresiye TL</td></tr>";
-                                            }
+        $veresiye_ay = date("Y-m", strtotime($veresiye_tarih));
+        
+        if (!isset($aylik_veresiye[$veresiye_ay])) {
+            $aylik_veresiye[$veresiye_ay] = 0;
+        }
 
-                                            // Veritabanı bağlantısını kapatın
-                                        } catch (PDOException $e) {
-                                            echo "Hata: " . $e->getMessage();
-                                        }
-                                        ?>
+        $aylik_veresiye[$veresiye_ay] += is_numeric($veresiye_tutar) ? $veresiye_tutar : 0;
+    }
+
+    $veresiyeTahsilatToplam = 0;
+    $veresiyetahsilatsor = $db->prepare("SELECT * FROM veresiyetahsilat WHERE vtTarih >= :yilbaslangici");
+    $veresiyetahsilatsor->execute(array('yilbaslangici' => $yilbaslangici));
+    while ($veresiyetahsilatcek = $veresiyetahsilatsor->fetch(PDO::FETCH_ASSOC)) {
+        // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
+      $tahsilat_tarih = $veresiyetahsilatcek['vtTarih'];
+        $tahsilat_tutar = $veresiyetahsilatcek['vtTahsilat'];
+
+        $tahsilat_ay = date("Y-m", strtotime($tahsilat_tarih));
+    
+        $aylik_tahsilat[$tahsilat_ay] += is_numeric($tahsilat_tutar) ? $tahsilat_tutar : 0;
+    }
+    // if ($gunlukKazanc != "0") {
+    //     $gunlukKazanc = $gunlukKazanc + $veresiyeTahsilatToplam;
+    // }
+
+    $ay = strftime('%B', strtotime($tarih));
+
+    // Ay ay kazançları, indirimleri ve veresiye miktarlarını yazdırın veya işleyin
+    foreach ($aylik_kazanc as $ay => $kazanc) {
+        $toplam_indirim = $aylik_indirim[$ay];
+        $toplam_veresiye = isset($aylik_veresiye[$ay]) ? $aylik_veresiye[$ay] : 0;
+        $toplam_tahsilat = $aylik_tahsilat[$ay];
+            $aylikToplamKazanc = $kazanc + $toplam_tahsilat;
+        echo "<tr><td class='text-center'>".strftime('%B', strtotime($ay))."</td>";
+        echo "<td class='text-center' style='color:#65B741;'>$aylikToplamKazanc TL</td>";
+        echo "<td class='text-center' style='color:red;'>$toplam_indirim TL</td>";
+        echo "<td class='text-center' style='color:red;'> $toplam_veresiye TL</td></tr>";
+    }
+} catch (PDOException $e) {
+    echo "Hata: " . $e->getMessage();
+}
+?>
+
 
 
                                     </tbody>

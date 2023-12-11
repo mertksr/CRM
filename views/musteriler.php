@@ -84,6 +84,10 @@ if (empty($_SESSION['kullanici'])) {
         tr:hover {
             background-color: #E4F1FF !important;
         }
+        #specialsearch {
+            color:#515365;
+            font-size: 800;
+        }
     </style>
 
     <!-- END PAGE LEVEL STYLES -->

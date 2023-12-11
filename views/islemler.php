@@ -217,6 +217,8 @@ if (empty($_SESSION['kullanici'])) {
                                                 <th>İşlem Zamanı</th>
                                                 <th>İşlem Türü</th>
                                                 <th>İşlem Ücreti</th>
+                                                <th>Veresiye</th>
+
                                                 <th>Not</th>
                                                 <th>Detay</th>
 
@@ -237,7 +239,13 @@ if (empty($_SESSION['kullanici'])) {
                                             } else {
                                                 $alınanucret = $islemcek['islemUcret'];
                                             }
-                                            $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
+                                            $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');        
+                                            $vsor = $db->prepare("SELECT * from veresiye WHERE vMusteriNo = :vMusteriNo");
+                                            $vsor->execute(array(
+                                                'vMusteriNo' =>  $islemcek['islemMusteriNo']
+                                            ));
+                                            $vcek = $vsor->fetch(PDO::FETCH_ASSOC)
+                                            ?>
 
                                             <tr>
                                                 <td><?= $say; ?></td>
@@ -246,7 +254,7 @@ if (empty($_SESSION['kullanici'])) {
                                                 <td><?= implode(", ", $islemturu);  ?></td>
 
                                                 <td><?= $alınanucretfrmt; ?> TL</td>
-
+                                                <td><?= ($vcek['vTutar']) ? $vcek['vTutar'] . " TL": "Yok"; ?> </td>
                                                 <td><?= $islemcek['islemNot']; ?> </td>
 
                                                 <td style="max-width:20px;">
@@ -294,6 +302,8 @@ if (empty($_SESSION['kullanici'])) {
                                             <th>İşlem Zamanı</th>
                                             <th>İşlem Türü</th>
                                             <th>İşlem Ücreti</th>
+                                            <th>Veresiye</th>
+
                                             <th>Not</th>
                                             <th>Detay</th>
 
@@ -318,7 +328,12 @@ if (empty($_SESSION['kullanici'])) {
                                         $msor->execute(array(
                                             'mMusteriNo' => $islemcek['islemMusteriNo']
                                         ));
-                                        $mcek = $msor->fetch(PDO::FETCH_ASSOC)
+                                        $mcek = $msor->fetch(PDO::FETCH_ASSOC);
+                                        $vsor = $db->prepare("SELECT * from veresiye WHERE vMusteriNo = :vMusteriNo");
+                                        $vsor->execute(array(
+                                            'vMusteriNo' =>  $mcek['mMusteriNo']
+                                        ));
+                                        $vcek = $vsor->fetch(PDO::FETCH_ASSOC)
                                     ?>
 
                                         <tr>
@@ -330,6 +345,7 @@ if (empty($_SESSION['kullanici'])) {
                                             <td><?= implode(", ", $islemturu);  ?></td>
 
                                             <td><?= $alınanucretfrmt; ?> TL</td>
+                                            <td><?= ($vcek['vTutar']) ? $vcek['vTutar'] . " TL": "Yok"; ?> </td>
 
                                             <td><?= $islemcek['islemNot']; ?> </td>
 

@@ -70,7 +70,7 @@ if (isset($_POST['islemekle'])) {
                 }
                 if (!empty($_POST['veresiye'])) {
                     $query = $db->prepare("INSERT INTO veresiye SET
-                    vSatisNo = :islemno,
+                    vIslemNo = :islemno,
                     vMusteriNo = :musterino,
                     vTutar = :veresiye,
                     vDurum= :durum,

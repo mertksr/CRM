@@ -1,11 +1,12 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-<?php 
+<?php
 if (empty($_SESSION['kullanici'])) {
     header("Location:../../../index.php?erisim=izinsiz");
 }
 ?>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -151,10 +152,11 @@ if (empty($_SESSION['kullanici'])) {
             cursor: pointer;
         }
 
-        table td{
-    color: #000000 !important;
-    font-weight: 600 !important;
-    }
+        table td {
+            color: #000000 !important;
+            font-weight: 600 !important;
+        }
+
         .choices__inner,
         .choices__input,
         .choices__list {
@@ -237,20 +239,17 @@ if (empty($_SESSION['kullanici'])) {
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $veresiyesor = $db->prepare("SELECT * FROM veresiye WHERE vDurum = 1 ORDER BY vId DESC");
-                                            $veresiyesor->execute();
+                                            $sql = "SELECT veresiye.*, musteriler.* FROM veresiye INNER JOIN musteriler ON veresiye.vMusteriNo = musteriler.mMusteriNo WHERE veresiye.vDurum = 1";
 
-                                            while ($veresiyecek = $veresiyesor->fetch(PDO::FETCH_ASSOC)) {
-                                                $musterisor = $db->prepare("SELECT * FROM musteriler WHERE mMusteriNo =:musterino");
-                                                $musterisor->execute(array(
-                                                    'musterino' => $veresiyecek['vMusteriNo']
-                                                ));
-                                                $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
+                                            $veresiyeMusteriSorgu = $db->prepare($sql);
+                                            $veresiyeMusteriSorgu->execute();
+
+                                            while ($veresiyeMusteri = $veresiyeMusteriSorgu->fetch(PDO::FETCH_ASSOC)) {
                                                 $islemsor = $db->prepare("SELECT * FROM servismuhasebe WHERE sSatisNo =:satisno OR sIslemNo =:islemno");
                                                 $islemsor->execute(array(
-                                                    'satisno' => $veresiyecek['vSatisNo'],
-                                                    'islemno' => $veresiyecek['vIslemNo']
-                                                    
+                                                    'satisno' => $veresiyeMusteri['vSatisNo'],
+                                                    'islemno' => $veresiyeMusteri['vIslemNo']
+
                                                 ));
                                                 $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
                                                 $islemturu = unserialize($islemcek['sTuru']);
@@ -261,48 +260,48 @@ if (empty($_SESSION['kullanici'])) {
                                                 }
                                                 $tahsilatToplam = 0;
                                                 $veresiyetahsilatsor = $db->prepare("SELECT * FROM veresiyetahsilat WHERE vtVeresiyeNo = :id");
-                                                $veresiyetahsilatsor->execute(array('id' => $veresiyecek['vId']));
+                                                $veresiyetahsilatsor->execute(array('id' => $veresiyeMusteri['vId']));
                                                 while ($veresiyetahsilatcek = $veresiyetahsilatsor->fetch(PDO::FETCH_ASSOC)) {
                                                     // Veritabanından gelen ücret sütunu değerini alın ve toplam ücrete ekleyin
                                                     $ucret = $veresiyetahsilatcek['vtTahsilat'];
                                                     $tahsilatToplam += $ucret;
                                                 }
-                                                $kalan = $veresiyecek['vTutar'] - $tahsilatToplam
+                                                $kalan = $veresiyeMusteri['vTutar'] - $tahsilatToplam
                                             ?>
 
                                                 <tr>
 
 
-                                                    <td style="text-align:center;"><?= $mustericek['mBolge']; ?></td>
-                                                    <td style="text-align:center;"><?= $mustericek['mAdSoyad']; ?></td>
-                                                    <td style="text-align:center;"><?= $veresiyecek['vTutar']; ?> TL</td>
+                                                    <td style="text-align:center;"><?= $veresiyeMusteri['mBolge']; ?></td>
+                                                    <td style="text-align:center;"><?= $veresiyeMusteri['mAdSoyad']; ?></td>
+                                                    <td style="text-align:center;"><?= $veresiyeMusteri['vTutar']; ?> TL</td>
                                                     <td style="text-align:center;"><?= $islemturu; ?></td>
-                                                    <td style="text-align:center;"><?= date("d.m.Y", strtotime($veresiyecek['vTarih']));  ?></td>
+                                                    <td style="text-align:center;"><?= date("d.m.Y", strtotime($veresiyeMusteri['vTarih']));  ?></td>
                                                     <td style="text-align:center;"><?= $tahsilatToplam ?> TL</td>
                                                     <td style="text-align:center;"><?= $kalan ?> TL</td>
-                                                    <td style="text-align:center;"><?= $veresiyecek['vNot']; ?></td>
+                                                    <td style="text-align:center;"><?= $veresiyeMusteri['vNot']; ?></td>
                                                     <td style="text-align:center;">
-                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#detay<?= $veresiyecek['vId']; ?>">
+                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#detay<?= $veresiyeMusteri['vId']; ?>">
                                                             <i class="fa-solid fa-circle-info"></i>
                                                     </td>
                                                     <td style="text-align:center;">
-                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#düş<?= $veresiyecek['vId']; ?>">
+                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#düş<?= $veresiyeMusteri['vId']; ?>">
                                                             <i class="fa-solid fa-calendar-plus"></i>
                                                     </td>
                                                     <td style="text-align:center;">
-                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#notduzenle<?= $veresiyecek['vId']; ?>">
+                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#notduzenle<?= $veresiyeMusteri['vId']; ?>">
                                                             <i class="fa-solid fa-pen"></i>
                                                     </td>
                                                     <td style="text-align:center;">
-                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#iptal<?= $veresiyecek['vId']; ?>">
+                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#iptal<?= $veresiyeMusteri['vId']; ?>">
                                                             <i class="fa-solid fa-xmark"></i>
                                                     </td>
                                                     <td style="text-align:center;">
-                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#sil<?= $veresiyecek['vId']; ?>">
+                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#sil<?= $veresiyeMusteri['vId']; ?>">
                                                             <i class="fa-solid fa-trash"></i>
                                                     </td>
                                                 </tr>
-                                                <div class="modal fade" id="notduzenle<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="notduzenle<?= $veresiyeMusteri['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -313,15 +312,15 @@ if (empty($_SESSION['kullanici'])) {
                                                             <div class="modal-body row">
 
                                                                 <div class="row g-1">
-                                                                    <h4 style="color:red;text-align:center;"><?= $mustericek['mAdSoyad']; ?></h4>
+                                                                    <h4 style="color:red;text-align:center;"><?= $veresiyeMusteri['mAdSoyad']; ?></h4>
                                                                     <form action="../netting/veresiyeislem.php" method="POST">
 
                                                                         <div class="form-group col-12">
                                                                             <label for="exampleFormControlInput1">Veresiye Notu</label>
-                                                                            <input type="text" name="vnot"  class="form-control contact-modal" value="<?= $veresiyecek['vNot'];?>" id="exampleFormControlInput1">
-                                                                            <input type="hidden" value="<?= $veresiyecek['vId'];?>" name="veresiyeid">
+                                                                            <input type="text" name="vnot" class="form-control contact-modal" value="<?= $veresiyeMusteri['vNot']; ?>" id="exampleFormControlInput1">
+                                                                            <input type="hidden" value="<?= $veresiyeMusteri['vId']; ?>" name="veresiyeid">
                                                                         </div>
- 
+
 
                                                                 </div>
                                                             </div>
@@ -332,7 +331,7 @@ if (empty($_SESSION['kullanici'])) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal fade" id="detay<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="detay<?= $veresiyeMusteri['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -343,16 +342,16 @@ if (empty($_SESSION['kullanici'])) {
                                                             <div class="modal-body row">
 
                                                                 <div class="row g-1">
-                                                                    <h4 style="color:red;text-align:center;"><?= $mustericek['mAdSoyad']; ?></h4>
+                                                                    <h4 style="color:red;text-align:center;"><?= $veresiyeMusteri['mAdSoyad']; ?></h4>
                                                                     <form action="../netting/randevuislem.php" method="POST" id="erteleform">
                                                                         <div class="col-6">
                                                                             <p>
-                                                                                <?php if (!empty($mustericek['mTel1'])) {
+                                                                                <?php if (!empty($veresiyeMusteri['mTel1'])) {
 
-                                                                                    echo ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/' . $mustericek['mTel1'] . '"><i class="fa-solid fa-phone fa-2xl"></i></a> :' . $mustericek['mTel1'] . '</div>';
+                                                                                    echo ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/' . $veresiyeMusteri['mTel1'] . '"><i class="fa-solid fa-phone fa-2xl"></i></a> :' . $veresiyeMusteri['mTel1'] . '</div>';
                                                                                 }
-                                                                                if (!empty($mustericek['mTel2'])) {
-                                                                                    echo '<div class="p-2" style="font-size:17px;"><a href="https://wa.me/' . $mustericek['mTel2'] . '"><i class="fa-solid fa-phone fa-2xl"></i></a> :' . $mustericek['mTel2'] . '</div>';
+                                                                                if (!empty($veresiyeMusteri['mTel2'])) {
+                                                                                    echo '<div class="p-2" style="font-size:17px;"><a href="https://wa.me/' . $veresiyeMusteri['mTel2'] . '"><i class="fa-solid fa-phone fa-2xl"></i></a> :' . $veresiyeMusteri['mTel2'] . '</div>';
                                                                                 } ?>
 
                                                                             </p>
@@ -360,19 +359,19 @@ if (empty($_SESSION['kullanici'])) {
                                                                         <div class="col-6">
                                                                             <p>
                                                                                 <?php
-                                                                                if (!empty($mustericek['mTel1'])) {
+                                                                                if (!empty($veresiyeMusteri['mTel1'])) {
 
-                                                                                    echo '<div class="p-2" style="font-size:17px;"><a href="https://wa.me/' . $mustericek['mTel1'] . '"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :' . $mustericek['mTel1'] . '</div>';
+                                                                                    echo '<div class="p-2" style="font-size:17px;"><a href="https://wa.me/' . $veresiyeMusteri['mTel1'] . '"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :' . $veresiyeMusteri['mTel1'] . '</div>';
                                                                                 }
-                                                                                if (!empty($mustericek['mTel2'])) {
-                                                                                    echo ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/' . $mustericek['mTel2'] . '"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :' . $mustericek['mTel2'] . '</div>';
+                                                                                if (!empty($veresiyeMusteri['mTel2'])) {
+                                                                                    echo ' <div class="p-2" style="font-size:17px;"><a href="https://wa.me/' . $veresiyeMusteri['mTel2'] . '"><i class="fa-brands fa-whatsapp fa-2xl"></i></a> :' . $veresiyeMusteri['mTel2'] . '</div>';
                                                                                 }
                                                                                 ?>s
                                                                             </p>
                                                                         </div>
                                                                         <div class="form-group col-4">
                                                                             <label for="exampleFormControlInput1">Toplam Ücret</label>
-                                                                            <input type="text" name="tahsilattarih" readonly value="<?= $veresiyecek['vTutar']; ?> TL" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                                            <input type="text" name="tahsilattarih" readonly value="<?= $veresiyeMusteri['vTutar']; ?> TL" class="form-control contact-modal" id="exampleFormControlInput1">
                                                                         </div>
                                                                         <div class="form-group col-4">
                                                                             <label for="exampleFormControlInput1">Ödenen Miktar</label>
@@ -385,7 +384,7 @@ if (empty($_SESSION['kullanici'])) {
                                                                         <?php
                                                                         $tahsilatsor = $db->prepare("SELECT * FROM veresiyetahsilat WHERE vtVeresiyeNo =:veresiyeno");
                                                                         $tahsilatsor->execute(array(
-                                                                            'veresiyeno' => $veresiyecek['vId']
+                                                                            'veresiyeno' => $veresiyeMusteri['vId']
                                                                         ));
                                                                         while ($tahsilatcek = $tahsilatsor->fetch(PDO::FETCH_ASSOC)) { ?>
                                                                             <div class="form-group col-6">
@@ -399,7 +398,7 @@ if (empty($_SESSION['kullanici'])) {
                                                                         <?php } ?>
                                                                         <div class="form-group col-12">
                                                                             <label for="exampleFormControlInput1">Tahsilat Notları</label>
-                                                                            <input type="text" name="tahsilattarih" readonly value="<?= $veresiyecek['vNot']; ?>" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                                            <input type="text" name="tahsilattarih" readonly value="<?= $veresiyeMusteri['vNot']; ?>" class="form-control contact-modal" id="exampleFormControlInput1">
                                                                         </div>
 
                                                                 </div>
@@ -411,7 +410,7 @@ if (empty($_SESSION['kullanici'])) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal fade" id="düş<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="düş<?= $veresiyeMusteri['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -422,7 +421,7 @@ if (empty($_SESSION['kullanici'])) {
                                                             <div class="modal-body row">
 
                                                                 <div class="row g-1">
-                                                                    <h4 style="color:red;text-align:center;"><?= $mustericek['mAdSoyad']; ?></h4>
+                                                                    <h4 style="color:red;text-align:center;"><?= $veresiyeMusteri['mAdSoyad']; ?></h4>
                                                                     <form action="../netting/veresiyeislem.php" method="POST" id="erteleform">
 
                                                                         <div class="form-group col-6">
@@ -437,9 +436,9 @@ if (empty($_SESSION['kullanici'])) {
                                                                             <label for="exampleFormControlInput1">Not</label>
                                                                             <input type="text" name="not" class="form-control contact-modal" id="exampleFormControlInput1">
                                                                         </div>
-                                                                        <input type="hidden" value="<?= $veresiyecek['vTutar']; ?>" name="tutar">
-                                                                        <input type="hidden" value="<?= $veresiyecek['vId']; ?>" name="veresiyeno">
-                                                                        <input type="hidden" value="<?= $veresiyecek['vAlinan']; ?>" name="alinan">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vTutar']; ?>" name="tutar">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vId']; ?>" name="veresiyeno">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vAlinan']; ?>" name="alinan">
 
                                                                 </div>
                                                             </div>
@@ -450,7 +449,7 @@ if (empty($_SESSION['kullanici'])) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal fade" id="iptal<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="iptal<?= $veresiyeMusteri['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -461,13 +460,13 @@ if (empty($_SESSION['kullanici'])) {
                                                             <div class="modal-body row">
 
                                                                 <div class="row g-1">
-                                                                    <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $mustericek['mAdSoyad']; ?></h4>
-                                                                    <h4 style="color:#F24C3D;text-align:center;">VERESİYEYİ İPTAL ETMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>  
+                                                                    <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $veresiyeMusteri['mAdSoyad']; ?></h4>
+                                                                    <h4 style="color:#F24C3D;text-align:center;">VERESİYEYİ İPTAL ETMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>
                                                                     <form action="../netting/veresiyeislem.php" method="POST" id="erteleform">
 
-                                                                        <input type="hidden" value="<?= $veresiyecek['vId']; ?>" name="veresiyeno">
-                                                                        <input type="hidden" value="<?= $veresiyecek['vKalan']; ?>" name="veresiyekalan">
-                                                                        <input type="hidden" value="<?= $veresiyecek['vTutar']; ?>" name="veresiyetoplam">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vId']; ?>" name="veresiyeno">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vKalan']; ?>" name="veresiyekalan">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vTutar']; ?>" name="veresiyetoplam">
 
 
                                                                 </div>
@@ -479,7 +478,7 @@ if (empty($_SESSION['kullanici'])) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal fade" id="sil<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="sil<?= $veresiyeMusteri['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -490,13 +489,13 @@ if (empty($_SESSION['kullanici'])) {
                                                             <div class="modal-body row">
 
                                                                 <div class="row g-1">
-                                                                    <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $mustericek['mAdSoyad']; ?></h4>
-                                                                    <h4 style="color:#F24C3D;text-align:center;">VERESİYEYİ SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>  
+                                                                    <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $veresiyeMusteri['mAdSoyad']; ?></h4>
+                                                                    <h4 style="color:#F24C3D;text-align:center;">VERESİYEYİ SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>
                                                                     <form action="../netting/veresiyeislem.php" method="POST" id="erteleform">
 
-                                                                        <input type="hidden" value="<?= $veresiyecek['vId']; ?>" name="veresiyeno">
-                                                                        <input type="hidden" value="<?= $veresiyecek['vKalan']; ?>" name="veresiyekalan">
-                                                                        <input type="hidden" value="<?= $veresiyecek['vTutar']; ?>" name="veresiyetoplam">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vId']; ?>" name="veresiyeno">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vKalan']; ?>" name="veresiyekalan">
+                                                                        <input type="hidden" value="<?= $veresiyeMusteri['vTutar']; ?>" name="veresiyetoplam">
 
 
                                                                 </div>
@@ -527,11 +526,11 @@ if (empty($_SESSION['kullanici'])) {
 
                 </div>
                 <div class="footer-wrapper">
-            <div class="footer-section f-section-1">
-                <p class="">Copyright © Mert Keser</p>
-            </div>
+                    <div class="footer-section f-section-1">
+                        <p class="">Copyright © Mert Keser</p>
+                    </div>
 
-        </div>
+                </div>
                 <!--  END CONTENT AREA  -->
             </div>
             <!--  END CONTENT AREA  -->

@@ -440,6 +440,16 @@ if (empty($_SESSION['kullanici'])) {
                                                                                 $yapilanindirim = "Yapılmamış";
                                                                                 $ucret = $randevuislemcek['islemUcret'];
                                                                             }
+                                                                            $servisno = $randevuislemcek['islemNo'];
+                                                                            $servisveresiyesor = $db->prepare("SELECT * FROM veresiye WHERE vIslemNo = :servisno");
+                                                                            $servisveresiyesor->bindParam(':servisno', $servisno );
+                                                                            $servisveresiyesor->execute();
+                                                                            $servisveresiyecek = $servisveresiyesor->fetch(PDO::FETCH_ASSOC);
+                                                                            if(isset($servisveresiyecek['vTutar'])){
+                                                                                $servisveresiye = $servisveresiyecek['vTutar'] . " TL";
+                                                                            }else{
+                                                                                $servisveresiye = "Yok";
+                                                                            }
                                                                         ?>
                                                                             <div class="form-group col-6">
                                                                                 <label for="exampleFormControlInput1">Servis Tarihi </label>
@@ -453,19 +463,22 @@ if (empty($_SESSION['kullanici'])) {
                                                                                 <label for="exampleFormControlInput1">Kullanılan Ürünler</label>
                                                                                 <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= implode(", ", $yapilanislemurun); ?></textarea>
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-3">
                                                                                 <label for="exampleFormControlInput1">Tutar</label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevuislemcek['islemUcret']; ?>TL">
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-3">
                                                                                 <label for="exampleFormControlInput1">Yapılan İndirim </label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $yapilanindirim; ?>">
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-3">
                                                                                 <label for="exampleFormControlInput1">Ücret </label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $ucret; ?>TL">
                                                                             </div>
-
+                                                                            <div class="form-group col-3">
+                                                                                <label for="exampleFormControlInput1">Veresiye </label>
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $servisveresiye; ?>">
+                                                                            </div>
                                                                         <?php } elseif ($randevucek['rDurum'] == "3") {
                                                                             $randevusatisno = $randevucek['rNo'];
                                                                             $randevusatissor = $db->prepare("SELECT * FROM satislar WHERE sRandevu = :randevu");
@@ -474,7 +487,6 @@ if (empty($_SESSION['kullanici'])) {
                                                                             $randevusatiscek = $randevusatissor->fetch(PDO::FETCH_ASSOC);
 
                                                                             $randevusatilanurun = unserialize($randevusatiscek['sUrun']);
-
                                                                             $satilanurun = [];
                                                                             $urunsor = $db->prepare("SELECT * FROM urunler ORDER BY urunSiralama ASC");
                                                                             $urunsor->execute();
@@ -487,6 +499,12 @@ if (empty($_SESSION['kullanici'])) {
                                                                                     }
                                                                                 }
                                                                             }
+                                                                            $satisno = $randevusatiscek['satisNo'];
+                                                                            $satisveresiyesor = $db->prepare("SELECT * FROM veresiye WHERE vSatisNo = :satisno");
+                                                                            $satisveresiyesor->bindParam(':satisno', $satisno );
+                                                                            $satisveresiyesor->execute();
+                                                                            $satisveresiyecek = $satisveresiyesor->fetch(PDO::FETCH_ASSOC);
+
                                                                         ?>
                                                                             <div class="form-group col-4">
                                                                                 <label for="exampleFormControlInput1">Satış Tarihi </label>
@@ -504,17 +522,21 @@ if (empty($_SESSION['kullanici'])) {
                                                                                 <label for="exampleFormControlInput1">Satılan Ürünler</label>
                                                                                 <textarea type="text" readonly style="height:60px;" class="form-control contact-modal" id="exampleFormControlInput1"><?= implode(", ", $satilanurun); ?></textarea>
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-3">
                                                                                 <label for="exampleFormControlInput1">Satış Tutarı</label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sTutar']; ?>TL">
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-3">
                                                                                 <label for="exampleFormControlInput1">Yapılan İndirim </label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="-<?= $randevusatiscek['sTutar'] - $randevusatiscek['sIndirimliTutar']; ?>TL">
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-3">
                                                                                 <label for="exampleFormControlInput1">Ücret </label>
                                                                                 <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $randevusatiscek['sIndirimliTutar']; ?>TL">
+                                                                            </div>
+                                                                            <div class="form-group col-3">
+                                                                                <label for="exampleFormControlInput1">Veresiye </label>
+                                                                                <input type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1" value="<?= $satisveresiyecek['vTutar']; ?>TL">
                                                                             </div>
                                                                             <div class="form-group col-12">
                                                                                 <label for="exampleFormControlInput1">Referans </label>

@@ -70,6 +70,7 @@ $(document).ready(function () {
   //     return savedState;
   // }
   // });
+  
   var veresiyeTable = $("#veresiyeler").DataTable({
     dom:
       "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
@@ -92,30 +93,7 @@ $(document).ready(function () {
     stripeClasses: [],
     pageLength: 50,
     columnDefs: [{ orderable: false, targets: "_all" }],
-    // stateSave: true,
-    // stateSaveCallback: function (settings, data) {
-    //   // Sütunlardaki özel arama değerlerini kaydedin
-    //   data.searchCols = [];
-    //   $("#specialsearch").each(function () {
-    //     data.searchCols.push({
-    //       search: this.value,
-    //     });
-    //   });
-
-    //   localStorage.setItem("myDataTableState", JSON.stringify(data));
-    // },
-    // stateLoadCallback: function (settings) {
-    //   // Kaydedilmiş durumu yüklerken sütunlardaki özel arama değerlerini geri yükleyin
-    //   if (savedState && savedState.searchCols) {
-    //     $("#specialsearch").each(function (index) {
-    //       if (savedState.searchCols[index]) {
-    //         this.value = savedState.searchCols[index].search;
-    //       }
-    //     });
-    //   }
-
-    //   return savedState;
-    // },
+        
   });
   $('input[id="specialsearch"]').on("keyup", function () {
     // table.columns().search( '' ); // Reset all column searches
@@ -182,7 +160,7 @@ $(document).ready(function () {
             });
 
           $.ajax({
-            url: '/mysV00.1/netting/mahallegetir.php',
+            url: 'https://pinarmys.com.tr/netting/mahallegetir.php',
             type: 'GET',
 
             success: function (data) {
@@ -204,7 +182,7 @@ $(document).ready(function () {
 
                 var secilenMahalle = $(this).val();
                 $.ajax({
-                  url: '/mysV00.1/netting/mahdentarihgetir.php',
+                  url: 'https://pinarmys.com.tr/netting/mahdentarihgetir.php',
                   type: 'POST', 
                   data: { mahalle: secilenMahalle }, 
                   success: function (data) {
@@ -222,7 +200,7 @@ $(document).ready(function () {
                         var yil = date.getFullYear(); 
                         var bakimtarihi = ay + ' ' + yil;
                         bakimtarihi = bakimtarihi.toUpperCase();
-                        select2.append('<option value="' + tarih + '">' + bakimtarihi + " II " + bakimSayisi + '</option>');
+                        select2.append('<option value="' + tarih + '">' + bakimtarihi + " (" + bakimSayisi + ") " + '</option>');
                       }
                     }
 
@@ -254,7 +232,7 @@ $(document).ready(function () {
 
 
           $.ajax({
-            url: '/mysV00.1/netting/tarihgetir.php',
+            url: 'https://pinarmys.com.tr/netting/tarihgetir.php',
             type: 'POST',
 
             success: function (data) {
@@ -271,7 +249,7 @@ $(document).ready(function () {
                   var bakimtarihi = ay + ' ' + yil;
                   bakimtarihi = bakimtarihi.toUpperCase();
 
-                  tarihselect.append('<option value="' + tarih + '">' + bakimtarihi + " II " + bakimSayisi + '</option>');
+                  tarihselect.append('<option value="' + tarih + '">' + bakimtarihi + " (" + bakimSayisi + ") " + '</option>');
                 }
               }
               var select1 = $('#mahalleselect');
@@ -279,7 +257,7 @@ $(document).ready(function () {
 
                 var secilenTarih = $(this).val();
                 $.ajax({
-                  url: '/mysV00.1/netting/tarihdenmahgetir.php', 
+                  url: 'https://pinarmys.com.tr/netting/tarihdenmahgetir.php', 
                   type: 'POST',
                   data: { tarih: secilenTarih }, 
                   success: function (data) {
@@ -297,7 +275,7 @@ $(document).ready(function () {
                         var mahalle = key;
                         var bakimSayisi = data[key];      
 
-                        select1.append('<option value="' + mahalle + '">' + mahalle + " II " + bakimSayisi + '</option>');
+                        select1.append('<option value="' + mahalle + '">' + mahalle + " (" + bakimSayisi + ") " + '</option>');
                       }
                     }
 
