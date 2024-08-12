@@ -1,1 +1,1 @@
-It is a customer management system for businesses that provide periodic services.
+It is a customer management system that offers superior user experience to businesses that provide periodic services.
