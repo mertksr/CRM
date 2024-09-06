@@ -1,16 +1,12 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-<?php 
-if (empty($_SESSION['kullanici'])) {
-    header("Location:../../../index.php?erisim=izinsiz");
-}
-?>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>Pınar Su Arıtma</title>
+    <title>Miscellaneous DataTables | CORK - Multipurpose Bootstrap Dashboard Template </title>
     <link rel="icon" type="image/x-icon" href="../public/src/assets/img/favicon.ico" />
     <link href="../public/layouts/horizontal-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
     <link href="../public/layouts/horizontal-light-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
@@ -151,10 +147,7 @@ if (empty($_SESSION['kullanici'])) {
             cursor: pointer;
         }
 
-        table td{
-    color: #000000 !important;
-    font-weight: 600 !important;
-    }
+
         .choices__inner,
         .choices__input,
         .choices__list {
@@ -214,7 +207,7 @@ if (empty($_SESSION['kullanici'])) {
 
                                     <div class="widget-content widget-content-area">
 
-                                        <table id="veresiyeler" class="table dt-table-hover" style="width:100%">
+                                        <table id="islemler" class="table dt-table-hover" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th style="text-align:center;">Bölge</th>
@@ -228,8 +221,6 @@ if (empty($_SESSION['kullanici'])) {
                                                     <th style="text-align:center;max-width:20px;">Detay</th>
                                                     <th style="max-width:20px;text-align:center;">V. Düş</th>
                                                     <th style="max-width:20px;text-align:center;">Not</th>
-                                                    <th style="max-width:20px;text-align:center;">İptal Et</th>
-
                                                     <th style="max-width:20px;text-align:center;">Sil</th>
 
 
@@ -237,7 +228,7 @@ if (empty($_SESSION['kullanici'])) {
                                                 </tr>
                                             </thead>
                                             <?php
-                                            $veresiyesor = $db->prepare("SELECT * FROM veresiye WHERE vDurum = 1 ORDER BY vTarih ASC");
+                                            $veresiyesor = $db->prepare("SELECT * FROM veresiye WHERE vDurum = 1 ORDER BY vId DESC");
                                             $veresiyesor->execute();
 
                                             while ($veresiyecek = $veresiyesor->fetch(PDO::FETCH_ASSOC)) {
@@ -246,11 +237,10 @@ if (empty($_SESSION['kullanici'])) {
                                                     'musterino' => $veresiyecek['vMusteriNo']
                                                 ));
                                                 $mustericek = $musterisor->fetch(PDO::FETCH_ASSOC);
-                                                $islemsor = $db->prepare("SELECT * FROM servismuhasebe WHERE sSatisNo =:satisno OR sIslemNo =:islemno");
+                                                $islemsor = $db->prepare("SELECT * FROM servismuhasebe WHERE sIslemNo =:islemno OR sSatisNo =:satisno");
                                                 $islemsor->execute(array(
-                                                    'satisno' => $veresiyecek['vSatisNo'],
-                                                    'islemno' => $veresiyecek['vIslemNo']
-                                                    
+                                                    'islemno' => $veresiyecek['vIslemNo'],
+                                                    'satisno' => $veresiyecek['vSatisNo']
                                                 ));
                                                 $islemcek = $islemsor->fetch(PDO::FETCH_ASSOC);
                                                 $islemturu = unserialize($islemcek['sTuru']);
@@ -277,7 +267,7 @@ if (empty($_SESSION['kullanici'])) {
                                                     <td style="text-align:center;"><?= $mustericek['mAdSoyad']; ?></td>
                                                     <td style="text-align:center;"><?= $veresiyecek['vTutar']; ?> TL</td>
                                                     <td style="text-align:center;"><?= $islemturu; ?></td>
-                                                    <td style="text-align:center;"><?= date("d.m.Y", strtotime($veresiyecek['vTarih']));  ?></td>
+                                                    <td style="text-align:center;"><?= date("d.m.Y", strtotime($islemcek['sTarih']));  ?></td>
                                                     <td style="text-align:center;"><?= $tahsilatToplam ?> TL</td>
                                                     <td style="text-align:center;"><?= $kalan ?> TL</td>
                                                     <td style="text-align:center;"><?= $veresiyecek['vNot']; ?></td>
@@ -292,10 +282,6 @@ if (empty($_SESSION['kullanici'])) {
                                                     <td style="text-align:center;">
                                                         <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#notduzenle<?= $veresiyecek['vId']; ?>">
                                                             <i class="fa-solid fa-pen"></i>
-                                                    </td>
-                                                    <td style="text-align:center;">
-                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#iptal<?= $veresiyecek['vId']; ?>">
-                                                            <i class="fa-solid fa-xmark"></i>
                                                     </td>
                                                     <td style="text-align:center;">
                                                         <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#sil<?= $veresiyecek['vId']; ?>">
@@ -372,7 +358,7 @@ if (empty($_SESSION['kullanici'])) {
                                                                         </div>
                                                                         <div class="form-group col-4">
                                                                             <label for="exampleFormControlInput1">Toplam Ücret</label>
-                                                                            <input type="text" name="tahsilattarih" readonly value="<?= $veresiyecek['vTutar']; ?> TL" class="form-control contact-modal" id="exampleFormControlInput1">
+                                                                            <input type="text" name="tahsilattarih" readonly value="<?= $islemcek['sVeresiye']; ?> TL" class="form-control contact-modal" id="exampleFormControlInput1">
                                                                         </div>
                                                                         <div class="form-group col-4">
                                                                             <label for="exampleFormControlInput1">Ödenen Miktar</label>
@@ -388,20 +374,14 @@ if (empty($_SESSION['kullanici'])) {
                                                                             'veresiyeno' => $veresiyecek['vId']
                                                                         ));
                                                                         while ($tahsilatcek = $tahsilatsor->fetch(PDO::FETCH_ASSOC)) { ?>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-6">
                                                                                 <label for="exampleFormControlInput1">Tahsilat Miktarı</label>
                                                                                 <input type="text" name="tahsilattarih" readonly value="<?= $tahsilatcek['vtTahsilat'] ?> TL" class="form-control contact-modal" id="exampleFormControlInput1">
                                                                             </div>
-                                                                            <div class="form-group col-4">
+                                                                            <div class="form-group col-6">
                                                                                 <label for="exampleFormControlInput1">Tahsilat Tarihi</label>
                                                                                 <input type="text" name="tahsilatnot" readonly value="<?= date("d.m.Y", strtotime($tahsilatcek['vtTarih'])); ?>" class="form-control contact-modal" id="exampleFormControlInput1">
                                                                             </div>
-                                                                            <div class="form-group col-4">
-                                                                                <label for="exampleFormControlInput1">Tahsilat Tipi</label>
-                                                                                <input type="text" name="tahsilatnot" readonly value="<?= $tahsilatcek['vtTahsilatTipi'] ?>" class="form-control contact-modal" id="exampleFormControlInput1">
-                                                                            </div>
-
-
                                                                         <?php } ?>
                                                                         <div class="form-group col-12">
                                                                             <label for="exampleFormControlInput1">Tahsilat Notları</label>
@@ -439,17 +419,6 @@ if (empty($_SESSION['kullanici'])) {
                                                                             <label for="exampleFormControlInput1">Tarih</label>
                                                                             <input type="date" name="tarih" required class="form-control contact-modal" id="exampleFormControlInput1">
                                                                         </div>
-                                                                        <div class="col-12">
-                                                                            <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
-                                                                            <select id="defaultInputState" name="tahsilattipi" required class="form-select">
-                                                                                <option value="">Seç</option>
-                                                                                <option value="Nakit">Nakit</option>
-                                                                                <option value="Kart">Kart</option>
-                                                                                <option value="Iban">Iban</option>
-                                                                                <option value="Veresiye">Veresiye</option>
-                                                                                <option value="Mail Order">Mail Order</option>
-                                                                            </select>
-                                                                        </div>
                                                                         <div class="form-group col-12">
                                                                             <label for="exampleFormControlInput1">Not</label>
                                                                             <input type="text" name="not" class="form-control contact-modal" id="exampleFormControlInput1">
@@ -462,35 +431,6 @@ if (empty($_SESSION['kullanici'])) {
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-success" name="tahsilatekle" type="submit">Kaydet</button>
-                                                            </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal fade" id="iptal<?= $veresiyecek['vId']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                                                            </div>
-                                                            <div class="modal-body row">
-
-                                                                <div class="row g-1">
-                                                                    <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $mustericek['mAdSoyad']; ?></h4>
-                                                                    <h4 style="color:#F24C3D;text-align:center;">VERESİYEYİ İPTAL ETMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>  
-                                                                    <form action="../netting/veresiyeislem.php" method="POST" id="erteleform">
-
-                                                                        <input type="hidden" value="<?= $veresiyecek['vId']; ?>" name="veresiyeno">
-                                                                        <input type="hidden" value="<?= $veresiyecek['vKalan']; ?>" name="veresiyekalan">
-                                                                        <input type="hidden" value="<?= $veresiyecek['vTutar']; ?>" name="veresiyetoplam">
-
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button class="btn btn-danger" name="veresiyeiptal" type="submit">İptal Et</button>
                                                             </div>
                                                             </form>
                                                         </div>
@@ -510,17 +450,7 @@ if (empty($_SESSION['kullanici'])) {
                                                                     <h4 style="color:#26577C;text-align:center;font-size:xx-large;"><?= $mustericek['mAdSoyad']; ?></h4>
                                                                     <h4 style="color:#F24C3D;text-align:center;">VERESİYEYİ SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>  
                                                                     <form action="../netting/veresiyeislem.php" method="POST" id="erteleform">
-                                                                    <div class="col-12">
-                                                                            <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
-                                                                            <select id="defaultInputState" name="tahsilattipi" required class="form-select">
-                                                                                <option value="">Seç</option>
-                                                                                <option value="Nakit">Nakit</option>
-                                                                                <option value="Kart">Kart</option>
-                                                                                <option value="Iban">Iban</option>
-                                                                                <option value="Veresiye">Veresiye</option>
-                                                                                <option value="Mail Order">Mail Order</option>
-                                                                            </select>
-                                                                        </div>
+
                                                                         <input type="hidden" value="<?= $veresiyecek['vId']; ?>" name="veresiyeno">
                                                                         <input type="hidden" value="<?= $veresiyecek['vKalan']; ?>" name="veresiyekalan">
                                                                         <input type="hidden" value="<?= $veresiyecek['vTutar']; ?>" name="veresiyetoplam">

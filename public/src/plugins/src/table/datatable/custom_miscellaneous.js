@@ -93,7 +93,7 @@ $(document).ready(function () {
     stripeClasses: [],
     pageLength: 50,
     columnDefs: [{ orderable: false, targets: "_all" }],
-        
+    
   });
   $('input[id="specialsearch"]').on("keyup", function () {
     // table.columns().search( '' ); // Reset all column searches
@@ -907,37 +907,21 @@ $(document).ready(function () {
     },
     stripeClasses: [],
     lengthMenu: [7, 10, 20, 50],
-    pageLength: 10,
-    stripeClasses: [],
-    pageLength: 10,
+    pageLength: 20,
     columnDefs: [{ orderable: false, targets: "_all" }],
     stateSave: true,
-    stateSaveCallback: function (settings, data) {
-      // Sütunlardaki özel arama değerlerini kaydedin
-      data.searchCols = [];
-      $("#specialsearch").each(function () {
-        data.searchCols.push({
-          search: this.value,
-        });
-      });
-
-      localStorage.setItem("myDataTableState", JSON.stringify(data));
-    },
     stateLoadCallback: function (settings) {
-      // Kaydedilmiş durumu yüklerken sütunlardaki özel arama değerlerini geri yükleyin
-      if (savedState && savedState.searchCols) {
-        $("#specialsearch").each(function (index) {
-          if (savedState.searchCols[index]) {
-            this.value = savedState.searchCols[index].search;
-          }
-        });
+      var data = JSON.parse(localStorage.getItem('myDataTableState'));
+      if (data) {
+        data.length = 20; // Sayfa uzunluğunu 20 olarak ayarlayın
       }
-
-      return savedState;
+      return data;
+    },
+    stateSaveCallback: function (settings, data) {
+      localStorage.setItem('myDataTableState', JSON.stringify(data));
     },
   });
-
-
+  
 
   /*
         Live Dom Ordering

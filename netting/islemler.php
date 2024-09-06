@@ -1,11 +1,6 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="tr">
-<?php
-if (empty($_SESSION['kullanici'])) {
-    header("Location:../../../index.php?erisim=izinsiz");
-}
-?>
 
 <head>
     <meta charset="utf-8">
@@ -43,11 +38,6 @@ if (empty($_SESSION['kullanici'])) {
             background-color: #394867 !important;
             color: white;
 
-        }
-
-        table td {
-            color: #000000 !important;
-            font-weight: 600 !important;
         }
 
         .info-input {
@@ -220,8 +210,6 @@ if (empty($_SESSION['kullanici'])) {
                                                 <th>İşlem Zamanı</th>
                                                 <th>İşlem Türü</th>
                                                 <th>İşlem Ücreti</th>
-                                                <th>Veresiye</th>
-
                                                 <th>Not</th>
                                                 <th>Detay</th>
 
@@ -242,20 +230,7 @@ if (empty($_SESSION['kullanici'])) {
                                             } else {
                                                 $alınanucret = $islemcek['islemUcret'];
                                             }
-                                            $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');
-
-                                            $vsor = $db->prepare("SELECT * from veresiye WHERE vIslemNo = :islemno");
-                                            $vsor->execute(array(
-                                                'islemno' =>  $islemcek['islemNo']
-                                            ));
-                                            $vcek = $vsor->fetch(PDO::FETCH_ASSOC);
-
-                                            $tursor = $db->prepare("SELECT * from servismuhasebe WHERE sIslemNo = :islemno");
-                                            $tursor->execute(array(
-                                                'islemno' =>  $islemcek['islemNo']
-                                            ));
-                                            $turcek = $tursor->fetch(PDO::FETCH_ASSOC);
-                                        ?>
+                                            $alınanucretfrmt = number_format($alınanucret, 2, ',', '.');          ?>
 
                                             <tr>
                                                 <td><?= $say; ?></td>
@@ -263,8 +238,8 @@ if (empty($_SESSION['kullanici'])) {
                                                 <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
                                                 <td><?= implode(", ", $islemturu);  ?></td>
 
-                                                <td><?= $alınanucretfrmt; ?> TL<?= " " . $turcek['sTahsilatTipi'];?></td>
-                                                <td><?= ($vcek['vTutar']) ? $vcek['vTutar'] . " TL" : "Yok"; ?> </td>
+                                                <td><?= $alınanucretfrmt; ?> TL</td>
+
                                                 <td><?= $islemcek['islemNot']; ?> </td>
 
                                                 <td style="max-width:20px;">
@@ -312,16 +287,14 @@ if (empty($_SESSION['kullanici'])) {
                                             <th>İşlem Zamanı</th>
                                             <th>İşlem Türü</th>
                                             <th>İşlem Ücreti</th>
-                                            <th>Veresiye</th>
-
                                             <th>Not</th>
                                             <th>Detay</th>
 
                                         </tr>
                                     </thead>
                                     <?php
-                                    $bugun = date("Y-m-d");
-                                    $islemsor = $db->prepare("SELECT * from islemler WHERE DATE(islemTarihi) ='$bugun'ORDER BY islemTarihi DESC");
+                                        $bugun = date("Y-m-d");
+                                        $islemsor = $db->prepare("SELECT * from islemler WHERE DATE(islemTarihi) ='$bugun'ORDER BY islemTarihi DESC");
 
                                     $islemsor->execute();
                                     $say = 0;
@@ -338,18 +311,7 @@ if (empty($_SESSION['kullanici'])) {
                                         $msor->execute(array(
                                             'mMusteriNo' => $islemcek['islemMusteriNo']
                                         ));
-                                        $mcek = $msor->fetch(PDO::FETCH_ASSOC);
-                                        $vsor = $db->prepare("SELECT * from veresiye WHERE vIslemNo = :islemno");
-                                        $vsor->execute(array(
-                                            'islemno' =>  $islemcek['islemNo']
-                                        ));
-                                        $vcek = $vsor->fetch(PDO::FETCH_ASSOC);
-
-                                        $tursor = $db->prepare("SELECT * from servismuhasebe WHERE sIslemNo = :islemno");
-                                        $tursor->execute(array(
-                                            'islemno' =>  $islemcek['islemNo']
-                                        ));
-                                        $turcek = $tursor->fetch(PDO::FETCH_ASSOC);
+                                        $mcek = $msor->fetch(PDO::FETCH_ASSOC)
                                     ?>
 
                                         <tr>
@@ -360,8 +322,7 @@ if (empty($_SESSION['kullanici'])) {
                                             <td><?= date("d.m.Y H:i", strtotime($islemcek['islemTarihi'])); ?></td>
                                             <td><?= implode(", ", $islemturu);  ?></td>
 
-                                            <td><?= $alınanucretfrmt; ?> TL<?= " " . $turcek['sTahsilatTipi'];?></td>
-                                            <td><?= isset($vcek['vTutar']) ? $vcek['vTutar'] . " TL" : "Yok"; ?> </td>
+                                            <td><?= $alınanucretfrmt; ?> TL</td>
 
                                             <td><?= $islemcek['islemNot']; ?> </td>
 
@@ -452,7 +413,7 @@ if (empty($_SESSION['kullanici'])) {
                                 <label for="inputAddress" class="form-label">İşlem Ücreti</label>
 
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="islemtutari" name="islemucreti" style="color:#505463;">
+                                    <input type="text" class="form-control" id="islemtutari" name="islemucreti"  style="color:#505463;">
                                     <button class="btn btn-outline-primary" style="z-index:0;" type="button" id="makediscount">İndirim Uygula</button>
                                 </div>
                             </div>
@@ -470,10 +431,8 @@ if (empty($_SESSION['kullanici'])) {
                                 <label for="defaultInputState" class="form-label ">İşlemi Yapan</label>
                                 <select form="islemekleform" id="defaultInputState" name="islemyapan" class="form-select">
                                     <option value="">Seç</option>
-                                    <option value="Mehmet">Mehmet</option>
-                                    <option value="Kadir">Kadir</option>
-                                    <option value="Orkun">Orkun</option>
-
+                                    <option value="mehmet">Mehmet</option>
+                                    <option value="kadir">Kadir</option>
 
                                 </select>
                             </div>
@@ -482,39 +441,30 @@ if (empty($_SESSION['kullanici'])) {
                                 <label for="inputAddress2" class="form-label">Veresiye Notu</label>
                                 <input type="text" class="form-control" name="notlar" id="inputAddress2">
                             </div>
-                            <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
-                            <select id="defaultInputState" name="tahsilattipi" required class="form-select">
-                                <option value="">Seç</option>
-                                <option value="Nakit">Nakit</option>
-                                <option value="Kart">Kart</option>
-                                <option value="Iban">Iban</option>
-                                <option value="Veresiye">Veresiye</option>
-                                <option value="Mail Order">Mail Order</option>
-                            </select>
-                        
-                        <input type="hidden" form="islemekleform" name="musterino" value="<?= $mcek['mMusteriNo']; ?>">
 
-                        <input type="hidden" form="islemekleform" name="periyot" value="<?= $mcek['mPeriyot']; ?>">
-                        <input type="hidden" form="islemekleform" name="tamfiyat" id="tamfiyat">
-                        <input type="hidden" form="islemekleform" name="indirimlifiyat" id="indirimtutari">
+                            <input type="hidden" form="islemekleform" name="musterino" value="<?= $mcek['mMusteriNo']; ?>">
+
+                            <input type="hidden" form="islemekleform" name="periyot" value="<?= $mcek['mPeriyot']; ?>">
+                            <input type="hidden" form="islemekleform" name="tamfiyat" id="tamfiyat">
+                            <input type="hidden" form="islemekleform" name="indirimlifiyat" id="indirimtutari">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="islemekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
+                        </div>
+
+
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" name="islemekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
-                </div>
-
-
-                </form>
             </div>
         </div>
-    </div>
-    <!--  BEGIN FOOTER  -->
-    <div class="footer-wrapper">
-        <div class="footer-section f-section-1">
-            <p class="">Copyright © Mert Keser</p>
-        </div>
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © Mert Keser</p>
+            </div>
 
-    </div>
-    <!--  END CONTENT AREA  -->
+        </div>
+        <!--  END CONTENT AREA  -->
     </div>
     <!--  END CONTENT AREA  -->
     </div>
@@ -590,20 +540,20 @@ if (empty($_SESSION['kullanici'])) {
                         success: function(data) {
                             var fiyat = parseFloat($("#islemtutari").val());
                             var basamak = fiyat.toString().length;
-                            var indirim_tutari = 50;
+                            var indirim_tutari = fiyat * 0.1;
                             var yeni_fiyat = fiyat - indirim_tutari;
-                            // var roundedPrice;
-                            // if (basamak == 4 || basamak == 5) {
-                            //     roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
-                            //     if (yeni_fiyat - roundedPrice >= 50) {
-                            //         roundedPrice += 100;
-                            //     }
-                            // } else if (basamak == 3 || basamak == 2) {
-                            //     roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
-                            // }
-                            $("#tahsilat").val(yeni_fiyat);
-                            $("#islemtutari").val(yeni_fiyat);
-                            $("#indirimtutari").val(yeni_fiyat);
+                            var roundedPrice;
+                            if (basamak == 4 || basamak == 5) {
+                                roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                                if (yeni_fiyat - roundedPrice >= 50) {
+                                    roundedPrice += 100;
+                                }
+                            } else if (basamak == 3 || basamak == 2) {
+                                roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                            }
+                            $("#tahsilat").val(roundedPrice);
+                            $("#islemtutari").val(roundedPrice);
+                            $("#indirimtutari").val(roundedPrice);
                         }
 
                     });

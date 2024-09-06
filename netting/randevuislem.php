@@ -176,6 +176,7 @@ if (isset($_POST['islemekle'])) {
     sVeresiye = :veresiye,
     sTarih = :tarih,
     sTuru = :servisturu,
+    sTahsilatTipi = :tahsilattipi,
     sPersonel = :personel
 
 
@@ -191,6 +192,7 @@ if (isset($_POST['islemekle'])) {
                 "veresiye" => $_POST['veresiye'],
                 "tarih" => date("Y-m-d"),
                 "servisturu" => $hizmetler_str,
+                "tahsilattipi" => $_POST['tahsilattipi'],
                 "personel" => $_SESSION['kullanici']
 
             ));
@@ -251,6 +253,8 @@ $randevusor->execute(array(
 $randevucek = $randevusor->fetch(PDO::FETCH_ASSOC);
 $musterino = $randevucek['rMID'];
 
+
+
 if (isset($_POST['randevuertele'])) {
     $musterino = $_POST['musterino'];
     $randevuid = $_POST['randevuid'];
@@ -288,6 +292,14 @@ if (isset($_POST['randevuertele'])) {
     $query->bindParam(':randevuid', $randevuid);
     $insert = $query->execute();
     }
+    if (isset($_POST['randevunotu']))  {
+
+$rnot = $_POST['randevunotu'];
+        $query = $db->prepare("UPDATE randevular SET rNot=:rnot WHERE rNo=:rid");
+        $query->bindParam(':rnot', $rnot);
+        $query->bindParam(':rid', $randevuid);
+        $insert = $query->execute();
+    }
     if ($insert) {
         header("Location:../views/randevular.php?no=$musterino&yt=basarili");
         exit();
@@ -295,6 +307,7 @@ if (isset($_POST['randevuertele'])) {
         header("Location:../views/randevular.php?no=$musterino&yt=basarisiz");
         exit();
     }
+
 }
 
 if (isset($_POST['islemeklepersonel'])) {
@@ -398,6 +411,7 @@ if (isset($_POST['islemeklepersonel'])) {
                  sVeresiye = :veresiye,
                  sTarih = :tarih,
                  sTuru = :servisturu,
+                    sTahsilatTipi = :tahsilattipi,
                 sPersonel = :personel
 
           ");
@@ -412,6 +426,7 @@ if (isset($_POST['islemeklepersonel'])) {
             "veresiye" => $_POST['veresiye'],
             "tarih" => date("Y-m-d"),
             "servisturu" => $hizmetler_str,
+            "tahsilattipi" => $_POST['tahsilattipi'],
             "personel" => $_SESSION['kullanici']
         ));
 
@@ -463,6 +478,7 @@ if (isset($_POST['satisekle'])) {
         sTutar = :ucret,
         sIndirimliTutar = :indirimlifiyat,
         sReferans = :referans,
+        sTahsilatTipi = :tahsilattipi,
         sNot = :notlar,
         sRandevu = :randevu
     ");
@@ -476,6 +492,7 @@ if (isset($_POST['satisekle'])) {
         "ucret" => $_POST['stamfiyat'],
         "indirimlifiyat" => $_POST['sindirimlifiyat'],
         "referans" => $_POST['referans'],
+        "tahsilattipi" => $_POST['tahsilattipi'],
         "notlar" => $_POST['notlar'],
         "randevu" => $_POST['randevuid']
     ));
@@ -503,6 +520,7 @@ if (isset($_POST['satisekle'])) {
             sVeresiye = :veresiye,
             sTarih = :tarih,
             sTuru = :servisturu,
+            sTahsilatTipi = :tahsilattipi,
             sPersonel = :personel
         ");
 
@@ -516,6 +534,7 @@ if (isset($_POST['satisekle'])) {
             "veresiye" => $_POST['veresiye'],
             "tarih" => $bugun,
             "servisturu" => $satis,
+            "tahsilattipi" => $_POST['tahsilattipi'],
             "personel" => $_SESSION['kullanici']
         ));
         if ($query2->errorCode() != "00000") {

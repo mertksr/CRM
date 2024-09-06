@@ -345,20 +345,20 @@ if (empty($_SESSION['kullanici'])) {
                     success: function(data) {
                         var fiyat = parseFloat($("#cost").val());
                         var basamak = fiyat.toString().length;
-                        var indirim_tutari = fiyat * 0.1;
+                        var indirim_tutari = 50;
                         var yeni_fiyat = fiyat - indirim_tutari;
-                        var roundedPrice;
-                        if (basamak == 4 || basamak == 5) {
-                            roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
-                            if (yeni_fiyat - roundedPrice >= 50) {
-                                roundedPrice += 100;
-                            }
-                        } else if (basamak == 3 || basamak == 2) {
-                            roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
-                        }
+                        // var roundedPrice;
+                        // if (basamak == 4 || basamak == 5) {
+                        //     roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                        //     if (yeni_fiyat - roundedPrice >= 50) {
+                        //         roundedPrice += 100;
+                        //     }
+                        // } else if (basamak == 3 || basamak == 2) {
+                        //     roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                        // }
 
-                        $("#cost").val(roundedPrice);
-                        $("#indirimtutari").val(roundedPrice);
+                        $("#cost").val(yeni_fiyat);
+                        $("#indirimtutari").val(yeni_fiyat);
                     }
 
                 });

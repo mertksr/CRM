@@ -1,11 +1,12 @@
 <?php include '../../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-<?php 
+<?php
 if (empty($_SESSION['kullanici'])) {
     header("Location:../../../../index.php?erisim=izinsiz");
 }
 ?>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -515,7 +516,7 @@ if (empty($_SESSION['kullanici'])) {
                                                             <i class="fa-solid fa-pen"></i> </a>
                                                     </td>
                                                     <td style="text-align:center;">
-                                                        <a class="btn btn-ozel mr-2" <?php if ($randevucek['rDurum'] == "2"|| $randevucek['rDurum'] == "3") {
+                                                        <a class="btn btn-ozel mr-2" <?php if ($randevucek['rDurum'] == "2" || $randevucek['rDurum'] == "3") {
                                                                                             echo "style='pointer-events: none;background-color:#c4c4c4;'";
                                                                                         }  ?> data-bs-toggle="modal" data-bs-target="#onayla<?php echo $modalId; ?>">
                                                             <i class="fa-solid fa-check"></i> </a>
@@ -843,10 +844,10 @@ if (empty($_SESSION['kullanici'])) {
                                                                                         $urunsor->execute();
                                                                                         while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
 
-                                                                                            if(!empty($uruncek['urunFiyat'])){
-                                                                                                $urunfiyat= "{" .$uruncek['urunFiyat']. "TL}";
-                                                                                            }else{
-                                                                                                $urunfiyat="";
+                                                                                            if (!empty($uruncek['urunFiyat'])) {
+                                                                                                $urunfiyat = "{" . $uruncek['urunFiyat'] . "TL}";
+                                                                                            } else {
+                                                                                                $urunfiyat = "";
                                                                                             }
                                                                                         ?>
                                                                                             <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd'] . $urunfiyat; ?></option>
@@ -860,7 +861,7 @@ if (empty($_SESSION['kullanici'])) {
 
                                                                                     <div class="input-group">
                                                                                         <input type="text" class="form-control" id="cost<?= $randevucek['rNo']; ?>" name="islemucreti" readonly style="color:#505463;">
-                                                                                        <button class="btn btn-outline-primary makediscount" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount<?= $randevucek['rNo']; ?>">UYGULA</button>
+                                                                                        <button class="btn btn-outline-primary" data-randevuid="<?= $randevucek['rNo'] ?>" style="z-index:0;" type="button" id="makediscount<?= $randevucek['rNo']; ?>">UYGULA</button>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-6">
@@ -877,7 +878,13 @@ if (empty($_SESSION['kullanici'])) {
                                                                                     <label for="inputAddress2" class="form-label">Veresiye Notu</label>
                                                                                     <input type="text" class="form-control" name="notlar" id="inputAddress2">
                                                                                 </div>
-
+                                                                                <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
+                                                                                <select id="defaultInputState" name="tahsilattipi" required class="form-select">
+                                                                                    <option value="">Seç</option>
+                                                                                    <option value="Nakit">Nakit</option>
+                                                                                    <option value="Kart">Kart</option>
+                                                                                    <option value="Veresiye">Veresiye</option>
+                                                                                </select>
                                                                                 <!-- <div class="col-12">
                                                                                     <label for="inputAddress2" class="form-label">Fotoğraf Ekle</label>
                                                                                     <input type="hidden" name="musterino" value=" /* $_GET['no'] */">
@@ -919,10 +926,10 @@ if (empty($_SESSION['kullanici'])) {
                                                                                     $urunsor->execute();
                                                                                     while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
 
-                                                                                        if(!empty($uruncek['urunFiyat'])){
-                                                                                            $urunfiyat= "{" .$uruncek['urunFiyat']. "TL}";
-                                                                                        }else{
-                                                                                            $urunfiyat="";
+                                                                                        if (!empty($uruncek['urunFiyat'])) {
+                                                                                            $urunfiyat = "{" . $uruncek['urunFiyat'] . "TL}";
+                                                                                        } else {
+                                                                                            $urunfiyat = "";
                                                                                         }
                                                                                     ?>
                                                                                         <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd'] . $urunfiyat; ?></option>
@@ -958,6 +965,7 @@ if (empty($_SESSION['kullanici'])) {
                                                                                 <select id="defaultInputState" name="referans" class="form-select">
                                                                                     <option selected="">Seç</option>
                                                                                     <option value="Kadir">Kadir</option>
+                                                                                    <option value="Orkun">Orkun</option>
                                                                                     <option value="Mehmet">Mehmet</option>
                                                                                 </select>
                                                                             </div>
@@ -966,6 +974,14 @@ if (empty($_SESSION['kullanici'])) {
                                                                                 <input type="text" name="notlar" style="text-transform:uppercase;" class="form-control">
 
                                                                             </div>
+                                                                            <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
+                                                                            <select id="defaultInputState" name="tahsilattipi" required class="form-select">
+                                                                                <option value="">Seç</option>
+                                                                                <option value="Nakit">Nakit</option>
+                                                                                <option value="Kart">Kart</option>
+                                                                                <option value="Veresiye">Veresiye</option>
+                                                                            </select>
+
                                                                             <input type="hidden" name="musterino" value="<?= $mustericek['mMusteriNo']; ?>">
                                                                             <input type="hidden" name="randevuid" value="<?= $randevucek['rNo']; ?>">
 
@@ -1105,12 +1121,16 @@ if (empty($_SESSION['kullanici'])) {
 
 
                         // Toplam fiyatı ve diğer değerleri güncelleyin
+
+
                         var randevuid = $(that).attr("data-id");
                         var indiriminput = "cost" + randevuid;
                         var urunlerinput = "urunlerinput" + randevuid;
                         var itamfiyat = "itamfiyat" + randevuid;
                         var iindirimtutari = "iindirimtutari" + randevuid;
                         var tahsilat = "tahsilat" + randevuid;
+                        var veresiye = "veresiye" + randevuid;
+                        $("#" + veresiye).val(0);
                         $("#" + tahsilat).val(total);
                         $("#" + urunlerinput).val(selectedString);
                         $("#" + indiriminput).val(total);
@@ -1185,7 +1205,9 @@ if (empty($_SESSION['kullanici'])) {
                     alert("Ürün seçmeden indirim yapamazsınız!");
                     return false;
                 } else {
-
+                    // $("#makediscount").off("click"); 
+                    $("#makediscount").removeClass('btn-outline-primary');
+                    $("#makediscount").addClass('btn-outline-danger');
 
                     $.ajax({
                         url: "../../netting/ayarcek.php",
@@ -1194,28 +1216,23 @@ if (empty($_SESSION['kullanici'])) {
                         success: function(data) {
                             var fiyat = parseFloat($("#" + costid).val());
                             var basamak = fiyat.toString().length;
-                            var indirim_tutari = fiyat * 0.1;
+                            var indirim_tutari = 50;
                             var yeni_fiyat = fiyat - indirim_tutari;
-                            var roundedPrice;
-                            if (basamak == 4 || basamak == 5) {
-                                roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
-                                if (yeni_fiyat - roundedPrice >= 50) {
-                                    roundedPrice += 100;
-                                }
-                            } else if (basamak == 3 || basamak == 2) {
-                                roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
-                            }
+                            // var roundedPrice;
+                            // if (basamak == 4 || basamak == 5) {
+                            //     roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                            //     if (yeni_fiyat - roundedPrice >= 50) {
+                            //         roundedPrice += 100;
+                            //     }
+                            // } else if (basamak == 3 || basamak == 2) {
+                            //     roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                            // }
 
-                            $("#" + costid).val(roundedPrice);
-                            $("#" + tahsilat).val(roundedPrice);
+                            $("#" + costid).val(yeni_fiyat);
+                            $("#" + tahsilat).val(yeni_fiyat);
                             var iindirimtutari = "iindirimtutari" + randevuid;
-                            $("#" + iindirimtutari).val(roundedPrice);
-                            /* Butona tıklandığında tekrar tıklanmasını enegelleme */
-                            var makediscount = "makediscount" + randevuid;
-                            var button = document.querySelector("#" + makediscount);
-                            button.disabled = true;                     
-                            $("#" + makediscount).removeClass('btn-outline-primary');
-                            $("#" + makediscount).addClass('btn-outline-danger');
+                            $("#" + iindirimtutari).val(yeni_fiyat);
+
                         }
 
                     });
@@ -1241,22 +1258,22 @@ if (empty($_SESSION['kullanici'])) {
                         success: function(data) {
                             var fiyat = parseFloat($("#" + scostid).val());
                             var basamak = fiyat.toString().length;
-                            var indirim_tutari = fiyat * 0.1;
+                            var indirim_tutari = 50;
                             var yeni_fiyat = fiyat - indirim_tutari;
-                            var roundedPrice;
-                            if (basamak == 4 || basamak == 5) {
-                                roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
-                                if (yeni_fiyat - roundedPrice >= 50) {
-                                    roundedPrice += 100;
-                                }
-                            } else if (basamak == 3 || basamak == 2) {
-                                roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
-                            }
+                            // var roundedPrice;
+                            // if (basamak == 4 || basamak == 5) {
+                            //     roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                            //     if (yeni_fiyat - roundedPrice >= 50) {
+                            //         roundedPrice += 100;
+                            //     }
+                            // } else if (basamak == 3 || basamak == 2) {
+                            //     roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                            // }
 
-                            $("#" + scostid).val(roundedPrice);
-                            //$("#sindirimtutari").val(roundedPrice);
+                            $("#" + scostid).val(yeni_fiyat);
+                            //$("#sindirimtutari").val(yeni_fiyat);
                             var sindirimtutari = "sindirimtutari" + randevuid;
-                            $("#" + sindirimtutari).val(roundedPrice);
+                            $("#" + sindirimtutari).val(yeni_fiyat);
                         }
 
                     });

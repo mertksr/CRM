@@ -31,6 +31,8 @@ if (isset($_POST['satisekle'])) {
         sTutar = :ucret,
         sIndirimliTutar = :indirimlifiyat,
         sReferans = :referans,
+        sTahsilatTipi = :tahsilattipi,
+
         sNot = :notlar
                 ");
 
@@ -43,12 +45,18 @@ if (isset($_POST['satisekle'])) {
         "ucret" =>  $_POST['islemucreti'],
         "indirimlifiyat" => $_POST['sindirimlifiyat'],
         "referans" => $_POST['referans'],
+        "tahsilattipi" => $_POST['tahsilattipi'],
         "notlar" => $_POST['notlar']
     ));
 
 
 
     if ($insert) {
+        if($_POST['veresiye']!=""){
+            $veresiye = $_POST['veresiye'];
+        }else{
+            $veresiye = "";
+        }
         if (!empty($_POST['sindirimlifiyat'])) {
             $fiyat = $_POST['stamfiyat'];
             $indirimlifiyat = $_POST['sindirimlifiyat'];
@@ -66,6 +74,7 @@ if (isset($_POST['satisekle'])) {
         sVeresiye = :veresiye,
         sTarih = :tarih,
         sTuru = :servisturu,
+        sTahsilatTipi = :tahsilattipi,
         sPersonel = :personel
         
         
@@ -78,9 +87,10 @@ if (isset($_POST['satisekle'])) {
             "indirim" => $_POST['sindirimlifiyat'],
             "yapilanindirim" => $indirim,
             "tahsilat" => $_POST['tahsilat'],
-            "veresiye" => $_POST['veresiye'],
+            "veresiye" => $veresiye,
             "tarih" => date("Y-m-d"),
             "servisturu" => $satis,
+            "tahsilattipi" => $_POST['tahsilattipi'],
             "personel" => $_SESSION['kullanici']
 
         ));
@@ -127,7 +137,8 @@ if (isset($_POST['muhasebedissatisekle'])) {
     sTahsilat = :tahsilat,
     sYapilanIndirim = :indirim,
     sTarih = :tarih,
-    sTuru = :tur
+    sTuru = :tur,
+    sTahsilatTipi=:tahsilattipi
     
     
           ");
@@ -137,7 +148,8 @@ if (isset($_POST['muhasebedissatisekle'])) {
         "tahsilat" => $_POST['tutar'],
         "indirim" => 0,
         "tarih" => $_POST['tarih'],
-        "tur" => $satis
+        "tur" => $satis,
+        "tahsilattipi" => $_POST['tahsilattipi']
     ));
 
 

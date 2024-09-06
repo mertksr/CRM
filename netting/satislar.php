@@ -1,11 +1,6 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="en">
-<?php
-if (empty($_SESSION['kullanici'])) {
-    header("Location:../../../index.php?erisim=izinsiz");
-}
-?>
 
 <head>
     <meta charset="utf-8">
@@ -51,11 +46,6 @@ if (empty($_SESSION['kullanici'])) {
             background-color: #394867 !important;
             color: white;
 
-        }
-
-        table td {
-            color: #000000 !important;
-            font-weight: 600 !important;
         }
 
         .info-input {
@@ -222,8 +212,7 @@ if (empty($_SESSION['kullanici'])) {
                                                     <th style="max-width:40px;">Garanti</th>
                                                     <th>Garanti Bitiş</th>
 
-                                                    <th style="max-width:60px;">Detay</th>
-                                                    <th style="max-width:60px;text-align:center;">SİL</th>
+                                                    <th>İşlemler</th>
 
 
                                                 </tr>
@@ -263,42 +252,14 @@ if (empty($_SESSION['kullanici'])) {
 
 
 
-                                                    <td style="max-width:30px;">
+                                                    <td style="max-width:20px;">
                                                         <div class="text-center">
-                                                            <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel detay">
+                                                            <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel mr-2 detay">
                                                                 <i class="fa-solid fa-address-book"></i>
                                                             </button>
                                                         </div>
+
                                                     </td>
-                                                    <td style="max-width:30px;">
-                                                        <div class="text-center">
-                                                            <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#sil<?php echo $satiscek['sNo']; ?>">
-                                                                <i class="fa-solid fa-trash"></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <div class="modal fade" id="sil<?php echo $satiscek['sNo']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                                                                </div>
-                                                                <div class="modal-body row">
-
-                                                                    <div class="row g-1">
-                                                                        <h4 style="color:#26577C;text-align:center;font-size:xx-large;"> <?= $mcek['mAdSoyad']; ?></h4>
-                                                                        <h4 style="color:#F24C3D;text-align:center;">SATIŞI SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <a class="btn btn-danger" href="../netting/satisislem.php?satissil=ok&satisno=<?= $satiscek['satisNo'] ?>" type="submit">Satışı Sil</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
 
 
                                                 </tr>
@@ -325,8 +286,7 @@ if (empty($_SESSION['kullanici'])) {
                                                 <th>Garanti Bitiş</th>
 
 
-                                                <th style="max-width:60px;">Detay</th>
-                                                <th style="max-width:60px;text-align:center;">SİL</th>
+                                                <th>İşlemler</th>
 
 
                                             </tr>
@@ -346,8 +306,6 @@ if (empty($_SESSION['kullanici'])) {
                                             $urunler = $urunsor->fetchAll(PDO::FETCH_ASSOC);
                                             $islemurun = [];
                                             $kullanilanurun = unserialize($satiscek['sUrun']);
-
-if ($kullanilanurun !== false && is_array($kullanilanurun)) {
                                             foreach ($kullanilanurun as $urunid) {
                                                 foreach ($urunler as $urun) {
                                                     if ($urunid == $urun['urunid']) {
@@ -355,7 +313,6 @@ if ($kullanilanurun !== false && is_array($kullanilanurun)) {
                                                     }
                                                 }
                                             }
-                                        }
                                         ?>
 
                                             <tr>
@@ -369,42 +326,15 @@ if ($kullanilanurun !== false && is_array($kullanilanurun)) {
 
 
 
-                                                <td style="max-width:30px;">
+                                                <td style="max-width:20px;">
                                                     <div class="text-center">
-                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel  detay">
+                                                        <button type="button" name="detay" value="detay" data-adsoyad="<?= $mcek['mAdSoyad']; ?>" id="<?php echo $satiscek["sNo"]; ?>" class="btn btn-ozel mr-2 detay">
                                                             <i class="fa-solid fa-address-book"></i>
                                                         </button>
                                                     </div>
 
                                                 </td>
-                                                <td style="max-width:30px;">
-                                                    <div class="text-center">
-                                                        <a class="btn btn-ozel" data-bs-toggle="modal" data-bs-target="#sil<?php echo $satiscek['sNo']; ?>">
-                                                            <i class="fa-solid fa-trash"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                <div class="modal fade" id="sil<?php echo $satiscek['sNo']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
-                                                            </div>
-                                                            <div class="modal-body row">
-
-                                                                <div class="row g-1">
-                                                                    <h4 style="color:#26577C;text-align:center;font-size:xx-large;"> <?= $mcek['mAdSoyad']; ?></h4>
-                                                                    <h4 style="color:#F24C3D;text-align:center;">SATIŞI SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ?</h4>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <a class="btn btn-danger" href="../netting/satisislem.php?satissil=ok&satisno=<?= $satiscek['satisNo'] ?>" type="submit">Satışı Sil</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                             </tr>
                                         <?php } ?>
@@ -438,13 +368,14 @@ if ($kullanilanurun !== false && is_array($kullanilanurun)) {
                                     Ürünler</label>
                                 <select id="choices-multiple-remove-button" name="kullanilanurunler[]" placeholder="Ürün Seçiniz" multiple>
                                     <?php
-                                    $urunsor = $db->prepare("SELECT *  FROM urunler WHERE urunCinsi = 3 ORDER BY urunSiralama2 ASC");
+
+                                    $urunsor = $db->prepare("SELECT *  FROM urunler WHERE urunCinsi = 3 ORDER BY urunCinsi DESC");
                                     $urunsor->execute();
                                     while ($uruncek = $urunsor->fetch(PDO::FETCH_ASSOC)) {
-                                        if (!empty($uruncek['urunFiyat'])) {
-                                            $urunfiyat = "{" . $uruncek['urunFiyat'] . "TL}";
-                                        } else {
-                                            $urunfiyat = "";
+                                        if(!empty($uruncek['urunFiyat'])){
+                                            $urunfiyat= "{" .$uruncek['urunFiyat']. "TL}";
+                                        }else{
+                                            $urunfiyat="";
                                         }
                                     ?>
                                         <option value="<?= $uruncek['urunid']; ?>"><?= $uruncek['urunAd'] . $urunfiyat; ?></option>
@@ -488,7 +419,6 @@ if ($kullanilanurun !== false && is_array($kullanilanurun)) {
                                 <select id="defaultInputState" form="satisekleform" name="referans" class="form-select">
                                     <option selected="">Seç</option>
                                     <option value="Kadir">Kadir</option>
-                                    <option value="Orkun">Orkun</option>
                                     <option value="Mehmet">Mehmet</option>
                                 </select>
                             </div>
@@ -497,54 +427,42 @@ if ($kullanilanurun !== false && is_array($kullanilanurun)) {
                                 <input type="text" form="satisekleform" name="notlar" style="text-transform:uppercase;" class="form-control">
 
                             </div>
-                            <label for="defaultInputState" class="form-label ">Tahsilat Tipi</label>
-                            <select id="defaultInputState" name="tahsilattipi" required class="form-select">
-                                <option value="">Seç</option>
-                                <option value="Nakit">Nakit</option>
-                                <option value="Kart">Kart</option>
-                                <option value="Iban">Iban</option>
-                                <option value="Veresiye">Veresiye</option>
-                                <option value="Mail Order">Mail Order</option>
-                            </select>
-                   
-
-                        <input type="hidden" name="musterino" form="satisekleform" value="<?= $mcek['mMusteriNo']; ?>">
+                            <input type="hidden" name="musterino" form="satisekleform" value="<?= $mcek['mMusteriNo']; ?>">
 
 
+                        </div>
+
+                        <input type="hidden" form="satisekleform" name="stamfiyat" id="tamfiyat">
+                        <input type="hidden" form="satisekleform" name="sindirimlifiyat" id="indirimtutari">
+
+                        <div class="modal-footer">
+                            <button type="submit" name="satisekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
+                        </div>
+
+
+                    </form>
                 </div>
-
-                <input type="hidden" form="satisekleform" name="stamfiyat" id="tamfiyat">
-                <input type="hidden" form="satisekleform" name="sindirimlifiyat" id="indirimtutari">
-
-                <div class="modal-footer">
-                    <button type="submit" name="satisekle" class="btn btn-success " style="color:#EFF5F5;">Kaydet</button>
-                </div>
-
-
-                </form>
             </div>
         </div>
-    </div>
-
-    <div id="satisDetayModal" class="modal fade">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;">Satış Bilgisi</h4>
-                    <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div id="satisDetayModal" class="modal fade">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="detaymodaladsoyad" style="color:#E21818; margin:auto;">Satış Bilgisi</h4>
+                        <button type="button" class="btn-close" style="margin:0;" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body row" id="musteridetaybody"></div>
                 </div>
-                <div class="modal-body row" id="musteridetaybody"></div>
             </div>
         </div>
-    </div>
-    <!--  BEGIN FOOTER  -->
-    <div class="footer-wrapper">
-        <div class="footer-section f-section-1">
-            <p class="">Copyright © Mert Keser</p>
-        </div>
+        <!--  BEGIN FOOTER  -->
+        <div class="footer-wrapper">
+            <div class="footer-section f-section-1">
+                <p class="">Copyright © Mert Keser</p>
+            </div>
 
-    </div>
-    <!--  END CONTENT AREA  -->
+        </div>
+        <!--  END CONTENT AREA  -->
     </div>
     <!--  END CONTENT AREA  -->
     </div>
@@ -588,7 +506,7 @@ if ($kullanilanurun !== false && is_array($kullanilanurun)) {
                 for (var i = 0; i < prices.length; i++) {
                     total += parseFloat(prices[i]);
                 }
-                $("#veresiye").val(0);
+
                 $("#tahsilat").val(total);
                 $("#tamfiyat").val(total);
                 $("#indirimtutari").val("0");
@@ -596,7 +514,7 @@ if ($kullanilanurun !== false && is_array($kullanilanurun)) {
             });
 
         });
-
+        
         const islemUcretiInput = document.getElementById('islemtutari');
         const tahsilatInput = document.getElementById('tahsilat');
         islemUcretiInput.addEventListener('input', function() {
@@ -629,20 +547,21 @@ if ($kullanilanurun !== false && is_array($kullanilanurun)) {
                     success: function(data) {
                         var fiyat = parseFloat($("#islemtutari").val());
                         var basamak = fiyat.toString().length;
-                        var indirim_tutari = 50;
+                        var indirim_tutari = fiyat * 0.1;
                         var yeni_fiyat = fiyat - indirim_tutari;
-                        // var roundedPrice;
-                        // if (basamak == 4 || basamak == 5) {
-                        //     roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
-                        //     if (yeni_fiyat - roundedPrice >= 50) {
-                        //         roundedPrice += 100;
-                        //     }
-                        // } else if (basamak == 3 || basamak == 2) {
-                        //     roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
-                        // }
-                        $("#tahsilat").val(yeni_fiyat);
+                        var roundedPrice;
+                        if (basamak == 4 || basamak == 5) {
+                            roundedPrice = Math.floor(yeni_fiyat / 100) * 100;
+                            if (yeni_fiyat - roundedPrice >= 50) {
+                                roundedPrice += 100;
+                            }
+                        } else if (basamak == 3 || basamak == 2) {
+                            roundedPrice = Math.floor(yeni_fiyat / 10) * 10;
+                        }
+                        $("#tahsilat").val(roundedPrice);
 
-                        $("#indirimtutari").val(yeni_fiyat);
+                        $("#islemtutari").val(roundedPrice);
+                        $("#indirimtutari").val(roundedPrice);
                     }
 
                 });

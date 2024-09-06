@@ -184,6 +184,8 @@ if (empty($_SESSION['kullanici'])) {
                                         <tr>
 
                                             <th>Müşteri Adı</th>
+                                            <th>Bölge</th>
+                                            <th>Adres</th>
                                             <th>Telefon Numarası 1</th>
                                             <th>Telefon Numarası 2</th>
 
@@ -197,6 +199,9 @@ if (empty($_SESSION['kullanici'])) {
 
                                         <tr>
                                             <td><?= $mcek['mAdSoyad']; ?></td>
+                                            <td><?= $mcek['mBolge']; ?></td>
+                                            <td><?= $mcek['mAdres']; ?></td>
+
                                             <td>0<?= $mcek['mTel1']; ?></td>
                                             <td>0<?= $mcek['mTel2']; ?></td>
 

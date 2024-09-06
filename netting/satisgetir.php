@@ -99,7 +99,10 @@ $output .= '
         <label for="exampleFormControlInput1">Satış Notları</label>
         <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sNot'] .'">
         </div>
-
+        <div class="form-group col-lg-12">
+        <label for="exampleFormControlInput1">Tahsilat Tipi</label>
+        <input  type="text" readonly class="form-control contact-modal" id="exampleFormControlInput1"value="'. $satiscek['sTahsilatTipi'] .'">
+        </div>
 
         </div>
     ';  

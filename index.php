@@ -1,30 +1,7 @@
 
 <?php
 
-include "netting/connect.php"; // Veritabanı bağlantısı için gerekli dosya
-
-if (!empty($_COOKIE['auth_token'])) {
-    $auth_token = $_COOKIE['auth_token'];
-    // Veritabanında kullanıcıyı sorgula
-    $sorgu = $db->prepare("SELECT * FROM kullanicilar WHERE auth_token = ?");
-    $sorgu->execute(array($auth_token));
-    $kullanici = $sorgu->fetch(PDO::FETCH_ASSOC);
-
-    if ($kullanici) {
-        // Kullanıcı oturumu açmış olarak kabul edilir
-        $_SESSION['kullanici'] = $kullanici['kAd'];
-        $_SESSION['kid'] = $kullanici['kId'];
-        $_SESSION['kyetki'] = $kullanici['kYetki'];
-        $_SESSION['personel'] = $kullanici['kPersonel'];
-        // Otomatik yönlendirme yap
-        if ($_SESSION['kyetki'] == 1) {
-            header("Location:views/index.php?f=y");
-        } elseif ($_SESSION['kyetki'] == 2) {
-            header("Location:views/personel/index.php?f=y");
-        }
-     
-    }
-}
+// header("Location:views/personel/index.php?f=y");
 ?>
 <!DOCTYPE html>
 <html lang="en">

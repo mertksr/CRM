@@ -1,0 +1,1 @@
+[01-Feb-2024 22:19:17 Europe/Istanbul] PHP Warning:  PDOStatement::execute(): SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home/pinarmy1/public_html/netting/veresiyeislem.php on line 27

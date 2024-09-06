@@ -9,7 +9,7 @@ if (isset($_POST['tahsilatekle'])) {
     $not = $_POST['not'];
     $tarih = $_POST['tarih'];
     $veresiyeno = $_POST['veresiyeno'];
-
+    $tahsilattipi = $_POST['tahsilattipi'];
     $tahsilat;
     if (!empty($eskialinan)) {
         $tahsilat = $eskialinan + $alinan;
@@ -23,6 +23,7 @@ if (isset($_POST['tahsilatekle'])) {
     $query->bindParam(':vnot', $not);
     $query->bindParam(':kalan', $kalan);
     $query->bindParam(':veresiyeno', $veresiyeno);
+    $query->bindParam(':tahsilattipi', $tahsilattipi);
     $update = $query->execute();
 
 
@@ -30,6 +31,7 @@ if (isset($_POST['tahsilatekle'])) {
     $iquery = $db->prepare("INSERT INTO veresiyetahsilat SET
     	vtVeresiyeNo = :veresiyeno,
         vtTahsilat = :tahsilat,
+        vtTahsilatTipi =:tahsilattipi,
         vtTarih = :tarih
 
 ");
@@ -37,6 +39,7 @@ if (isset($_POST['tahsilatekle'])) {
     $insert = $iquery->execute(array(
         "veresiyeno" => $_POST['veresiyeno'],
         "tahsilat" => $_POST['tahsilat'],
+        "tahsilattipi" => $_POST['tahsilattipi'],
         "tarih" => $_POST['tarih']
     ));
     if ($insert) {
@@ -82,6 +85,7 @@ if (isset($_POST['veresiyesil'])) {
     $iquery = $db->prepare("INSERT INTO veresiyetahsilat SET
     vtVeresiyeNo = :veresiyeno,
     vtTahsilat = :tahsilat,
+    vtTahsilatTipi =:tahsilattipi,
     vtTarih = :tarih
 
 ");
@@ -89,6 +93,7 @@ if (isset($_POST['veresiyesil'])) {
     $insert = $iquery->execute(array(
         "veresiyeno" => $_POST['veresiyeno'],
         "tahsilat" => $odenen,
+        "tahsilattipi" => $_POST['tahsilattipi'],
         "tarih" => $bugun
     ));
 

@@ -1,11 +1,7 @@
 <?php include '../netting/connect.php' ?>
 <!DOCTYPE html>
 <html lang="tr">
-<?php 
-if (empty($_SESSION['kullanici'])) {
-    header("Location:../../../index.php?erisim=izinsiz");
-}
-?>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,10 +39,9 @@ if (empty($_SESSION['kullanici'])) {
             background-color: #16213E;
         }
 
-        table td{
-    color: #000000 !important;
-    font-weight: 600 !important;
-    }
+            {
+            text-transform: uppercase !important;
+        }
 
         .btn-ozel {
             background-color: #394867 !important;
@@ -132,7 +127,6 @@ if (empty($_SESSION['kullanici'])) {
                                 <button type="button" class="btn special1 mr-2" style="color:#EFF5F5;" name="musterieklemodalbtn" id="musterieklemodalbtn" data-bs-toggle="modal" data-bs-target="#musterieklemodal" class="btn btn-warning">YENİ KAYIT</button>
 
                             </div>
-                        
 
                             <div class="widget-content widget-content-area">
                                 <table id="musteriler" class="table dt-table-hover" style="width:100%">
@@ -142,8 +136,8 @@ if (empty($_SESSION['kullanici'])) {
 
                                             <th style="max-width:50px;"><input type="text" class="form-control" id="specialsearch" placeholder="Ad Soyad"></th>
 
-                                            <th style="min-width:20px;"><input type="text" class="form-control" id="specialsearch" placeholder="Bölge"></th>
-                                            <th style="max-width:5px;padding: 10px 0 10px 0;text-align:center;">Önceki Bakım</th>
+                                            <th style="max-width:30px;"><input type="text" class="form-control" id="specialsearch" placeholder="Bölge"></th>
+                                            <th style="max-width:10px;text-align:center;">Önceki Bakım</th>
                                             <th style="max-width:65px;text-align:center;"><input type="text" class="form-control" id="specialsearch" placeholder="Bakım"></th>
                                             <th style="max-width:10px;text-align:center;"><input type="text" class="form-control" id="specialsearch" placeholder="Sonraki Bakım"></th>
                                             <th style="max-width:25px;text-align:center;">İletişim</th>
@@ -277,7 +271,6 @@ if (empty($_SESSION['kullanici'])) {
                                 <select id="defaultInputState" name="teknisyen" class="form-select">
                                     <option selected="">Seç</option>
                                     <option value="Kadir">Kadir</option>
-                                    <option value="Orkun">Orkun</option>
                                     <option value="Mehmet">Mehmet</option>
                                 </select>
                             </div>
@@ -361,7 +354,7 @@ if (empty($_SESSION['kullanici'])) {
                                 <option value="">Seçim yapın</option>
 
                                 <?php
-                                $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 OR urunCinsi = 3 OR urunCinsi = 10 ORDER BY urunSiralama ASC");
+                                $cihazsor = $db->prepare("SELECT * FROM urunler WHERE urunCinsi = 1 OR urunCinsi = 3 ORDER BY urunSiralama ASC");
                                 $cihazsor->execute();
                                 while ($cihazcek = $cihazsor->fetch(PDO::FETCH_ASSOC)) {
                                 ?>
@@ -454,7 +447,6 @@ if (empty($_SESSION['kullanici'])) {
     ?>
 
     <script>
-
         $(document).ready(function() {
             var urunlerData = <?php echo $urunlerJSON; ?>;
 

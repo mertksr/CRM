@@ -105,6 +105,7 @@ if (isset($_POST['islemekle'])) {
                         sVeresiye = :veresiye,
                         sTarih = :tarih,
                         sTuru = :tur,
+                        sTahsilatTipi= :tahsilattipi,
                         sPersonel = :personel
                     ");
 
@@ -118,6 +119,7 @@ if (isset($_POST['islemekle'])) {
                     "veresiye" => $_POST['veresiye'],
                     "tarih" => date("Y-m-d"),
                     "tur" => $hizmetler_str,
+                    "tahsilattipi" => $_POST['tahsilattipi'],
                     "personel" => $_POST['islemyapan']
                 ));
                 $last_id = $db->lastInsertId();
