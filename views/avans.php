@@ -24,6 +24,7 @@ if (empty($_SESSION['kullanici'])) {
             padding: 0 3px;
         }
         #maasform,
+        #primform,
         #avansform {
             margin: 20px 0;
             border: 1px solid #ccc;
@@ -67,6 +68,13 @@ if (empty($_SESSION['kullanici'])) {
             width: 150px;
         }
     }
+    th{
+        background-color: #d9d9da !important;
+    }
+    td{
+        border: 1px solid #ddd !important;
+        max-height: 40px !important;
+    }
     </style>
 </head>
 
@@ -102,50 +110,50 @@ if (empty($_SESSION['kullanici'])) {
 
                     <div class="row">
                         <div class="col-md-4 col-sm-12">
-                            <form method="POST">
+                            <form method="POST" action="../netting/personelislem.php">
                                 <div class="form-group" id="avansform">
-                                    <input type="text" class="form-control" placeholder="Avans">
-                                    <select name="" class="form-select">
+                                    <input type="text" name="avansmiktar" class="form-control" placeholder="Avans">
+                                    <select name="avanspersonel" class="form-select">
                                         <option value="">Seç</option>
                                         <option value="Tuğba">Tuğba</option>
                                         <option value="Kadir">Kadir</option>
                                         <option value="Orkun">Orkun</option>
                                     </select>
-                                    <input type="date" class="form-control dateInput" value="<?= date("Y-m-d"); ?>">
+                                    <input type="date" name="avanstarih" class="form-control dateInput" value="<?= date("Y-m-d"); ?>">
 
-                                    <button class="btn btn-primary">Kaydet</button>
+                                    <button class="btn btn-primary" name="avanskaydet">Kaydet</button>
 
                                 </div>
                             </form>
                         </div>
                         <div class="col-md-4 col-sm-12">
-                            <form method="POST">
-                                <div class="form-group" id="avansform">
-                                    <input type="text" class="form-control" placeholder="Prim">
-                                    <select name="" class="form-select">
+                            <form method="POST"  action="../netting/personelislem.php">
+                                <div class="form-group" id="primform">
+                                    <input type="text" name="primmiktar" class="form-control" placeholder="Prim">
+                                    <select name="primpersonel" class="form-select">
                                         <option value="">Seç</option>
                                         <option value="Tuğba">Tuğba</option>
                                         <option value="Kadir">Kadir</option>
                                         <option value="Orkun">Orkun</option>
                                     </select>
-                                    <input type="date" class="form-control dateInput" value="<?= date("Y-m-d"); ?>">
+                                    <input type="date" name="primtarih" class="form-control dateInput" value="<?= date("Y-m-d"); ?>">
 
-                                    <button class="btn btn-primary">Kaydet</button>
+                                    <button class="btn btn-primary" name="primkaydet">Kaydet</button>
 
                                 </div>
                             </form>
                         </div>
                         <div class="col-md-4 col-sm-12">
-                            <form method="POST">
+                            <form method="POST"  action="../netting/personelislem.php">
                                 <div class="form-group" id="maasform">
-                                    <input type="text" class="form-control" placeholder="Maaş Girin">
-                                    <select name="" class="form-select">
+                                    <input type="text" name="maasmiktar" class="form-control" placeholder="Maaş Girin">
+                                    <select name="maaspersonel" class="form-select">
                                         <option value="">Seç</option>
                                         <option value="Tuğba">Tuğba</option>
                                         <option value="Kadir">Kadir</option>
                                         <option value="Orkun">Orkun</option>
                                     </select>
-                                    <button class="btn btn-primary">Kaydet</button>
+                                    <button class="btn btn-primary"  name="maaskaydet">Kaydet</button>
                                 </div>
                             </form>
                         </div>
@@ -160,16 +168,25 @@ if (empty($_SESSION['kullanici'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
+                            <?php
+    // Sadece bu ay içerisindeki avansları çekmek için sorgu
+    $avanssor = $db->prepare("SELECT * FROM personelavans WHERE avansPersonel = :personel AND YEAR(avansTarih) = YEAR(CURDATE()) AND MONTH(avansTarih) = MONTH(CURDATE())");
+    
+    $avanssor->execute(
+        array(
+            'personel' => 'Tuğba'
+        )
+    );
+    
+    while ($avanscek = $avanssor->fetch(PDO::FETCH_ASSOC)) {
+?>
+        <tr>
+            <td><?= $avanscek["avansTarih"] ?></td>
+            <td><?= $avanscek["avansMiktar"] ?></td>
+            <td><?= $avanscek["avansPrimMiktar"] ?></td>
+        </tr>
+<?php } ?>
+
   
                             </tbody>
                         </table>
@@ -182,16 +199,24 @@ if (empty($_SESSION['kullanici'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
+                            <?php
+    $avanssor = $db->prepare("SELECT * FROM personelavans WHERE avansPersonel = :personel AND YEAR(avansTarih) = YEAR(CURDATE()) AND MONTH(avansTarih) = MONTH(CURDATE())");
+    
+    $avanssor->execute(
+        array(
+            'personel' => 'Kadir'
+        )
+    );
+    
+    while ($avanscek = $avanssor->fetch(PDO::FETCH_ASSOC)) {
+?>
+        <tr>
+            <td><?= $avanscek["avansTarih"] ?></td>
+            <td><?= $avanscek["avansMiktar"] ?></td>
+            <td><?= $avanscek["avansPrimMiktar"] ?></td>
+        </tr>
+<?php } ?>
+
 
                             </tbody>
                         </table>
@@ -204,16 +229,24 @@ if (empty($_SESSION['kullanici'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
+                            <?php
+    $avanssor = $db->prepare("SELECT * FROM personelavans WHERE avansPersonel = :personel AND YEAR(avansTarih) = YEAR(CURDATE()) AND MONTH(avansTarih) = MONTH(CURDATE())");
+    
+    $avanssor->execute(
+        array(
+            'personel' => 'Orkun'
+        )
+    );
+    
+    while ($avanscek = $avanssor->fetch(PDO::FETCH_ASSOC)) {
+?>
+        <tr>
+            <td><?= $avanscek["avansTarih"] ?></td>
+            <td><?= $avanscek["avansMiktar"] ?></td>
+            <td><?= $avanscek["avansPrimMiktar"] ?></td>
+        </tr>
+<?php } ?>
+
 
                             </tbody>
                         </table>
