@@ -153,10 +153,10 @@
                     </div>
                 </a>
             </li>
-            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'gunsonu') {  echo "active"; } ?>">
-                <a href="gunsonu.php" class="dropdown-toggle">                    
+            <li class="menu  <?php if (basename($_SERVER['PHP_SELF'], '.php') == 'avans') {  echo "active"; } ?>">
+                <a href="avans.php" class="dropdown-toggle">                    
                     <div class="">                        
-                        <span>GÜN SONU</span>
+                        <span>AVANS</span>
                     </div>
                        
                     <div>

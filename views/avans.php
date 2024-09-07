@@ -20,11 +20,14 @@ if (empty($_SESSION['kullanici'])) {
     <link href="../public/layouts/horizontal-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
 
     <style>
+        .row>* {
+            padding: 0 3px;
+        }
         #maasform,
         #avansform {
             margin: 20px 0;
             border: 1px solid #ccc;
-            padding: 20px;
+            padding: 15px;
             background-color: #F7F7F8;
             display: flex;
             justify-content: center;
@@ -44,6 +47,9 @@ if (empty($_SESSION['kullanici'])) {
             button {
                 margin: 3px 0;
             }
+            .dateInput{
+            width: auto;
+        }
 
         }
 
@@ -56,6 +62,11 @@ if (empty($_SESSION['kullanici'])) {
             margin: 0 10px;
             border: 2px solid #ccc;
         }
+        @media screen and (min-width: 768px) {
+        .dateInput{
+            width: 150px;
+        }
+    }
     </style>
 </head>
 
@@ -90,33 +101,49 @@ if (empty($_SESSION['kullanici'])) {
                 <div class="middle-content container-xxl p-0">
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4 col-sm-12">
                             <form method="POST">
                                 <div class="form-group" id="avansform">
-                                    <input type="text" class="form-control" placeholder="Avans Girin">
+                                    <input type="text" class="form-control" placeholder="Avans">
                                     <select name="" class="form-select">
-                                        <option value="">Personel Seçiniz</option>
-                                        <option value="">Personel 1</option>
-                                        <option value="">Personel 2</option>
-                                        <option value="">Personel 3</option>
+                                        <option value="">Seç</option>
+                                        <option value="Tuğba">Tuğba</option>
+                                        <option value="Kadir">Kadir</option>
+                                        <option value="Orkun">Orkun</option>
                                     </select>
-                                    <input type="date" class="form-control" value="<?= date("Y-m-d"); ?>">
+                                    <input type="date" class="form-control dateInput" value="<?= date("Y-m-d"); ?>">
 
                                     <button class="btn btn-primary">Kaydet</button>
 
                                 </div>
                             </form>
                         </div>
+                        <div class="col-md-4 col-sm-12">
+                            <form method="POST">
+                                <div class="form-group" id="avansform">
+                                    <input type="text" class="form-control" placeholder="Prim">
+                                    <select name="" class="form-select">
+                                        <option value="">Seç</option>
+                                        <option value="Tuğba">Tuğba</option>
+                                        <option value="Kadir">Kadir</option>
+                                        <option value="Orkun">Orkun</option>
+                                    </select>
+                                    <input type="date" class="form-control dateInput" value="<?= date("Y-m-d"); ?>">
 
-                        <div class="col-md-6">
+                                    <button class="btn btn-primary">Kaydet</button>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
                             <form method="POST">
                                 <div class="form-group" id="maasform">
                                     <input type="text" class="form-control" placeholder="Maaş Girin">
                                     <select name="" class="form-select">
-                                        <option value="">Personel Seçiniz</option>
-                                        <option value="">Personel 1</option>
-                                        <option value="">Personel 2</option>
-                                        <option value="">Personel 3</option>
+                                        <option value="">Seç</option>
+                                        <option value="Tuğba">Tuğba</option>
+                                        <option value="Kadir">Kadir</option>
+                                        <option value="Orkun">Orkun</option>
                                     </select>
                                     <button class="btn btn-primary">Kaydet</button>
                                 </div>
