@@ -39,7 +39,9 @@ if (empty($_SESSION['kullanici'])) {
         @media screen and (max-width: 768px) {
 
             #maasform,
-            #avansform {
+            #avansform,
+            #primform,
+            .tables {
                 flex-direction: column;
 
             }
@@ -120,7 +122,7 @@ if (empty($_SESSION['kullanici'])) {
                 <div class="middle-content container-xxl p-0">
 
                     <div class="row">
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-6 col-sm-12">
                             <form method="POST" action="../netting/personelislem.php">
                                 <div class="form-group" id="avansform">
                                     <input type="text" name="avansmiktar" class="form-control" placeholder="Avans">
@@ -138,7 +140,7 @@ if (empty($_SESSION['kullanici'])) {
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-6 col-sm-12">
                             <form method="POST" action="../netting/personelislem.php">
                                 <div class="form-group" id="primform">
                                     <input type="text" name="primmiktar" class="form-control" placeholder="Prim">
@@ -156,7 +158,7 @@ if (empty($_SESSION['kullanici'])) {
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-4 col-sm-12">
+                        <!-- <div class="col-md-4 col-sm-12">
                             <form method="POST" action="../netting/personelislem.php">
                                 <div class="form-group" id="maasform">
                                     <input type="text" name="maasmiktar" class="form-control" placeholder="Maaş Girin">
@@ -169,7 +171,7 @@ if (empty($_SESSION['kullanici'])) {
                                     <button class="btn btn-primary" name="maaskaydet">Kaydet</button>
                                 </div>
                             </form>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="tables">
                         <table class="table">
@@ -199,8 +201,8 @@ if (empty($_SESSION['kullanici'])) {
 
                                     ?>
                                     <tr>
-                                        <td><?= $avanscek["avansTarih"] ?></td>
-                                        <td><?= $avanscek["avansMiktar"] ?></td>
+                                    <td><?= date("d.m.Y", strtotime($avanscek["avansTarih"])) ?></td>
+                                    <td><?= $avanscek["avansMiktar"] ?></td>
                                         <td><?= $avanscek["avansPrimMiktar"] ?></td>
                                     </tr>
                                 <?php } ?>
@@ -303,16 +305,20 @@ if (empty($_SESSION['kullanici'])) {
     <!-- END MAIN CONTAINER -->
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-    <!-- <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
+     <!-- <script src="../public/src/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../public/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="../public/src/plugins/src/mousetrap/mousetrap.min.js"></script>
-    <script src="../public/src/plugins/src/waves/waves.min.js"></script>
-    <script src="../public/layouts/horizontal-light-menu/app.js"></script> -->
+    <script src="../public/src/plugins/src/waves/waves.min.js"></script> -->
+
+                                <!--   MOBİL NAVBAR İÇİN GEREKLİ -->
+    <script src="../public/layouts/horizontal-light-menu/app.js"></script> 
+    
+    
     <!-- END GLOBAL MANDATORY SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     <!-- <script src="../public/src/plugins/src/apex/apexcharts.min.js"></script> -->
-    <!-- <script src="../public/src/assets/js/dashboard/dash_1.js"></script> -->
+<!-- <script src="../public/src/assets/js/dashboard/dash_1.js"></script> 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
 </body>
